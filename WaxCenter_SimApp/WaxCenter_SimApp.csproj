@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{115736E3-5919-4386-9B19-BC2B59CEE84D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>WaxCenter_SimApp</RootNamespace>
+    <AssemblyName>WaxCenter_SimApp</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controller\Controller.cs" />
+    <Compile Include="DataStructures\PairingHeap.cs" />
+    <Compile Include="AppGUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AppGUI.Designer.cs">
+      <DependentUpon>AppGUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUIComponents\Clock\SimulationClock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\Clock\SimulationClock.Designer.cs">
+      <DependentUpon>SimulationClock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\ISimComponent.cs" />
+    <Compile Include="Model\RandomDistribution\ExponentialDistribution.cs" />
+    <Compile Include="Model\RandomDistribution\IDistribution.cs" />
+    <Compile Include="Model\RandomDistribution\TriangularDistribution.cs" />
+    <Compile Include="Model\Simulation\GUIData\GUIDataValues.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Agents\Agent.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Events\SimEvent.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Core\EventSimulationCore.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Core\ISimulation.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\IComponent.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\ServiceComponent.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\SinkComponent.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\SourceComponent.cs" />
+    <Compile Include="Model\Simulation\TrafikaSimulation\Customer.cs" />
+    <Compile Include="Model\Simulation\TrafikaSimulation\Events\CustomerArrivalEvent.cs" />
+    <Compile Include="Model\Simulation\TrafikaSimulation\EventSimCoreNewsPapers.cs" />
+    <Compile Include="Model\Simulation\TrafikaSimulation\Events\NewsPaperEvent.cs" />
+    <Compile Include="Model\Simulation\TrafikaSimulation\Events\ServiceEndEvent.cs" />
+    <Compile Include="Model\Simulation\TrafikaSimulation\Events\ServiceStartEvent.cs" />
+    <Compile Include="Model\Statistics\BaseStatictic.cs" />
+    <Compile Include="Model\Statistics\ContinousStatistic.cs" />
+    <Compile Include="Model\Statistics\DiscreteStatistic.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GUIComponents\Screens\ReplicationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\Screens\ReplicationControl.Designer.cs">
+      <DependentUpon>ReplicationControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimDelay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimDelay.Designer.cs">
+      <DependentUpon>SimDelay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimResourcePool.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimResourcePool.Designer.cs">
+      <DependentUpon>SimResourcePool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimSelect2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimSelect2.Designer.cs">
+      <DependentUpon>SimSelect2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimService.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimService.Designer.cs">
+      <DependentUpon>SimService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimSink.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimSink.Designer.cs">
+      <DependentUpon>SimSink.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimSource.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimSource.Designer.cs">
+      <DependentUpon>SimSource.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimStats.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\SimComponents\SimStats.Designer.cs">
+      <DependentUpon>SimStats.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUIComponents\Screens\SimulationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\Screens\SimulationControl.Designer.cs">
+      <DependentUpon>SimulationControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SimOptResPoolControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SimOptResPoolControl.Designer.cs">
+      <DependentUpon>SimOptResPoolControl.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AppGUI.resx">
+      <DependentUpon>AppGUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\Clock\SimulationClock.resx">
+      <DependentUpon>SimulationClock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="GUIComponents\Screens\ReplicationControl.resx">
+      <DependentUpon>ReplicationControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\SimComponents\SimDelay.resx">
+      <DependentUpon>SimDelay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\SimComponents\SimResourcePool.resx">
+      <DependentUpon>SimResourcePool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\SimComponents\SimSelect2.resx">
+      <DependentUpon>SimSelect2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\SimComponents\SimService.resx">
+      <DependentUpon>SimService.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\SimComponents\SimSink.resx">
+      <DependentUpon>SimSink.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\SimComponents\SimSource.resx">
+      <DependentUpon>SimSource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\SimComponents\SimStats.resx">
+      <DependentUpon>SimStats.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\Screens\SimulationControl.resx">
+      <DependentUpon>SimulationControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SimOptResPoolControl.resx">
+      <DependentUpon>SimOptResPoolControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
