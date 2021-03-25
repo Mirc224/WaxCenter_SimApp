@@ -6,18 +6,19 @@ using System.Threading.Tasks;
 using WaxCenter_SimApp.Model.RandomDistribution;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Agents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events;
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents
 {
-    public class SourceComponent<T> : IComponent
+    public class SourceComponent<T> : BaseComponent
         where T: Agent
     {
         public IDistribution Generator { get; private set; }
         public int NumberOfGenerated { get; set; } = 0;
-        public EventSimulationCore Simulation { get; private set; }
 
-        public SourceComponent(IDistribution distributionGenerator)
+        public SourceComponent(EventSimulationCore simulation, IDistribution distributionGenerator)
         {
+            Simulation = simulation;
             Generator = distributionGenerator;
         }
 
@@ -28,10 +29,25 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
             return newAgent;
         }
 
-        public void Reset()
+        override public void Reset()
         {
             NumberOfGenerated = 0;
             Agent.GlobalAgentID = 0;
+        }
+
+        public void Start()
+        {
+            BaseAgentArrivalEvent<T> arrivalEvent = new BaseAgentArrivalEvent<T>(this);
+            arrivalEvent.OccurrenceTime = Simulation.CurrentTime + Generator.Sample();
+            Simulation.EventCalendar.Insert(arrivalEvent.OccurrenceTime, arrivalEvent);
+
+        }
+
+        override public void Enter(Agent agent)
+        {
+            // On enter method
+            NextComponent.Enter(agent);
+            // On exit method
         }
     }
 }

@@ -20,9 +20,9 @@ namespace WaxCenter_SimApp
             /*double cislo = 2.5522;
             Console.WriteLine((int)cislo);
             Console.WriteLine((int)((cislo%1)* 100));*/
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AppGUI());
+            /*            Application.EnableVisualStyles();
+                        Application.SetCompatibleTextRenderingDefault(false);
+                        Application.Run(new AppGUI());*/
             //Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
             //var gen = new TriangularDistribution(10, 100, 50);
             /*            var gen = new ExponentialDistribution(5);
@@ -47,9 +47,10 @@ namespace WaxCenter_SimApp
                         }
 
                         Console.WriteLine(list.Average());*/
-            /*   var simulation = new EventSimCoreNewsPapers();
-               simulation.MaxTime = 80;
-               simulation.DoReplication();*/
+            var simulation = new EventSimCoreNewsPapers();
+            simulation.ResetSimulation();
+            simulation.MaxTime = 10000000;
+            simulation.DoReplication();
         }
     }
 }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents
+namespace WaxCenter_SimApp.Model.Simulation.NewsPaper
 {
-    interface IComponent
+    class EventSimulCoreNP
     {
-        void Reset();
     }
 }

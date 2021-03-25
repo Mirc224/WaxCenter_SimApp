@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WaxCenter_SimApp.Model.RandomDistribution;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Agents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents;
-using WaxCenter_SimApp.Model.Simulation.TrafikaSimulation.Events;
+
 using WaxCenter_SimApp.Model.Statistics;
 
 namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
@@ -21,20 +22,32 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
         //public Queue<Customer> WaitingQueue { get; private set; } = new Queue<Customer>();
         //public ExponentialDistribution CustomerArrivalGenerator { get; private set; } = new ExponentialDistribution(5);
         //public ExponentialDistribution ServiceTimeGenerator { get; private set; } = new ExponentialDistribution(4);
-        public ServiceComponent<ServiceStartEvent> NewsPaperService { get; private set; }
+        public ServiceComponent NewsPaperService { get; private set; }
         public DiscreteStatistic NewsPaperWaitingTime { get; private set; } = new DiscreteStatistic();
         public ContinousStatistic NewsPaperQLength { get; private set; } = new ContinousStatistic();
         public SourceComponent<Customer> CustomerSource { get; private set; }
-        public SinkComponent CustomerSink { get; private set; } = new SinkComponent();
+        public SinkComponent CustomerSink { get; private set; }
         public int Speed { get; set; } = 1;
         public double StartTime { get; set; } = 0;
         public Random SeedGenerator { get; private set; }
 
         public EventSimCoreNewsPapers()
         {
-            NewsPaperService = new ServiceComponent<ServiceStartEvent>(this, new ExponentialDistribution(4), 1);
-            CustomerSource = new SourceComponent<Customer>(new ExponentialDistribution(5));
+            CustomerSource = new SourceComponent<Customer>(this, new ExponentialDistribution(5));
+            NewsPaperService = new ServiceComponent(this, new ExponentialDistribution(4), 1);
+            CustomerSink = new SinkComponent(this);
+            NewsPaperService.OnEnter = OnEnterService;
+            NewsPaperService.OnEnterDelay = OnEnterDelay;
+            CustomerSource.NextComponent = NewsPaperService;
+            NewsPaperService.NextComponent = CustomerSink;
             SeedGenerator = new Random();
+            SeedIt();
+        }
+
+        private void SeedIt()
+        {
+            CustomerSource.Generator.SetSeed(SeedGenerator.Next());
+            NewsPaperService.Generator.SetSeed(SeedGenerator.Next());
         }
 
         override
@@ -43,9 +56,10 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             SimEvent currentEvent = null;
             if(EventCalendar.Count == 0)
             {
-                currentEvent = new CustomerArrivalEvent(this);
+                CustomerSource.Start();
+/*                currentEvent = new CustomerArrivalEvent(this);
                 currentEvent.OccurrenceTime = CustomerSource.Generator.Sample();
-                EventCalendar.Insert(currentEvent.OccurrenceTime, currentEvent);
+                EventCalendar.Insert(currentEvent.OccurrenceTime, currentEvent);*/
             }
             CurrentTime = 0;
             while (EventCalendar.Count != 0 && CurrentTime <= MaxTime)
@@ -58,14 +72,30 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             Console.WriteLine(NewsPaperQLength.Mean);
         }
 
+        public int OnEnterService(ServiceComponent self, Agent agent)
+        {
+            var customer = (Customer)agent;
+            customer.QueueArrivalTime = this.CurrentTime;
+            NewsPaperQLength.Add(self.QueueSize, CurrentTime);
+
+            return 0;
+        }
+
+        public int OnEnterDelay(ServiceComponent self, Agent agent)
+        {
+            var customer = (Customer)agent;
+            NewsPaperQLength.Add(self.QueueSize, CurrentTime);
+            NewsPaperWaitingTime.Add(CurrentTime - customer.QueueArrivalTime);
+
+            return 0;
+        }
+
         public SimulationStatus RunRealTimeSimulation()
         {
             SimEvent currentEvent = null;
             if (EventCalendar.Count == 0 && (Status == SimulationStatus.CANCELED || Status == SimulationStatus.FINISHED))
             {
-                currentEvent = new CustomerArrivalEvent(this);
-                currentEvent.OccurrenceTime = CustomerSource.Generator.Sample();
-                EventCalendar.Insert(currentEvent.OccurrenceTime, currentEvent);
+                CustomerSource.Start();
             }
             Status = SimulationStatus.RUNNING;
             double nextEventTime;
