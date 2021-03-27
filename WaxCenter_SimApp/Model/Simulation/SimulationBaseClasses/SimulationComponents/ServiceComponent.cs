@@ -10,23 +10,14 @@ using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events;
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents
 {
-    public class ServiceComponent : BaseComponent
+    public class ServiceComponent : DelayComponent
     {
-        public int MaxService { get; private set; } 
-        public int CurrentlyUsed { get; private set; }
-        public bool IsFree { get => MaxService != CurrentlyUsed; }
         public Queue<Agent> WaitingQueue { get; private set; } = new Queue<Agent>();
-        public IDistribution Generator { get; private set; }
         public int QueueSize { get => WaitingQueue.Count; }
-        public int AgentsEntered { get; private set; } = 0;
-        public int AgentsLeaved { get; private set; } = 0;
-        public Func<ServiceComponent, Agent, int> OnEnter { get; set; } = null;
         public Func<ServiceComponent, Agent, int> OnEnterDelay { get; set; } = null;
-        public ServiceComponent(EventSimulationCore simulation, IDistribution generator, int maxService = 1)
+        public ServiceComponent(EventSimulationCore simulation, IDistribution generator, int maxService = 1): 
+            base(simulation, generator, maxService)
         {
-            Simulation = simulation;
-            MaxService = maxService;
-            Generator = generator;
         }
 
         override public void Enter(Agent agent)
@@ -46,7 +37,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
             if (OnEnter != null)
                 OnEnter(this, agent);
         }
-        public bool StartService(Agent agent)
+        override public bool StartService(Agent agent)
         {
             // On service start
             if (OnEnterDelay != null)
@@ -59,7 +50,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
             return true;
         }
 
-        public bool EndService(Agent agent)
+        override public bool EndService(Agent agent)
         {
             // On exit
             ++AgentsLeaved;
@@ -86,7 +77,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
             return WaitingQueue.Dequeue();
         }
 
-        private void PlanServiceEventStart(Agent agent)
+        override protected void PlanServiceEventStart(Agent agent)
         {
             ++CurrentlyUsed;
             // On enter Service
@@ -94,17 +85,15 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
                 throw new Exception("ServiceComponent: Used more services than maximal avaiable!");
 
             //var serviceStartE = Activator.CreateInstance(typeof(E), Simulation) as E;
-            var serviceStartE = new BaseServiceStartEvent(this);
+            var serviceStartE = new DelayStartEvent(this);
             serviceStartE.Agent = agent;
             serviceStartE.OccurrenceTime = Simulation.CurrentTime;
             Simulation.EventCalendar.Insert(serviceStartE.OccurrenceTime, serviceStartE);
         }
         override public void Reset()
         {
-            CurrentlyUsed = 0;
             WaitingQueue.Clear();
-            AgentsLeaved = 0;
-            AgentsEntered = 0;
+            base.Reset();
         }
 
     }

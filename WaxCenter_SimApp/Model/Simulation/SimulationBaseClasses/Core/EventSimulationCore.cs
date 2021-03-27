@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WaxCenter_SimApp.DataStructures;
-using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events.BaseEvents;
 
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core

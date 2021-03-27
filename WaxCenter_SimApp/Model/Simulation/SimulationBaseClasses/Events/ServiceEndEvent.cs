@@ -3,21 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events.BaseEvents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents;
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events
 {
-    class BaseServiceEndEvent : SimEvent
+    public class ServiceEndEvent : BaseServiceEvent
     {
-
-        private ServiceComponent _service;
-        public BaseServiceEndEvent(ServiceComponent service)
+        public ServiceEndEvent(ServiceComponent service)
         {
             _service = service;
         }
         public override void Execute()
         {
-            _service.EndService(Agent);
+            throw new NotImplementedException();
         }
     }
 }

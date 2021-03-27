@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Agents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 
-namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events
+namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events.BaseEvents
 {
     public abstract class SimEvent
     {

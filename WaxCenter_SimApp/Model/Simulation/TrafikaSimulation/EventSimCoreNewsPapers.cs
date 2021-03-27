@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using WaxCenter_SimApp.Model.RandomDistribution;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Agents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
-using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events.BaseEvents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents;
 
 using WaxCenter_SimApp.Model.Statistics;
@@ -72,11 +72,12 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             Console.WriteLine(NewsPaperQLength.Mean);
         }
 
-        public int OnEnterService(ServiceComponent self, Agent agent)
+        public int OnEnterService(DelayComponent self, Agent agent)
         {
+            var tmpSelf = (ServiceComponent)self;
             var customer = (Customer)agent;
             customer.QueueArrivalTime = this.CurrentTime;
-            NewsPaperQLength.Add(self.QueueSize, CurrentTime);
+            NewsPaperQLength.Add(tmpSelf.QueueSize, CurrentTime);
 
             return 0;
         }
