@@ -14,10 +14,5 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
         {
             AgentID = Customer.GlobalAgentID++;
         }
-
-        public static void ResetGlobalID()
-        {
-            GlobalAgentID = 0;
-        }
     }
 }

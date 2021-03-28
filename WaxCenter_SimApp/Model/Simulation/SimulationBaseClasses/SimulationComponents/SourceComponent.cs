@@ -7,6 +7,7 @@ using WaxCenter_SimApp.Model.RandomDistribution;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Agents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.ComponentValuesClasses;
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents
 {
@@ -15,11 +16,14 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
     {
         public IDistribution Generator { get; private set; }
         public int NumberOfGenerated { get; set; } = 0;
+        public SourceStateData<T> StateData { get; private set; }
+
 
         public SourceComponent(EventSimulationCore simulation, IDistribution distributionGenerator)
         {
             Simulation = simulation;
             Generator = distributionGenerator;
+            StateData = new SourceStateData<T>(this);
         }
 
         public T GetAgent()

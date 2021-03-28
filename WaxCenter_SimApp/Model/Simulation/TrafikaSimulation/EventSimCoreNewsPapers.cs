@@ -19,17 +19,16 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
          * Tu patria vsetko dalsie co je v simulacii. Generatory generator nasad, statisticke vyhodnotenia, atribut stavu, ci je obsadene alebo neobsadene.
          */
         public DiscreteStatistic NewsPaperWaitingTime { get; private set; } = new DiscreteStatistic();
-        public ContinousStatistic NewsPaperQLength { get; private set; } = new ContinousStatistic();
-        public ContinousStatistic DelaySize { get; private set; } = new ContinousStatistic();
+        public ContinuousStatistic NewsPaperQLength { get; private set; } = new ContinuousStatistic();
+        public ContinuousStatistic DelaySize { get; private set; } = new ContinuousStatistic();
         public SourceComponent<Customer> CustomerSource { get; private set; }
         public ServiceComponent NewsPaperService { get; private set; }
         public DelayComponent ReadDelay { get; private set; }
         public SinkComponent CustomerSink { get; private set; }
-        public int Speed { get; set; } = 1;
         public double StartTime { get; set; } = 0;
-        public Random SeedGenerator { get; private set; }
 
-        public EventSimCoreNewsPapers()
+        public EventSimCoreNewsPapers(Controller.Controller controller, double maxTime = 0)
+            : base(controller, maxTime)
         {
             CustomerSource = new SourceComponent<Customer>(this, new ExponentialDistribution(5));
             NewsPaperService = new ServiceComponent(this, new ExponentialDistribution(4), 1);
@@ -44,13 +43,6 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             ReadDelay.NextComponent = CustomerSink;
             SeedGenerator = new Random();
             SeedIt();
-        }
-
-        private void SeedIt()
-        {
-            CustomerSource.Generator.SetSeed(SeedGenerator.Next());
-            NewsPaperService.Generator.SetSeed(SeedGenerator.Next());
-            ReadDelay.Generator.SetSeed(SeedGenerator.Next());
         }
 
         override
@@ -138,6 +130,7 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
                         return Status;
                     }
                 }
+                CurrentTime = nextEventTime;
                 currentEvent = EventCalendar.GetMin();
                 CurrentTime = currentEvent.OccurrenceTime;
                 currentEvent.Execute();
@@ -146,18 +139,8 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             Status = SimulationStatus.FINISHED;
             return Status;
         }
-
-        public double RunClock(double timeDifference)
-        {
-            int actualSpeed = Speed;
-            int time = timeDifference - 1 >= 0 ? 1000 / actualSpeed : (int)((timeDifference * 1000)/actualSpeed);
-            Thread.Sleep(time);
-            if (timeDifference < 1)
-                return timeDifference;
-            return 1;
-        }
-
-        public void ResetSimulation()
+        override
+        public void BeforeReplicationInit()
         {
             MaxTime = 900000;
             Console.WriteLine("resetujem");
@@ -168,23 +151,29 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             ResetStatistics();
         }
 
-        private void ResetComponents()
+        override
+        protected void ResetComponents()
         {
             CustomerSource.Reset();
             NewsPaperService.Reset();
             CustomerSink.Reset();
             ReadDelay.Reset();
-            CustomerSource.Generator.SetSeed(SeedGenerator.Next());
-            NewsPaperService.Generator.SetSeed(SeedGenerator.Next());
-            ReadDelay.Generator.SetSeed(SeedGenerator.Next());
         }
 
-        private void ResetStatistics()
+        override
+        protected void ResetStatistics()
         {
             NewsPaperWaitingTime.Reset();
             NewsPaperQLength.Reset();
             DelaySize.Reset();
             NewsPaperQLength.PreviousState = StartTime;
+        }
+
+        protected override void SeedIt()
+        {
+            CustomerSource.Generator.SetSeed(SeedGenerator.Next());
+            NewsPaperService.Generator.SetSeed(SeedGenerator.Next());
+            ReadDelay.Generator.SetSeed(SeedGenerator.Next());
         }
     }
 }

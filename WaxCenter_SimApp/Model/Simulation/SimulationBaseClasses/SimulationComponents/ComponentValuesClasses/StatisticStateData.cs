@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WaxCenter_SimApp.Model.Statistics;
+
+namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.ComponentValuesClasses
+{
+    public class StatisticStateData
+    {
+        public double StatMin { get => _statistic.Min; }
+        public double StatMax { get => _statistic.Max; }
+        public double StatMean { get => _statistic.Mean; }
+        private BaseStatistic _statistic;
+        public StatisticStateData(BaseStatistic statistic)
+        {
+            _statistic = statistic;
+        }
+    }
+}

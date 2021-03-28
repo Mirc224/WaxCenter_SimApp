@@ -26,7 +26,7 @@ namespace WaxCenter_SimApp.Controller
         private EventSimCoreNewsPapers _simulation;
         private BackgroundWorker _realTimeSimWorker;
         private int[] _speedList = new int[] { 1, 2, 5, 10, 25, 50, 100, 1000 };
-        public GUIDataValues GUIData { get; private set; }
+        public GUIDataValuesVacCenter GUIData { get; private set; }
         public EventSimulationCore.SimulationStatus SimulationStatus { get => _simulation.Status; private set => _simulation.Status = value; }
         //private SimulationControl _realTimeSimulation;
         public bool PauseClicked { get; set; } = false;
@@ -36,9 +36,9 @@ namespace WaxCenter_SimApp.Controller
         public Controller(AppGUI appGUI, SimulationControl realTimeSim)
         {
             _applicationGUI = appGUI;
-            _simulation = new EventSimCoreNewsPapers();
+            _simulation = new EventSimCoreNewsPapers(this);
             _simulation.Controller = this;
-            GUIData = new GUIDataValues(_simulation);
+            GUIData = new GUIDataValuesVacCenter(_simulation);
             realTimeSim.GUIData = GUIData;
             //_realTimeSimulation = realTimeSim;
 
@@ -93,7 +93,7 @@ namespace WaxCenter_SimApp.Controller
 
         public void InitializeSimulation()
         {
-            _simulation.ResetSimulation();
+            _simulation.BeforeReplicationInit();
         }
 
         public void AfterRealTimeSimulationStopped()

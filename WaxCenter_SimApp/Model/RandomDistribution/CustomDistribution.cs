@@ -8,9 +8,10 @@ namespace WaxCenter_SimApp.Model.RandomDistribution
 {
     public class CustomDistribution : IDistribution
     {
+        public Func<double> CustomDistributionFunction { get; set; }
         public double Sample()
         {
-            throw new NotImplementedException();
+            return CustomDistributionFunction();
         }
 
         public void SetSeed(int seed)

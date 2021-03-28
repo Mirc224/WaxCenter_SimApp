@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaxCenter_SimApp.Model.RandomDistribution;
 using WaxCenter_SimApp.Model.Simulation.TrafikaSimulation;
+using WaxCenter_SimApp.Model.Simulation.VaccinationCenter;
 
 namespace WaxCenter_SimApp
 {
@@ -47,9 +48,10 @@ namespace WaxCenter_SimApp
                         }
 
                         Console.WriteLine(list.Average());*/
-            var simulation = new EventSimCoreNewsPapers();
-            simulation.ResetSimulation();
-            simulation.MaxTime = 15000000;
+            //var simulation = new EventSimCoreNewsPapers(null);
+            var simulation = new EventSimCoreVaccinationCenter(null);
+            simulation.BeforeReplicationInit();
+            simulation.MaxTime = 51000 * 60;
             simulation.DoReplication();
         }
     }

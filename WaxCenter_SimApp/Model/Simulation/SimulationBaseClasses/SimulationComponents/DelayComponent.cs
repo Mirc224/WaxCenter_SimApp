@@ -7,6 +7,7 @@ using WaxCenter_SimApp.Model.RandomDistribution;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Agents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.ComponentValuesClasses;
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents
 {
@@ -21,12 +22,13 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         protected int _capacityUsed = 0;
         public Func<DelayComponent, Agent, int> OnEnter { get; set; } = null;
         public Func<DelayComponent, Agent, int> OnExit { get; set; } = null;
-
+        public virtual DelayStateData StateData { get; protected set; }
         public DelayComponent(EventSimulationCore simulation, IDistribution generator, int maxService = 1)
         {
             Simulation = simulation;
             MaxService = maxService;
             Generator = generator;
+            StateData = new DelayStateData(this);
         }
         public virtual bool StartService(Agent agent)
         {

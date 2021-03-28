@@ -8,6 +8,7 @@ using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Agents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.AdditionServiceComponents;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.ComponentValuesClasses;
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents
 {
@@ -17,10 +18,12 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         public Queue<Agent> WaitingQueue { get; private set; } = new Queue<Agent>();
         public int QueueSize { get => WaitingQueue.Count; }
         public Func<ServiceComponent, Agent, int> OnEnterDelay { get; set; } = null;
+        public ServiceStateData ServiceStateData { get=> (ServiceStateData)StateData; }
         public ServiceComponent(EventSimulationCore simulation, IDistribution generator, int maxService = 1): 
             base(simulation, generator, maxService)
         {
             ResourcePool = new ResourcePool(this, maxService);
+            StateData = new ServiceStateData(this);
         }
 
         override public void Enter(Agent agent)
@@ -98,6 +101,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         override public void Reset()
         {
             WaitingQueue.Clear();
+            ResourcePool.Reset();
             base.Reset();
         }
 

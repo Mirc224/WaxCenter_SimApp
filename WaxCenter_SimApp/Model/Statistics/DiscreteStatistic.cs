@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WaxCenter_SimApp.Model.Statistics
 {
-    public class DiscreteStatistic : BaseStatictic
+    public class DiscreteStatistic : BaseStatistic
     {
-        public double Mean { get => Numerator / Denominator; }
+        override public double Mean { get => Numerator / Denominator; }
         public void Add(double value)
         {
             Numerator += value;

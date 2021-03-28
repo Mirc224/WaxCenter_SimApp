@@ -66,7 +66,9 @@
     <Compile Include="Model\RandomDistribution\ExponentialDistribution.cs" />
     <Compile Include="Model\RandomDistribution\IDistribution.cs" />
     <Compile Include="Model\RandomDistribution\TriangularDistribution.cs" />
+    <Compile Include="Model\RandomDistribution\UniformDistribution.cs" />
     <Compile Include="Model\Simulation\GUIData\GUIDataValues.cs" />
+    <Compile Include="Model\Simulation\GUIData\GUIDataValuesVacCenter.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Agents\Agent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Events\AgentArrivalEvent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Events\BaseEvents\BaseDelayEvent.cs" />
@@ -80,6 +82,11 @@
     <Compile Include="Model\Simulation\SimulationBaseClasses\Events\ServiceStartEvent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\AdditionServiceComponents\ResourcePool.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\BaseComponent.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\ComponentValuesClasses\DelayStateData.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\ComponentValuesClasses\ServiceStateData.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\ComponentValuesClasses\SinkStateData.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\ComponentValuesClasses\SourceStateData.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\ComponentValuesClasses\StatisticStateData.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\DelayComponent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\ServiceComponent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\AdditionServiceComponents\ServiceStaff.cs" />
@@ -87,8 +94,10 @@
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\SourceComponent.cs" />
     <Compile Include="Model\Simulation\TrafikaSimulation\Customer.cs" />
     <Compile Include="Model\Simulation\TrafikaSimulation\EventSimCoreNewsPapers.cs" />
-    <Compile Include="Model\Statistics\BaseStatictic.cs" />
-    <Compile Include="Model\Statistics\ContinousStatistic.cs" />
+    <Compile Include="Model\Simulation\VaccinationCenter\EventSimCoreVaccinationCenter.cs" />
+    <Compile Include="Model\Simulation\VaccinationCenter\Patient.cs" />
+    <Compile Include="Model\Statistics\BaseStatistic.cs" />
+    <Compile Include="Model\Statistics\ContinuousStatistic.cs" />
     <Compile Include="Model\Statistics\DiscreteStatistic.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

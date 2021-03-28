@@ -74,8 +74,19 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         {
             _availableStaff.Clear();
             for (int i = 0; i < _maxStaff; ++i)
-                _availableStaff[i].Reset();
+                _staff[i].Reset();
             _totalTimeOccupied = 0;
+        }
+
+        public void SetSeed(int seed)
+        {
+            _selectSeedGenerator = new Random(seed);
+            SetSelectSeed();
+        }
+        public void SetSeed()
+        {
+            _selectSeedGenerator = new Random();
+            SetSelectSeed();
         }
         private void SetSelectSeed()
         {
