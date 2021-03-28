@@ -8,6 +8,7 @@ using WaxCenter_SimApp.GUIComponents.Screens;
 using WaxCenter_SimApp.Model.Simulation.GUIData;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 using WaxCenter_SimApp.Model.Simulation.TrafikaSimulation;
+using WaxCenter_SimApp.Model.Simulation.VaccinationCenter;
 
 namespace WaxCenter_SimApp.Controller
 {
@@ -23,7 +24,7 @@ namespace WaxCenter_SimApp.Controller
     public class Controller
     {
         private AppGUI _applicationGUI;
-        private EventSimCoreNewsPapers _simulation;
+        private EventSimCoreVaccinationCenter _simulation;
         private BackgroundWorker _realTimeSimWorker;
         private int[] _speedList = new int[] { 1, 2, 5, 10, 25, 50, 100, 1000 };
         public GUIDataValuesVacCenter GUIData { get; private set; }
@@ -36,7 +37,7 @@ namespace WaxCenter_SimApp.Controller
         public Controller(AppGUI appGUI, SimulationControl realTimeSim)
         {
             _applicationGUI = appGUI;
-            _simulation = new EventSimCoreNewsPapers(this);
+            _simulation = new EventSimCoreVaccinationCenter(this);
             _simulation.Controller = this;
             GUIData = new GUIDataValuesVacCenter(_simulation);
             realTimeSim.GUIData = GUIData;
@@ -49,14 +50,14 @@ namespace WaxCenter_SimApp.Controller
             _realTimeSimWorker = simulationWorker;
             /*            _simulation.MaxTime = 80;
                         _simulation.DoReplication();*/
-            if( _simulation.RunRealTimeSimulation() != EventSimulationCore.SimulationStatus.FINISHED)
+            /*if( _simulation.RunRealTimeSimulation() != EventSimulationCore.SimulationStatus.FINISHED)
             {
                 if (PauseClicked)
                     SimulationStatus = EventSimulationCore.SimulationStatus.PAUSED;
                 else
                     SimulationStatus = EventSimulationCore.SimulationStatus.CANCELED;
                 return false;
-            }
+            }*/
             
             return true;
         }

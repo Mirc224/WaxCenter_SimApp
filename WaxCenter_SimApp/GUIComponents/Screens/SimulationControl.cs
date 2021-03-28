@@ -15,27 +15,26 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
     public partial class SimulationControl : UserControl
     {
         public AppGUI AppGUI { get; set; }
-        public GUIDataValues GUIData { get; set; }
+        public GUIDataValuesVacCenter GUIData { get; set; }
         public SimulationControl()
         {
             InitializeComponent();
 
-            this.StatAvgNOWaiting.SimulationControl = this;
-            this.StatVaccinateQlength.SimulationControl = this;
-            this.StatVaccinateWaitingTime.SimulationControl = this;
-            this.StatCheckWaitingTime.SimulationControl = this;
-            this.StatCheckQlength.SimulationControl = this;
+            this.StatWaitingRoomCapacity.SimulationControl = this;
+            this.StatVaccinationQlength.SimulationControl = this;
+            this.StatVaccinationWaitingTime.SimulationControl = this;
+            this.StatExaminationWaitingTime.SimulationControl = this;
+            this.StatExaminationQlength.SimulationControl = this;
             this.StatAdminQLength.SimulationControl = this;
             this.StatAdminWaitingTime.SimulationControl = this;
             this.ResPoolNurse.SimulationControl = this;
             this.ResPoolDoctor.SimulationControl = this;
             this.ResPoolAdmin.SimulationControl = this;
-            this.DelaySelect.SimulationControl = this;
-            this.ExitSink.SimulationControl = this;
+            this.PatientSink.SimulationControl = this;
             this.PatientSource.SimulationControl = this;
-            this.DelayCakaren.SimulationControl = this;
-            this.ServiceOckovanie.SimulationControl = this;
-            this.ServiceVysetrenie.SimulationControl = this;
+            this.DelayWaitingRoom.SimulationControl = this;
+            this.ServiceVaccination.SimulationControl = this;
+            this.ServiceExamination.SimulationControl = this;
             this.ServiceAdministracia.SimulationControl = this;
             this.SimulationClock.SimulationControl = this;
             
@@ -106,7 +105,32 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 
         public void UpdateValues()
         {
-            CustomersSource.CounterText = GUIData.SourceOutput.ToString();
+            PatientSource.UpdateAccordingToState(GUIData.SourceStateData);
+
+            ServiceAdministracia.UpdateAccordingToState(GUIData.ServiceAdminStateData);
+            ResPoolAdmin.UpdateAccordingToState(GUIData.ServiceAdminStateData);
+
+            ServiceExamination.UpdateAccordingToState(GUIData.ServiceExaminationStateData);
+            ResPoolDoctor.UpdateAccordingToState(GUIData.ServiceExaminationStateData);
+
+            ServiceVaccination.UpdateAccordingToState(GUIData.ServiceVaccinationStateData);
+            ResPoolNurse.UpdateAccordingToState(GUIData.ServiceVaccinationStateData);
+
+            DelayWaitingRoom.UpdateAccordingToState(GUIData.DelayWaitingRoomStateData);
+
+            PatientSink.UpdateAccordingToState(GUIData.SinkStateData);
+
+            StatAdminQLength.UpdateAccordingToState(GUIData.StatAdminQLengthStateData);
+            StatAdminWaitingTime.UpdateAccordingToState(GUIData.StatAdminWaitingTStateData);
+
+            StatExaminationQlength.UpdateAccordingToState(GUIData.StatExaminationQLengthStateData);
+            StatExaminationWaitingTime.UpdateAccordingToState(GUIData.StatExaminationWaitingTStateData);
+
+            StatVaccinationQlength.UpdateAccordingToState(GUIData.StatVaccinationQLengthStateData);
+            StatVaccinationWaitingTime.UpdateAccordingToState(GUIData.StatVaccinationWaitingTStateData);
+
+            StatWaitingRoomCapacity.UpdateAccordingToState(GUIData.StatWaitingRoomCapacityStateData);
+            /*CustomersSource.CounterText = GUIData.SourceOutput.ToString();
             PredajService.QueueText = GUIData.ServiceQueueActualLength.ToString();
             PredajService.DelayText = GUIData.CurrentlyUsedService.ToString();
             PredajService.InputText = GUIData.ServiceInput.ToString();
@@ -118,7 +142,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             NewsPaperResPool.StaffUsedText = $"{GUIData.MaxService - GUIData.CurrentlyUsedService}/{GUIData.MaxService}";
             CakanieStat.ValueText = $"[{GUIData.MinWaitingTime.ToString("F")}..{GUIData.MaxWaitingTime.ToString("F")}] Mean: {GUIData.AverageWaitingTime}";
             DlzkaStat.ValueText = $"[{GUIData.MinQLength}..{GUIData.MaxQLength}] Mean: {GUIData.AverageQLength}";
-            SizeStat.ValueText = $"[{GUIData.DelayMinSize}..{GUIData.DelayMaxSize}] Mean: {GUIData.DelayMeanSize}";
+            SizeStat.ValueText = $"[{GUIData.DelayMinSize}..{GUIData.DelayMaxSize}] Mean: {GUIData.DelayMeanSize}";*/
         }
 
     }

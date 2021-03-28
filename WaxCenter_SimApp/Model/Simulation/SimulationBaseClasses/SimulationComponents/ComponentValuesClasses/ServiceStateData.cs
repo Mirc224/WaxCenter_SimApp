@@ -10,6 +10,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
     {
         public int QueueSize { get => ((ServiceComponent)_delayComponent).QueueSize; }
         public double ResourcePoolUtilization { get => ((ServiceComponent)_delayComponent).ResourcePool.Utilization; }
+        public int ResourcePoolMaxStaff { get => ((ServiceComponent)_delayComponent).ResourcePool.MaxStaff; }
         public ServiceStateData(ServiceComponent service):
             base(service)
         {

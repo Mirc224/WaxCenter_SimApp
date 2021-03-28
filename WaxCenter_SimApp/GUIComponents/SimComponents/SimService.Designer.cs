@@ -159,6 +159,6 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
         public string InputText { get => ServiceInputLabel.Text; set => ServiceInputLabel.Text = value; }
         public string OutputText { get => ServiceOutputLabel.Text; set => ServiceOutputLabel.Text = value; }
         public string QueueText { get => QueueActualLabel.Text; set => QueueActualLabel.Text = value; }
-        public string DelayText { get => DelayActualLabel.Text; set => DelayActualLabel.Text = value; }
+        public string CurrentlyUsedText { get => DelayActualLabel.Text; set => DelayActualLabel.Text = value; }
     }
 }

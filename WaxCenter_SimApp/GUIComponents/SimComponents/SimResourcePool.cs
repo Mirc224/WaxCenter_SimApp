@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaxCenter_SimApp.GUIComponents.Screens;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.ComponentValuesClasses;
 
 namespace WaxCenter_SimApp.GUIComponents.SimComponents
 {
@@ -24,6 +25,12 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
         private void ResourcePoolPicture_MouseClick(object sender, MouseEventArgs e)
         {
             SimulationControl.HandleComponentSelect(this);
+        }
+
+        public void UpdateAccordingToState(ServiceStateData stateData)
+        {
+            StaffUsedText = $"{stateData.ResourcePoolMaxStaff - stateData.CurrentlyUsed}/{stateData.ResourcePoolMaxStaff}";
+            UtilizationText = $"{(int)(stateData.ResourcePoolUtilization * 100) }";
         }
     }
 }

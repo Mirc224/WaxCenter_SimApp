@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaxCenter_SimApp.GUIComponents.Screens;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.ComponentValuesClasses;
 
 namespace WaxCenter_SimApp.GUIComponents.SimComponents
 {
@@ -29,6 +30,10 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
         private void StatPicture_MouseClick(object sender, MouseEventArgs e)
         {
             MyClickEvent(sender, e);
+        }
+        public void UpdateAccordingToState(StatisticStateData stateData)
+        {
+            ValueText = $"[{stateData.StatMin.ToString("F")}..{stateData.StatMax.ToString("F")}] Mean: {stateData.StatMean}";
         }
     }
 }

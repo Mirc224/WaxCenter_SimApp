@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaxCenter_SimApp.GUIComponents.Screens;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.ComponentValuesClasses;
 
 namespace WaxCenter_SimApp.GUIComponents.SimComponents
 {
@@ -26,6 +27,12 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
         private void DelayPicture_MouseClick(object sender, MouseEventArgs e)
         {
             SimulationControl.HandleComponentSelect(this);
+        }
+        public void UpdateAccordingToState(DelayStateData stateData)
+        {
+            InputText = stateData.AgentsEntered.ToString();
+            OutputText = stateData.AgentsLeaved.ToString();
+            CurrentlyUsedText = stateData.CurrentlyUsed.ToString();
         }
     }
 }

@@ -139,8 +139,8 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
         private System.Windows.Forms.Panel panel1;
 
         public string TitleText { get => DelayTitleLabel.Text; set => DelayTitleLabel.Text = value; }
-        public string InputDelayText { get => DelayInputLabel.Text; set => DelayInputLabel.Text = value; }
-        public string OutputDelayText { get => OutputDelayLabel.Text; set => OutputDelayLabel.Text = value; }
-        public string ActualDelayText { get => ActualDelayLabel.Text; set => ActualDelayLabel.Text = value; }
+        public string InputText { get => DelayInputLabel.Text; set => DelayInputLabel.Text = value; }
+        public string OutputText { get => OutputDelayLabel.Text; set => OutputDelayLabel.Text = value; }
+        public string CurrentlyUsedText { get => ActualDelayLabel.Text; set => ActualDelayLabel.Text = value; }
     }
 }

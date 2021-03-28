@@ -32,6 +32,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.SimulationTitleLabel = new System.Windows.Forms.Label();
             this.SimulationTopPanel = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.SizeStat = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
+            this.ReadDelay = new WaxCenter_SimApp.GUIComponents.SimComponents.SimDelay();
             this.DlzkaStat = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
             this.CakanieStat = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
             this.PredajService = new WaxCenter_SimApp.GUIComponents.SimComponents.SimService();
@@ -39,25 +41,22 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.CustomersSource = new WaxCenter_SimApp.GUIComponents.SimComponents.SimSource();
             this.NewsPaperResPool = new WaxCenter_SimApp.GUIComponents.SimComponents.SimResourcePool();
             this.SimulationClock = new WaxCenter_SimApp.GUIComponents.Clock.SimulationClock();
-            this.StatAvgNOWaiting = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
-            this.StatVaccinateQlength = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
-            this.StatVaccinateWaitingTime = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
-            this.StatCheckWaitingTime = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
-            this.StatCheckQlength = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
+            this.StatWaitingRoomCapacity = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
+            this.StatVaccinationQlength = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
+            this.StatVaccinationWaitingTime = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
+            this.StatExaminationWaitingTime = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
+            this.StatExaminationQlength = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
             this.StatAdminQLength = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
             this.StatAdminWaitingTime = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
             this.ResPoolNurse = new WaxCenter_SimApp.GUIComponents.SimComponents.SimResourcePool();
             this.ResPoolDoctor = new WaxCenter_SimApp.GUIComponents.SimComponents.SimResourcePool();
             this.ResPoolAdmin = new WaxCenter_SimApp.GUIComponents.SimComponents.SimResourcePool();
-            this.DelaySelect = new WaxCenter_SimApp.GUIComponents.SimComponents.SimSelect2();
-            this.ExitSink = new WaxCenter_SimApp.GUIComponents.SimComponents.SimSink();
+            this.PatientSink = new WaxCenter_SimApp.GUIComponents.SimComponents.SimSink();
             this.PatientSource = new WaxCenter_SimApp.GUIComponents.SimComponents.SimSource();
-            this.DelayCakaren = new WaxCenter_SimApp.GUIComponents.SimComponents.SimDelay();
-            this.ServiceOckovanie = new WaxCenter_SimApp.GUIComponents.SimComponents.SimService();
-            this.ServiceVysetrenie = new WaxCenter_SimApp.GUIComponents.SimComponents.SimService();
+            this.DelayWaitingRoom = new WaxCenter_SimApp.GUIComponents.SimComponents.SimDelay();
+            this.ServiceVaccination = new WaxCenter_SimApp.GUIComponents.SimComponents.SimService();
+            this.ServiceExamination = new WaxCenter_SimApp.GUIComponents.SimComponents.SimService();
             this.ServiceAdministracia = new WaxCenter_SimApp.GUIComponents.SimComponents.SimService();
-            this.ReadDelay = new WaxCenter_SimApp.GUIComponents.SimComponents.SimDelay();
-            this.SizeStat = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
             this.SimulationTopPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -95,27 +94,51 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.panel1.Controls.Add(this.CustomersSource);
             this.panel1.Controls.Add(this.NewsPaperResPool);
             this.panel1.Controls.Add(this.SimulationClock);
-            this.panel1.Controls.Add(this.StatAvgNOWaiting);
-            this.panel1.Controls.Add(this.StatVaccinateQlength);
-            this.panel1.Controls.Add(this.StatVaccinateWaitingTime);
-            this.panel1.Controls.Add(this.StatCheckWaitingTime);
-            this.panel1.Controls.Add(this.StatCheckQlength);
+            this.panel1.Controls.Add(this.StatWaitingRoomCapacity);
+            this.panel1.Controls.Add(this.StatVaccinationQlength);
+            this.panel1.Controls.Add(this.StatVaccinationWaitingTime);
+            this.panel1.Controls.Add(this.StatExaminationWaitingTime);
+            this.panel1.Controls.Add(this.StatExaminationQlength);
             this.panel1.Controls.Add(this.StatAdminQLength);
             this.panel1.Controls.Add(this.StatAdminWaitingTime);
             this.panel1.Controls.Add(this.ResPoolNurse);
             this.panel1.Controls.Add(this.ResPoolDoctor);
             this.panel1.Controls.Add(this.ResPoolAdmin);
-            this.panel1.Controls.Add(this.DelaySelect);
-            this.panel1.Controls.Add(this.ExitSink);
+            this.panel1.Controls.Add(this.PatientSink);
             this.panel1.Controls.Add(this.PatientSource);
-            this.panel1.Controls.Add(this.DelayCakaren);
-            this.panel1.Controls.Add(this.ServiceOckovanie);
-            this.panel1.Controls.Add(this.ServiceVysetrenie);
+            this.panel1.Controls.Add(this.DelayWaitingRoom);
+            this.panel1.Controls.Add(this.ServiceVaccination);
+            this.panel1.Controls.Add(this.ServiceExamination);
             this.panel1.Controls.Add(this.ServiceAdministracia);
             this.panel1.Location = new System.Drawing.Point(3, 79);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1549, 728);
             this.panel1.TabIndex = 3;
+            // 
+            // SizeStat
+            // 
+            this.SizeStat.ID = -1;
+            this.SizeStat.Location = new System.Drawing.Point(956, 475);
+            this.SizeStat.Name = "SizeStat";
+            this.SizeStat.SimulationControl = null;
+            this.SizeStat.Size = new System.Drawing.Size(300, 65);
+            this.SizeStat.TabIndex = 26;
+            this.SizeStat.TitleText = "Pocet cakajucich";
+            this.SizeStat.ValueText = "value label";
+            // 
+            // ReadDelay
+            // 
+            this.ReadDelay.AutoSize = true;
+            this.ReadDelay.CurrentlyUsedText = "actual";
+            this.ReadDelay.ID = -1;
+            this.ReadDelay.InputText = "input";
+            this.ReadDelay.Location = new System.Drawing.Point(557, 570);
+            this.ReadDelay.Name = "ReadDelay";
+            this.ReadDelay.OutputText = "output";
+            this.ReadDelay.SimulationControl = null;
+            this.ReadDelay.Size = new System.Drawing.Size(161, 137);
+            this.ReadDelay.TabIndex = 25;
+            this.ReadDelay.TitleText = "Citanie novin";
             // 
             // DlzkaStat
             // 
@@ -141,7 +164,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // 
             // PredajService
             // 
-            this.PredajService.DelayText = "dActual";
+            this.PredajService.CurrentlyUsedText = "dActual";
             this.PredajService.ID = -1;
             this.PredajService.InputText = "input";
             this.PredajService.Location = new System.Drawing.Point(180, 562);
@@ -155,8 +178,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // 
             // CustomerSink
             // 
-            this.CustomerSink.CounterText = "output";
             this.CustomerSink.ID = -1;
+            this.CustomerSink.InputText = "output";
             this.CustomerSink.Location = new System.Drawing.Point(800, 562);
             this.CustomerSink.Name = "CustomerSink";
             this.CustomerSink.SimulationControl = null;
@@ -166,10 +189,10 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // 
             // CustomersSource
             // 
-            this.CustomersSource.CounterText = "0";
             this.CustomersSource.ID = -1;
             this.CustomersSource.Location = new System.Drawing.Point(18, 562);
             this.CustomersSource.Name = "CustomersSource";
+            this.CustomersSource.OutputText = "0";
             this.CustomersSource.SimulationControl = null;
             this.CustomersSource.Size = new System.Drawing.Size(93, 149);
             this.CustomersSource.TabIndex = 20;
@@ -199,60 +222,60 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.SimulationClock.StopButtonEnabled = true;
             this.SimulationClock.TabIndex = 18;
             // 
-            // StatAvgNOWaiting
+            // StatWaitingRoomCapacity
             // 
-            this.StatAvgNOWaiting.ID = -1;
-            this.StatAvgNOWaiting.Location = new System.Drawing.Point(1224, 80);
-            this.StatAvgNOWaiting.Name = "StatAvgNOWaiting";
-            this.StatAvgNOWaiting.SimulationControl = null;
-            this.StatAvgNOWaiting.Size = new System.Drawing.Size(289, 58);
-            this.StatAvgNOWaiting.TabIndex = 17;
-            this.StatAvgNOWaiting.TitleText = "Avg počet čakajúcich";
-            this.StatAvgNOWaiting.ValueText = "value label";
+            this.StatWaitingRoomCapacity.ID = -1;
+            this.StatWaitingRoomCapacity.Location = new System.Drawing.Point(1224, 80);
+            this.StatWaitingRoomCapacity.Name = "StatWaitingRoomCapacity";
+            this.StatWaitingRoomCapacity.SimulationControl = null;
+            this.StatWaitingRoomCapacity.Size = new System.Drawing.Size(289, 58);
+            this.StatWaitingRoomCapacity.TabIndex = 17;
+            this.StatWaitingRoomCapacity.TitleText = "Avg počet čakajúcich";
+            this.StatWaitingRoomCapacity.ValueText = "value label";
             // 
-            // StatVaccinateQlength
+            // StatVaccinationQlength
             // 
-            this.StatVaccinateQlength.ID = -1;
-            this.StatVaccinateQlength.Location = new System.Drawing.Point(893, 80);
-            this.StatVaccinateQlength.Name = "StatVaccinateQlength";
-            this.StatVaccinateQlength.SimulationControl = null;
-            this.StatVaccinateQlength.Size = new System.Drawing.Size(363, 58);
-            this.StatVaccinateQlength.TabIndex = 16;
-            this.StatVaccinateQlength.TitleText = "Avg dĺžka radu - Vyšetrenie";
-            this.StatVaccinateQlength.ValueText = "value label";
+            this.StatVaccinationQlength.ID = -1;
+            this.StatVaccinationQlength.Location = new System.Drawing.Point(893, 80);
+            this.StatVaccinationQlength.Name = "StatVaccinationQlength";
+            this.StatVaccinationQlength.SimulationControl = null;
+            this.StatVaccinationQlength.Size = new System.Drawing.Size(363, 58);
+            this.StatVaccinationQlength.TabIndex = 16;
+            this.StatVaccinationQlength.TitleText = "Avg dĺžka radu - Vyšetrenie";
+            this.StatVaccinationQlength.ValueText = "value label";
             // 
-            // StatVaccinateWaitingTime
+            // StatVaccinationWaitingTime
             // 
-            this.StatVaccinateWaitingTime.ID = -1;
-            this.StatVaccinateWaitingTime.Location = new System.Drawing.Point(893, 16);
-            this.StatVaccinateWaitingTime.Name = "StatVaccinateWaitingTime";
-            this.StatVaccinateWaitingTime.SimulationControl = null;
-            this.StatVaccinateWaitingTime.Size = new System.Drawing.Size(363, 58);
-            this.StatVaccinateWaitingTime.TabIndex = 15;
-            this.StatVaccinateWaitingTime.TitleText = "Avg čas čakania - Očkovanie";
-            this.StatVaccinateWaitingTime.ValueText = "value label";
+            this.StatVaccinationWaitingTime.ID = -1;
+            this.StatVaccinationWaitingTime.Location = new System.Drawing.Point(893, 16);
+            this.StatVaccinationWaitingTime.Name = "StatVaccinationWaitingTime";
+            this.StatVaccinationWaitingTime.SimulationControl = null;
+            this.StatVaccinationWaitingTime.Size = new System.Drawing.Size(363, 58);
+            this.StatVaccinationWaitingTime.TabIndex = 15;
+            this.StatVaccinationWaitingTime.TitleText = "Avg čas čakania - Očkovanie";
+            this.StatVaccinationWaitingTime.ValueText = "value label";
             // 
-            // StatCheckWaitingTime
+            // StatExaminationWaitingTime
             // 
-            this.StatCheckWaitingTime.ID = -1;
-            this.StatCheckWaitingTime.Location = new System.Drawing.Point(498, 16);
-            this.StatCheckWaitingTime.Name = "StatCheckWaitingTime";
-            this.StatCheckWaitingTime.SimulationControl = null;
-            this.StatCheckWaitingTime.Size = new System.Drawing.Size(374, 58);
-            this.StatCheckWaitingTime.TabIndex = 14;
-            this.StatCheckWaitingTime.TitleText = "Avg čas čakania - Vyšetrenie";
-            this.StatCheckWaitingTime.ValueText = "value label";
+            this.StatExaminationWaitingTime.ID = -1;
+            this.StatExaminationWaitingTime.Location = new System.Drawing.Point(498, 16);
+            this.StatExaminationWaitingTime.Name = "StatExaminationWaitingTime";
+            this.StatExaminationWaitingTime.SimulationControl = null;
+            this.StatExaminationWaitingTime.Size = new System.Drawing.Size(374, 58);
+            this.StatExaminationWaitingTime.TabIndex = 14;
+            this.StatExaminationWaitingTime.TitleText = "Avg čas čakania - Vyšetrenie";
+            this.StatExaminationWaitingTime.ValueText = "value label";
             // 
-            // StatCheckQlength
+            // StatExaminationQlength
             // 
-            this.StatCheckQlength.ID = -1;
-            this.StatCheckQlength.Location = new System.Drawing.Point(498, 80);
-            this.StatCheckQlength.Name = "StatCheckQlength";
-            this.StatCheckQlength.SimulationControl = null;
-            this.StatCheckQlength.Size = new System.Drawing.Size(374, 58);
-            this.StatCheckQlength.TabIndex = 13;
-            this.StatCheckQlength.TitleText = "Avg dĺžka radu - Vyšetrenie";
-            this.StatCheckQlength.ValueText = "value label";
+            this.StatExaminationQlength.ID = -1;
+            this.StatExaminationQlength.Location = new System.Drawing.Point(498, 80);
+            this.StatExaminationQlength.Name = "StatExaminationQlength";
+            this.StatExaminationQlength.SimulationControl = null;
+            this.StatExaminationQlength.Size = new System.Drawing.Size(374, 58);
+            this.StatExaminationQlength.TabIndex = 13;
+            this.StatExaminationQlength.TitleText = "Avg dĺžka radu - Vyšetrenie";
+            this.StatExaminationQlength.ValueText = "value label";
             // 
             // StatAdminQLength
             // 
@@ -279,7 +302,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // ResPoolNurse
             // 
             this.ResPoolNurse.ID = -1;
-            this.ResPoolNurse.Location = new System.Drawing.Point(588, 291);
+            this.ResPoolNurse.Location = new System.Drawing.Point(995, 299);
             this.ResPoolNurse.Name = "ResPoolNurse";
             this.ResPoolNurse.SimulationControl = null;
             this.ResPoolNurse.Size = new System.Drawing.Size(95, 145);
@@ -291,7 +314,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // ResPoolDoctor
             // 
             this.ResPoolDoctor.ID = -1;
-            this.ResPoolDoctor.Location = new System.Drawing.Point(314, 291);
+            this.ResPoolDoctor.Location = new System.Drawing.Point(623, 303);
             this.ResPoolDoctor.Name = "ResPoolDoctor";
             this.ResPoolDoctor.SimulationControl = null;
             this.ResPoolDoctor.Size = new System.Drawing.Size(95, 141);
@@ -303,7 +326,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // ResPoolAdmin
             // 
             this.ResPoolAdmin.ID = -1;
-            this.ResPoolAdmin.Location = new System.Drawing.Point(18, 291);
+            this.ResPoolAdmin.Location = new System.Drawing.Point(208, 303);
             this.ResPoolAdmin.Name = "ResPoolAdmin";
             this.ResPoolAdmin.SimulationControl = null;
             this.ResPoolAdmin.Size = new System.Drawing.Size(230, 145);
@@ -312,88 +335,76 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ResPoolAdmin.TitleText = "Administratívny pracovník";
             this.ResPoolAdmin.UtilizationText = "utilization%";
             // 
-            // DelaySelect
+            // PatientSink
             // 
-            this.DelaySelect.FalseOutputText = "FalseO";
-            this.DelaySelect.ID = -1;
-            this.DelaySelect.Location = new System.Drawing.Point(1019, 144);
-            this.DelaySelect.Name = "DelaySelect";
-            this.DelaySelect.SimulationControl = null;
-            this.DelaySelect.Size = new System.Drawing.Size(170, 141);
-            this.DelaySelect.TabIndex = 7;
-            this.DelaySelect.TitleText = "Dĺžka čakania";
-            this.DelaySelect.TrueOutputText = "TrueO";
-            // 
-            // ExitSink
-            // 
-            this.ExitSink.CounterText = "output";
-            this.ExitSink.ID = -1;
-            this.ExitSink.Location = new System.Drawing.Point(1419, 144);
-            this.ExitSink.Name = "ExitSink";
-            this.ExitSink.SimulationControl = null;
-            this.ExitSink.Size = new System.Drawing.Size(106, 141);
-            this.ExitSink.TabIndex = 6;
-            this.ExitSink.TitleText = "Východ";
+            this.PatientSink.ID = -1;
+            this.PatientSink.InputText = "output";
+            this.PatientSink.Location = new System.Drawing.Point(1419, 144);
+            this.PatientSink.Name = "PatientSink";
+            this.PatientSink.SimulationControl = null;
+            this.PatientSink.Size = new System.Drawing.Size(106, 141);
+            this.PatientSink.TabIndex = 6;
+            this.PatientSink.TitleText = "Východ";
             // 
             // PatientSource
             // 
-            this.PatientSource.CounterText = "0";
             this.PatientSource.ID = -1;
-            this.PatientSource.Location = new System.Drawing.Point(20, 144);
+            this.PatientSource.Location = new System.Drawing.Point(18, 152);
             this.PatientSource.Name = "PatientSource";
+            this.PatientSource.OutputText = "0";
             this.PatientSource.SimulationControl = null;
             this.PatientSource.Size = new System.Drawing.Size(161, 141);
             this.PatientSource.TabIndex = 5;
             this.PatientSource.TitleText = "Zdroj pacientov";
             // 
-            // DelayCakaren
+            // DelayWaitingRoom
             // 
-            this.DelayCakaren.ActualDelayText = "actual";
-            this.DelayCakaren.AutoSize = true;
-            this.DelayCakaren.ID = -1;
-            this.DelayCakaren.InputDelayText = "input";
-            this.DelayCakaren.Location = new System.Drawing.Point(1238, 144);
-            this.DelayCakaren.Name = "DelayCakaren";
-            this.DelayCakaren.OutputDelayText = "output";
-            this.DelayCakaren.SimulationControl = null;
-            this.DelayCakaren.Size = new System.Drawing.Size(134, 149);
-            this.DelayCakaren.TabIndex = 4;
-            this.DelayCakaren.TitleText = "Čakáreň";
+            this.DelayWaitingRoom.AutoSize = true;
+            this.DelayWaitingRoom.CurrentlyUsedText = "actual";
+            this.DelayWaitingRoom.ID = -1;
+            this.DelayWaitingRoom.InputText = "input";
+            this.DelayWaitingRoom.Location = new System.Drawing.Point(1224, 144);
+            this.DelayWaitingRoom.Name = "DelayWaitingRoom";
+            this.DelayWaitingRoom.OutputText = "output";
+            this.DelayWaitingRoom.SimulationControl = null;
+            this.DelayWaitingRoom.Size = new System.Drawing.Size(134, 149);
+            this.DelayWaitingRoom.TabIndex = 4;
+            this.DelayWaitingRoom.TitleText = "Čakáreň";
             // 
-            // ServiceOckovanie
+            // ServiceVaccination
             // 
-            this.ServiceOckovanie.DelayText = "dActual";
-            this.ServiceOckovanie.ID = -1;
-            this.ServiceOckovanie.InputText = "input";
-            this.ServiceOckovanie.Location = new System.Drawing.Point(750, 144);
-            this.ServiceOckovanie.Name = "ServiceOckovanie";
-            this.ServiceOckovanie.OutputText = "output";
-            this.ServiceOckovanie.QueueText = "qActual";
-            this.ServiceOckovanie.SimulationControl = null;
-            this.ServiceOckovanie.Size = new System.Drawing.Size(229, 149);
-            this.ServiceOckovanie.TabIndex = 3;
-            this.ServiceOckovanie.TitleText = "Očkovanie";
+            this.ServiceVaccination.CurrentlyUsedText = "dActual";
+            this.ServiceVaccination.ID = -1;
+            this.ServiceVaccination.InputText = "input";
+            this.ServiceVaccination.Location = new System.Drawing.Point(925, 144);
+            this.ServiceVaccination.Name = "ServiceVaccination";
+            this.ServiceVaccination.OutputText = "output";
+            this.ServiceVaccination.QueueText = "qActual";
+            this.ServiceVaccination.SimulationControl = null;
+            this.ServiceVaccination.Size = new System.Drawing.Size(229, 149);
+            this.ServiceVaccination.TabIndex = 3;
+            this.ServiceVaccination.TitleText = "Očkovanie";
             // 
-            // ServiceVysetrenie
+            // ServiceExamination
             // 
-            this.ServiceVysetrenie.DelayText = "dActual";
-            this.ServiceVysetrenie.ID = -1;
-            this.ServiceVysetrenie.InputText = "input";
-            this.ServiceVysetrenie.Location = new System.Drawing.Point(476, 144);
-            this.ServiceVysetrenie.Name = "ServiceVysetrenie";
-            this.ServiceVysetrenie.OutputText = "output";
-            this.ServiceVysetrenie.QueueText = "qActual";
-            this.ServiceVysetrenie.SimulationControl = null;
-            this.ServiceVysetrenie.Size = new System.Drawing.Size(229, 141);
-            this.ServiceVysetrenie.TabIndex = 2;
-            this.ServiceVysetrenie.TitleText = "Vyšetrenie";
+            this.ServiceExamination.CurrentlyUsedText = "dActual";
+            this.ServiceExamination.ID = -1;
+            this.ServiceExamination.InputText = "input";
+            this.ServiceExamination.Location = new System.Drawing.Point(557, 144);
+            this.ServiceExamination.Name = "ServiceExamination";
+            this.ServiceExamination.OutputText = "output";
+            this.ServiceExamination.QueueText = "qActual";
+            this.ServiceExamination.SimulationControl = null;
+            this.ServiceExamination.Size = new System.Drawing.Size(229, 141);
+            this.ServiceExamination.TabIndex = 2;
+            this.ServiceExamination.TitleText = "Vyšetrenie";
             // 
             // ServiceAdministracia
             // 
-            this.ServiceAdministracia.DelayText = "dActual";
+            this.ServiceAdministracia.CurrentlyUsedText = "dActual";
             this.ServiceAdministracia.ID = -1;
             this.ServiceAdministracia.InputText = "input";
-            this.ServiceAdministracia.Location = new System.Drawing.Point(180, 144);
+            this.ServiceAdministracia.Location = new System.Drawing.Point(208, 144);
             this.ServiceAdministracia.Name = "ServiceAdministracia";
             this.ServiceAdministracia.OutputText = "output";
             this.ServiceAdministracia.QueueText = "qActual";
@@ -401,31 +412,6 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ServiceAdministracia.Size = new System.Drawing.Size(229, 141);
             this.ServiceAdministracia.TabIndex = 1;
             this.ServiceAdministracia.TitleText = "Administrácia";
-            // 
-            // ReadDelay
-            // 
-            this.ReadDelay.ActualDelayText = "actual";
-            this.ReadDelay.AutoSize = true;
-            this.ReadDelay.ID = -1;
-            this.ReadDelay.InputDelayText = "input";
-            this.ReadDelay.Location = new System.Drawing.Point(557, 570);
-            this.ReadDelay.Name = "ReadDelay";
-            this.ReadDelay.OutputDelayText = "output";
-            this.ReadDelay.SimulationControl = null;
-            this.ReadDelay.Size = new System.Drawing.Size(161, 137);
-            this.ReadDelay.TabIndex = 25;
-            this.ReadDelay.TitleText = "Citanie novin";
-            // 
-            // SizeStat
-            // 
-            this.SizeStat.ID = -1;
-            this.SizeStat.Location = new System.Drawing.Point(956, 475);
-            this.SizeStat.Name = "SizeStat";
-            this.SizeStat.SimulationControl = null;
-            this.SizeStat.Size = new System.Drawing.Size(300, 65);
-            this.SizeStat.TabIndex = 26;
-            this.SizeStat.TitleText = "Pocet cakajucich";
-            this.SizeStat.ValueText = "value label";
             // 
             // SimulationControl
             // 
@@ -448,23 +434,22 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         private System.Windows.Forms.Label SimulationTitleLabel;
         private System.Windows.Forms.Panel SimulationTopPanel;
         private System.Windows.Forms.Panel panel1;
-        private SimDelay DelayCakaren;
-        private SimService ServiceOckovanie;
-        private SimService ServiceVysetrenie;
+        private SimDelay DelayWaitingRoom;
+        private SimService ServiceVaccination;
+        private SimService ServiceExamination;
         private SimService ServiceAdministracia;
-        private SimSelect2 DelaySelect;
-        private SimSink ExitSink;
+        private SimSink PatientSink;
         private SimSource PatientSource;
-        private SimStats StatVaccinateQlength;
-        private SimStats StatVaccinateWaitingTime;
-        private SimStats StatCheckWaitingTime;
-        private SimStats StatCheckQlength;
+        private SimStats StatVaccinationQlength;
+        private SimStats StatVaccinationWaitingTime;
+        private SimStats StatExaminationWaitingTime;
+        private SimStats StatExaminationQlength;
         private SimStats StatAdminQLength;
         private SimStats StatAdminWaitingTime;
         private SimResourcePool ResPoolNurse;
         private SimResourcePool ResPoolDoctor;
         private SimResourcePool ResPoolAdmin;
-        private SimStats StatAvgNOWaiting;
+        private SimStats StatWaitingRoomCapacity;
         private Clock.SimulationClock SimulationClock;
         private SimStats DlzkaStat;
         private SimStats CakanieStat;

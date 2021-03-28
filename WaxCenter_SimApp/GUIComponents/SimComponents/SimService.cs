@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaxCenter_SimApp.GUIComponents.Screens;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.ComponentValuesClasses;
 
 namespace WaxCenter_SimApp.GUIComponents.SimComponents
 {
@@ -24,5 +25,13 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
         {
             SimulationControl.HandleComponentSelect(this);
         }
+        public void UpdateAccordingToState(ServiceStateData stateData)
+        {
+            InputText = stateData.AgentsEntered.ToString();
+            OutputText = stateData.AgentsLeaved.ToString();
+            QueueText = stateData.QueueSize.ToString();
+            CurrentlyUsedText = stateData.CurrentlyUsed.ToString();
+        }
     }
+    
 }

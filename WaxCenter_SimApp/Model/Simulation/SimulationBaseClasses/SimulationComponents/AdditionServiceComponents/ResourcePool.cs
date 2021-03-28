@@ -12,11 +12,11 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         private ServiceComponent _service;
         private ServiceStaff[] _staff;
         private Random[] _staffSelectGenerators;
-        private int _maxStaff;
+        public int MaxStaff { get; private set; }
         private Random _selectSeedGenerator;
         private List<ServiceStaff> _availableStaff;
         private double _totalTimeOccupied;
-        public double Utilization { get => _service.Simulation.CurrentTime == 0 ? 0 : _totalTimeOccupied / (_maxStaff * _service.Simulation.CurrentTime); }
+        public double Utilization { get => _service.Simulation.CurrentTime == 0 ? 0 : _totalTimeOccupied / (MaxStaff * _service.Simulation.CurrentTime); }
         public ResourcePool(ServiceComponent service, int maxStaff)
         {
             _service = service;
@@ -26,21 +26,21 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 
         public void SetMaxStaff(int maxStaff)
         {
-            _maxStaff = maxStaff;
-            _staff = new ServiceStaff[_maxStaff];
-            _staffSelectGenerators = new Random[_maxStaff - 1];
-            for (int i = 0; i < _maxStaff; ++i)
+            MaxStaff = maxStaff;
+            _staff = new ServiceStaff[MaxStaff];
+            _staffSelectGenerators = new Random[MaxStaff - 1];
+            for (int i = 0; i < MaxStaff; ++i)
             {
                 _staff[i] = new ServiceStaff(_service);
             }
-            _availableStaff = new List<ServiceStaff>(_maxStaff);
+            _availableStaff = new List<ServiceStaff>(MaxStaff);
             SetSelectSeed();
         }
 
         public ServiceStaff GetFreeStaff()
         {
             _availableStaff.Clear();
-            for(int i = 0; i < _maxStaff; ++i)
+            for(int i = 0; i < MaxStaff; ++i)
             {
                 if (!_staff[i].Occupied)
                     _availableStaff.Add(_staff[i]);
@@ -73,7 +73,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         public void Reset()
         {
             _availableStaff.Clear();
-            for (int i = 0; i < _maxStaff; ++i)
+            for (int i = 0; i < MaxStaff; ++i)
                 _staff[i].Reset();
             _totalTimeOccupied = 0;
         }
@@ -90,7 +90,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         }
         private void SetSelectSeed()
         {
-            for (int i = 0; i < _maxStaff - 1; ++i)
+            for (int i = 0; i < MaxStaff - 1; ++i)
                 _staffSelectGenerators[i] = new Random(_selectSeedGenerator.Next());
         }
     }

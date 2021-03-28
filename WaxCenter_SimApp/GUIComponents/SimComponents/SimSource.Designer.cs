@@ -99,7 +99,7 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
             set => SourceTitleLabel.Text = value;
         }
 
-        public string CounterText
+        public string OutputText
         {
             get => CounterLabel.Text;
             set => CounterLabel.Text = value;

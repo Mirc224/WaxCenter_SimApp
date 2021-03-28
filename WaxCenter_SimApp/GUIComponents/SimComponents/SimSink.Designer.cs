@@ -113,7 +113,7 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
             set => SinkTitleLabel.Text = value;
         }
 
-        public string CounterText
+        public string InputText
         {
             get => OutputSinkLabel.Text;
             set => OutputSinkLabel.Text = value;
