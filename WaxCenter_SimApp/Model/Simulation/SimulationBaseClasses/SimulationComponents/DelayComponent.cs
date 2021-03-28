@@ -16,10 +16,11 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         public int AgentsLeaved { get; protected set; } = 0;
         public int MaxService { get; protected set; }
         public int CurrentlyUsed { get; protected set; }
-        public bool IsFree { get => MaxService != CurrentlyUsed; }
+        public bool IsFree { get => MaxService != _capacityUsed; }
         public IDistribution Generator { get; protected set; }
-
+        protected int _capacityUsed = 0;
         public Func<DelayComponent, Agent, int> OnEnter { get; set; } = null;
+        public Func<DelayComponent, Agent, int> OnExit { get; set; } = null;
 
         public DelayComponent(EventSimulationCore simulation, IDistribution generator, int maxService = 1)
         {
@@ -30,6 +31,8 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         public virtual bool StartService(Agent agent)
         {
             ++CurrentlyUsed;
+            if (OnEnter != null)
+                OnEnter(this, agent);
             return true;
         }
 
@@ -38,6 +41,10 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
             // On exit
             ++AgentsLeaved;
             --CurrentlyUsed;
+            --_capacityUsed;
+            if (OnExit != null)
+                OnExit(this, agent);
+
             NextComponent.Enter(agent);
             return true;
         }
@@ -49,9 +56,9 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 
         protected virtual void PlanServiceEventStart(Agent agent)
         {
-            ++CurrentlyUsed;
+            ++_capacityUsed;
             // On enter Service
-            if (CurrentlyUsed > MaxService)
+            if (_capacityUsed > MaxService)
                 throw new Exception("ServiceComponent: Used more services than maximal avaiable!");
 
             //var serviceStartE = Activator.CreateInstance(typeof(E), Simulation) as E;
@@ -63,6 +70,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 
         public override void Reset()
         {
+            _capacityUsed = 0;
             CurrentlyUsed = 0;
             AgentsEntered = 0;
             AgentsLeaved = 0;

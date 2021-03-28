@@ -49,7 +49,7 @@ namespace WaxCenter_SimApp
                         Console.WriteLine(list.Average());*/
             var simulation = new EventSimCoreNewsPapers();
             simulation.ResetSimulation();
-            simulation.MaxTime = 10000000;
+            simulation.MaxTime = 15000000;
             simulation.DoReplication();
         }
     }

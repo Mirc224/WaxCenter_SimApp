@@ -56,6 +56,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ServiceOckovanie = new WaxCenter_SimApp.GUIComponents.SimComponents.SimService();
             this.ServiceVysetrenie = new WaxCenter_SimApp.GUIComponents.SimComponents.SimService();
             this.ServiceAdministracia = new WaxCenter_SimApp.GUIComponents.SimComponents.SimService();
+            this.ReadDelay = new WaxCenter_SimApp.GUIComponents.SimComponents.SimDelay();
+            this.SizeStat = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
             this.SimulationTopPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -84,6 +86,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.SizeStat);
+            this.panel1.Controls.Add(this.ReadDelay);
             this.panel1.Controls.Add(this.DlzkaStat);
             this.panel1.Controls.Add(this.CakanieStat);
             this.panel1.Controls.Add(this.PredajService);
@@ -116,7 +120,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // DlzkaStat
             // 
             this.DlzkaStat.ID = -1;
-            this.DlzkaStat.Location = new System.Drawing.Point(579, 476);
+            this.DlzkaStat.Location = new System.Drawing.Point(498, 476);
             this.DlzkaStat.Name = "DlzkaStat";
             this.DlzkaStat.SimulationControl = null;
             this.DlzkaStat.Size = new System.Drawing.Size(400, 64);
@@ -153,7 +157,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // 
             this.CustomerSink.CounterText = "output";
             this.CustomerSink.ID = -1;
-            this.CustomerSink.Location = new System.Drawing.Point(476, 566);
+            this.CustomerSink.Location = new System.Drawing.Point(800, 562);
             this.CustomerSink.Name = "CustomerSink";
             this.CustomerSink.SimulationControl = null;
             this.CustomerSink.Size = new System.Drawing.Size(196, 145);
@@ -174,7 +178,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // NewsPaperResPool
             // 
             this.NewsPaperResPool.ID = -1;
-            this.NewsPaperResPool.Location = new System.Drawing.Point(750, 566);
+            this.NewsPaperResPool.Location = new System.Drawing.Point(1019, 562);
             this.NewsPaperResPool.Name = "NewsPaperResPool";
             this.NewsPaperResPool.SimulationControl = null;
             this.NewsPaperResPool.Size = new System.Drawing.Size(170, 145);
@@ -186,7 +190,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // SimulationClock
             // 
             this.SimulationClock.ClockText = "0,0";
-            this.SimulationClock.Location = new System.Drawing.Point(1116, 562);
+            this.SimulationClock.Location = new System.Drawing.Point(1257, 549);
             this.SimulationClock.Name = "SimulationClock";
             this.SimulationClock.SimulationControl = null;
             this.SimulationClock.Size = new System.Drawing.Size(256, 162);
@@ -398,6 +402,31 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ServiceAdministracia.TabIndex = 1;
             this.ServiceAdministracia.TitleText = "Administrácia";
             // 
+            // ReadDelay
+            // 
+            this.ReadDelay.ActualDelayText = "actual";
+            this.ReadDelay.AutoSize = true;
+            this.ReadDelay.ID = -1;
+            this.ReadDelay.InputDelayText = "input";
+            this.ReadDelay.Location = new System.Drawing.Point(557, 570);
+            this.ReadDelay.Name = "ReadDelay";
+            this.ReadDelay.OutputDelayText = "output";
+            this.ReadDelay.SimulationControl = null;
+            this.ReadDelay.Size = new System.Drawing.Size(161, 137);
+            this.ReadDelay.TabIndex = 25;
+            this.ReadDelay.TitleText = "Citanie novin";
+            // 
+            // SizeStat
+            // 
+            this.SizeStat.ID = -1;
+            this.SizeStat.Location = new System.Drawing.Point(956, 475);
+            this.SizeStat.Name = "SizeStat";
+            this.SizeStat.SimulationControl = null;
+            this.SizeStat.Size = new System.Drawing.Size(300, 65);
+            this.SizeStat.TabIndex = 26;
+            this.SizeStat.TitleText = "Pocet cakajucich";
+            this.SizeStat.ValueText = "value label";
+            // 
             // SimulationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -443,5 +472,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         private SimSink CustomerSink;
         private SimSource CustomersSource;
         private SimResourcePool NewsPaperResPool;
+        private SimStats SizeStat;
+        private SimDelay ReadDelay;
     }
 }

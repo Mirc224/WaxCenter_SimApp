@@ -19,7 +19,8 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events
             _delayComponent.StartService(Agent);
             var endService = new DelayEndEvent(_delayComponent);
             endService.Agent = Agent;
-            endService.OccurrenceTime = _delayComponent.Simulation.CurrentTime + _delayComponent.Generator.Sample();
+            double durration = _delayComponent.Generator.Sample();
+            endService.OccurrenceTime = _delayComponent.Simulation.CurrentTime + durration;
             _delayComponent.Simulation.EventCalendar.Insert(endService.OccurrenceTime, endService);
         }
     }

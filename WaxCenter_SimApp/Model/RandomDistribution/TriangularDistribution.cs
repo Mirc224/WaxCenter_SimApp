@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WaxCenter_SimApp.Model.RandomDistribution
 {
-    class TriangularDistribution : IDistribution
+    public class TriangularDistribution : IDistribution
     {
         private double _min;
         private double _max;

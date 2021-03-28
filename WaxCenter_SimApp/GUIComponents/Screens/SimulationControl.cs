@@ -112,9 +112,13 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             PredajService.InputText = GUIData.ServiceInput.ToString();
             PredajService.OutputText = GUIData.ServiceOutput.ToString();
             CustomerSink.CounterText = GUIData.SinkInput.ToString();
+            ReadDelay.InputDelayText = GUIData.DelayInput.ToString();
+            ReadDelay.OutputDelayText = GUIData.DelayOutput.ToString();
+            ReadDelay.ActualDelayText = GUIData.CurretlyUsedDelay.ToString();
             NewsPaperResPool.StaffUsedText = $"{GUIData.MaxService - GUIData.CurrentlyUsedService}/{GUIData.MaxService}";
             CakanieStat.ValueText = $"[{GUIData.MinWaitingTime.ToString("F")}..{GUIData.MaxWaitingTime.ToString("F")}] Mean: {GUIData.AverageWaitingTime}";
             DlzkaStat.ValueText = $"[{GUIData.MinQLength}..{GUIData.MaxQLength}] Mean: {GUIData.AverageQLength}";
+            SizeStat.ValueText = $"[{GUIData.DelayMinSize}..{GUIData.DelayMaxSize}] Mean: {GUIData.DelayMeanSize}";
         }
 
     }

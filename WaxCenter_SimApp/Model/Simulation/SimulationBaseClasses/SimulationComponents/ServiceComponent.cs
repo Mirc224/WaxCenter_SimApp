@@ -7,17 +7,20 @@ using WaxCenter_SimApp.Model.RandomDistribution;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Agents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.AdditionServiceComponents;
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents
 {
     public class ServiceComponent : DelayComponent
     {
+        public ResourcePool ResourcePool { get; private set; }
         public Queue<Agent> WaitingQueue { get; private set; } = new Queue<Agent>();
         public int QueueSize { get => WaitingQueue.Count; }
         public Func<ServiceComponent, Agent, int> OnEnterDelay { get; set; } = null;
         public ServiceComponent(EventSimulationCore simulation, IDistribution generator, int maxService = 1): 
             base(simulation, generator, maxService)
         {
+            ResourcePool = new ResourcePool(this, maxService);
         }
 
         override public void Enter(Agent agent)
@@ -40,6 +43,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         override public bool StartService(Agent agent)
         {
             // On service start
+            ++CurrentlyUsed;
             if (OnEnterDelay != null)
                 OnEnterDelay(this, agent);
 
@@ -55,7 +59,8 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
             // On exit
             ++AgentsLeaved;
             --CurrentlyUsed;
-            if(CurrentlyUsed < 0)
+            --_capacityUsed;
+            if(_capacityUsed < 0)
                 throw new Exception("ServiceComponent: Released more services than maximal avaiable!");
             if(QueueSize !=0)
             {
@@ -79,13 +84,13 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 
         override protected void PlanServiceEventStart(Agent agent)
         {
-            ++CurrentlyUsed;
+            ++_capacityUsed;
             // On enter Service
             if (CurrentlyUsed > MaxService)
                 throw new Exception("ServiceComponent: Used more services than maximal avaiable!");
 
             //var serviceStartE = Activator.CreateInstance(typeof(E), Simulation) as E;
-            var serviceStartE = new DelayStartEvent(this);
+            var serviceStartE = new ServiceStartEvent(this);
             serviceStartE.Agent = agent;
             serviceStartE.OccurrenceTime = Simulation.CurrentTime;
             Simulation.EventCalendar.Insert(serviceStartE.OccurrenceTime, serviceStartE);

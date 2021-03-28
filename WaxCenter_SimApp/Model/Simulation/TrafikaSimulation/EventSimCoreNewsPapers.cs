@@ -9,7 +9,6 @@ using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Agents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events.BaseEvents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents;
-
 using WaxCenter_SimApp.Model.Statistics;
 
 namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
@@ -19,13 +18,12 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
         /*
          * Tu patria vsetko dalsie co je v simulacii. Generatory generator nasad, statisticke vyhodnotenia, atribut stavu, ci je obsadene alebo neobsadene.
          */
-        //public Queue<Customer> WaitingQueue { get; private set; } = new Queue<Customer>();
-        //public ExponentialDistribution CustomerArrivalGenerator { get; private set; } = new ExponentialDistribution(5);
-        //public ExponentialDistribution ServiceTimeGenerator { get; private set; } = new ExponentialDistribution(4);
-        public ServiceComponent NewsPaperService { get; private set; }
         public DiscreteStatistic NewsPaperWaitingTime { get; private set; } = new DiscreteStatistic();
         public ContinousStatistic NewsPaperQLength { get; private set; } = new ContinousStatistic();
+        public ContinousStatistic DelaySize { get; private set; } = new ContinousStatistic();
         public SourceComponent<Customer> CustomerSource { get; private set; }
+        public ServiceComponent NewsPaperService { get; private set; }
+        public DelayComponent ReadDelay { get; private set; }
         public SinkComponent CustomerSink { get; private set; }
         public int Speed { get; set; } = 1;
         public double StartTime { get; set; } = 0;
@@ -35,11 +33,15 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
         {
             CustomerSource = new SourceComponent<Customer>(this, new ExponentialDistribution(5));
             NewsPaperService = new ServiceComponent(this, new ExponentialDistribution(4), 1);
+            ReadDelay = new DelayComponent(this, new DiscreteDistribution(new double[] { 0.95, 0.05 }, new double[] { 10, 30 }), int.MaxValue);
             CustomerSink = new SinkComponent(this);
             NewsPaperService.OnEnter = OnEnterService;
             NewsPaperService.OnEnterDelay = OnEnterDelay;
+            ReadDelay.OnEnter = OnEnterReadDelay;
+            ReadDelay.OnExit = OnExitReadDelay;
             CustomerSource.NextComponent = NewsPaperService;
-            NewsPaperService.NextComponent = CustomerSink;
+            NewsPaperService.NextComponent = ReadDelay;
+            ReadDelay.NextComponent = CustomerSink;
             SeedGenerator = new Random();
             SeedIt();
         }
@@ -48,6 +50,7 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
         {
             CustomerSource.Generator.SetSeed(SeedGenerator.Next());
             NewsPaperService.Generator.SetSeed(SeedGenerator.Next());
+            ReadDelay.Generator.SetSeed(SeedGenerator.Next());
         }
 
         override
@@ -70,6 +73,8 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             }
             Console.WriteLine(NewsPaperWaitingTime.Mean);
             Console.WriteLine(NewsPaperQLength.Mean);
+            Console.WriteLine(NewsPaperService.ResourcePool.Utilization);
+            Console.WriteLine(DelaySize.Mean);
         }
 
         public int OnEnterService(DelayComponent self, Agent agent)
@@ -88,6 +93,18 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             NewsPaperQLength.Add(self.QueueSize, CurrentTime);
             NewsPaperWaitingTime.Add(CurrentTime - customer.QueueArrivalTime);
 
+            return 0;
+        }
+
+        public int OnEnterReadDelay(DelayComponent self, Agent agent)
+        {
+            DelaySize.Add(self.CurrentlyUsed, CurrentTime);
+            return 0;
+        }
+
+        public int OnExitReadDelay(DelayComponent self, Agent agent)
+        {
+            DelaySize.Add(self.CurrentlyUsed, CurrentTime);
             return 0;
         }
 
@@ -156,14 +173,17 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             CustomerSource.Reset();
             NewsPaperService.Reset();
             CustomerSink.Reset();
+            ReadDelay.Reset();
             CustomerSource.Generator.SetSeed(SeedGenerator.Next());
             NewsPaperService.Generator.SetSeed(SeedGenerator.Next());
+            ReadDelay.Generator.SetSeed(SeedGenerator.Next());
         }
 
         private void ResetStatistics()
         {
             NewsPaperWaitingTime.Reset();
             NewsPaperQLength.Reset();
+            DelaySize.Reset();
             NewsPaperQLength.PreviousState = StartTime;
         }
     }

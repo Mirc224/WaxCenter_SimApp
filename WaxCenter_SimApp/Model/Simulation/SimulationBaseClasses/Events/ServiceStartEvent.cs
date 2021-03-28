@@ -17,9 +17,14 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events
         public override void Execute()
         {
             _service.StartService(Agent);
-            var endService = new ServiceEndEvent(_service);
+            _staff = _service.ResourcePool.GetFreeStaff();
+            if (_staff == null)
+                throw new Exception("ServiceStartEvnet: returned null staff!");
+            var endService = new ServiceEndEvent(_service, _staff);
             endService.Agent = Agent;
-            endService.OccurrenceTime = _service.Simulation.CurrentTime + _service.Generator.Sample();
+            double durationTime = _service.Generator.Sample();
+            _staff.CurrentServiceDuration = durationTime;
+            endService.OccurrenceTime = _service.Simulation.CurrentTime + durationTime;
             _service.Simulation.EventCalendar.Insert(endService.OccurrenceTime, endService);
         }
     }

@@ -23,6 +23,13 @@ namespace WaxCenter_SimApp.Model.Simulation.GUIData
         public double CurrentTime { get => _simulation.CurrentTime; }
         public int MaxService { get => _simulation.NewsPaperService.MaxService; }
         public int CurrentlyUsedService { get => _simulation.NewsPaperService.CurrentlyUsed; }
+        public int CurretlyUsedDelay { get => _simulation.ReadDelay.CurrentlyUsed; }
+        public int DelayInput { get => _simulation.ReadDelay.AgentsEntered; }
+        public int DelayOutput { get => _simulation.ReadDelay.AgentsLeaved; }
+        public double DelayMinSize { get => _simulation.DelaySize.Min; }
+        public double DelayMaxSize { get => _simulation.DelaySize.Max; }
+        public double DelayMeanSize { get => _simulation.DelaySize.Mean; }
+
 
         private EventSimCoreNewsPapers _simulation;
 

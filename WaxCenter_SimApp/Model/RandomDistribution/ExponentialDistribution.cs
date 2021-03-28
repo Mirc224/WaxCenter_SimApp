@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WaxCenter_SimApp.Model.RandomDistribution
 {
-    class ExponentialDistribution : IDistribution
+    public class ExponentialDistribution : IDistribution
     {
         Random _generator;
         double _lambda;

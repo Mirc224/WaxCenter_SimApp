@@ -61,12 +61,12 @@
       <DependentUpon>SimulationClock.cs</DependentUpon>
     </Compile>
     <Compile Include="GUIComponents\SimComponents\ISimComponent.cs" />
+    <Compile Include="Model\RandomDistribution\CustomDistribution.cs" />
+    <Compile Include="Model\RandomDistribution\DiscreteDistribution.cs" />
     <Compile Include="Model\RandomDistribution\ExponentialDistribution.cs" />
     <Compile Include="Model\RandomDistribution\IDistribution.cs" />
     <Compile Include="Model\RandomDistribution\TriangularDistribution.cs" />
     <Compile Include="Model\Simulation\GUIData\GUIDataValues.cs" />
-    <Compile Include="Model\Simulation\NewsPaper\EventSimulCoreNP.cs" />
-    <Compile Include="Model\Simulation\NewsPaper\Zakaznik.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Agents\Agent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Events\AgentArrivalEvent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Events\BaseEvents\BaseDelayEvent.cs" />
