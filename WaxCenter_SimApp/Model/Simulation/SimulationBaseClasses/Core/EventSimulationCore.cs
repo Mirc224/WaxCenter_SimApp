@@ -42,7 +42,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
         public Controller.Controller Controller { get; set; }
         public SimulationStatus Status { get; set; } = SimulationStatus.FINISHED;
         public bool ContinueAfterMaxTime { get; set; } = false;
-        public SimulationComponentsContainer SimulationComponents { get; protected set; } = new SimulationComponentsContainer();
+        public SimulationComponentsManager SimulationComponentsManager { get; protected set; } = new SimulationComponentsManager();
         public int Seed { 
             get => _lastUsedSeed; 
             set 
@@ -103,25 +103,13 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
 
         protected virtual void ResetComponents()
         {
-            if (SimulationComponents.Source != null)
-                SimulationComponents.Source.Reset();
-
-            if (SimulationComponents.ServiceComponents != null)
-                for (int i = 0; i < SimulationComponents.ServiceComponents.Length; ++i)
-                    SimulationComponents.ServiceComponents[i].Reset();
-
-            if (SimulationComponents.DelayComponents != null)
-                for (int i = 0; i < SimulationComponents.DelayComponents.Length; ++i)
-                    SimulationComponents.DelayComponents[i].Reset();
-
-            if (SimulationComponents.Sink != null)
-                SimulationComponents.Sink.Reset();
+            SimulationComponentsManager.ResetAllComponents();
         }
         protected virtual void ResetStatistics()
         {
-            if (SimulationComponents.Statistics != null)
-                for (int i = 0; i < SimulationComponents.Statistics.Length; ++i)
-                    SimulationComponents.Statistics[i].Reset();
+            if (SimulationComponentsManager.Statistics != null)
+                for (int i = 0; i < SimulationComponentsManager.Statistics.Length; ++i)
+                    SimulationComponentsManager.Statistics[i].Reset();
         }
         protected void SetSeed()
         {
@@ -134,7 +122,10 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
             SeedGenerator = new Random(seed);
             SeedIt();
         }
-        protected abstract void SeedIt();
+        protected virtual void SeedIt()
+        {
+            SimulationComponentsManager.SetComponetsSeed(SeedGenerator);
+        }
         public virtual void DoReplication()
         {
             SimEvent currentEvent = null;

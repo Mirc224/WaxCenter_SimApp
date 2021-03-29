@@ -14,6 +14,9 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
 {
     public class EventSimCoreVaccinationCenter : EventSimulationCore
     {
+
+        public int NumberOfGeneratedAgents { get; set; } = 540;
+        public double EndTime { get; set; } = 540 * 60;
         // Komponenty
         public SourceComponent<Patient> PatientSource { get; private set; }
         public ServiceComponent AdminService { get; private set; }
@@ -67,11 +70,11 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             PatientSink = new SinkComponent(this);
             WaitingRoomDelay.NextComponent = PatientSink;
 
-            SimulationComponents.Source = PatientSource;
-            SimulationComponents.ServiceComponents = new ServiceComponent[] { AdminService, ExaminationService, VaccinationService };
-            SimulationComponents.DelayComponents = new DelayComponent[] { WaitingRoomDelay};
-            SimulationComponents.Sink = PatientSink;
-            SimulationComponents.Statistics = new BaseStatistic[] {StatAdminQLength, StatAdminWaitingTime, StatExaminationQLength, StatExaminationWaitingTime,
+            SimulationComponentsManager.Source = PatientSource;
+            SimulationComponentsManager.ServiceComponents = new ServiceComponent[] { AdminService, ExaminationService, VaccinationService };
+            SimulationComponentsManager.DelayComponents = new DelayComponent[] { WaitingRoomDelay};
+            SimulationComponentsManager.Sink = PatientSink;
+            SimulationComponentsManager.Statistics = new BaseStatistic[] {StatAdminQLength, StatAdminWaitingTime, StatExaminationQLength, StatExaminationWaitingTime,
                                                                    StatVaccinationQLength, StatVaccinationWaitingTime, StatWaitingRoomCapacity};
 
             //ContinueAfterMaxTime = true;
@@ -102,16 +105,6 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             Patient.ResetGlobalID();
             ResetComponents();
             ResetStatistics();
-        }
-        
-        override
-        protected void SeedIt()
-        {
-            PatientSource.Generator.SetSeed(SeedGenerator.Next());
-            AdminService.Generator.SetSeed(SeedGenerator.Next());
-            ExaminationService.Generator.SetSeed(SeedGenerator.Next());
-            VaccinationService.Generator.SetSeed(SeedGenerator.Next());
-            WaitingRoomDelay.Generator.SetSeed(SeedGenerator.Next());
         }
 
         private int AdminOnEnter(DelayComponent self, Agent agent)
@@ -173,7 +166,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         }
         private double SourceGeneratorFunction()
         {
-            return 60;
+            return ((EndTime/60.0)/NumberOfGeneratedAgents)*60;
         }
 
         protected override void PlanFirstEvent()
