@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WaxCenter_SimApp.DataStructures;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events.BaseEvents;
-
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.SimulationComponentsWrapper;
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
 {
@@ -41,8 +41,30 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
         public double MaxTime { get; set; } = 0;
         public Controller.Controller Controller { get; set; }
         public SimulationStatus Status { get; set; } = SimulationStatus.FINISHED;
-        protected int _lastUsedSeed = 224;
-        public bool AutoSeed { get; protected set; } = false;
+        public bool ContinueAfterMaxTime { get; set; } = false;
+        public SimulationComponentsContainer SimulationComponents { get; protected set; } = new SimulationComponentsContainer();
+        public int Seed { 
+            get => _lastUsedSeed; 
+            set 
+            { 
+                _lastUsedSeed = value;
+                SetSeed(_lastUsedSeed);
+            } 
+        }
+        public bool AutoSeed 
+        { 
+            get => _autoSeed;
+            set
+            {
+                _autoSeed = value;
+                if (value)
+                    SetSeed();
+                else
+                    SetSeed(_lastUsedSeed);
+            } 
+        }
+        private int _lastUsedSeed = 224;
+        private bool _autoSeed = false;
         
         public EventSimulationCore(Controller.Controller controller, double maxTime = 0)
         {
@@ -66,7 +88,10 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
 
         public void BeforeSimulation()
         {
-            throw new NotImplementedException();
+            if (_autoSeed)
+                SetSeed();
+            else
+                SetSeed(_lastUsedSeed);
         }
         public abstract void BeforeReplicationInit();
         public void ResetSimulation()
@@ -76,28 +101,108 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
             ResetGenerators();
         }
 
-        protected virtual void ResetComponents(){}
-        protected virtual void ResetStatistics(){}
-        public void SetSeed()
+        protected virtual void ResetComponents()
+        {
+            if (SimulationComponents.Source != null)
+                SimulationComponents.Source.Reset();
+
+            if (SimulationComponents.ServiceComponents != null)
+                for (int i = 0; i < SimulationComponents.ServiceComponents.Length; ++i)
+                    SimulationComponents.ServiceComponents[i].Reset();
+
+            if (SimulationComponents.DelayComponents != null)
+                for (int i = 0; i < SimulationComponents.DelayComponents.Length; ++i)
+                    SimulationComponents.DelayComponents[i].Reset();
+
+            if (SimulationComponents.Sink != null)
+                SimulationComponents.Sink.Reset();
+        }
+        protected virtual void ResetStatistics()
+        {
+            if (SimulationComponents.Statistics != null)
+                for (int i = 0; i < SimulationComponents.Statistics.Length; ++i)
+                    SimulationComponents.Statistics[i].Reset();
+        }
+        protected void SetSeed()
         {
             SeedGenerator = new Random();
             SeedIt();
         }
-        public void SetSeed(int seed)
+        protected void SetSeed(int seed)
         {
             _lastUsedSeed = seed;
-            SeedGenerator = new Random(_lastUsedSeed);
+            SeedGenerator = new Random(seed);
             SeedIt();
         }
         protected abstract void SeedIt();
-        public abstract void DoReplication();
+        public virtual void DoReplication()
+        {
+            SimEvent currentEvent = null;
+            if (EventCalendar.Count == 0)
+            {
+                PlanFirstEvent();
+                /*                currentEvent = new CustomerArrivalEvent(this);
+                                currentEvent.OccurrenceTime = CustomerSource.Generator.Sample();
+                                EventCalendar.Insert(currentEvent.OccurrenceTime, currentEvent);*/
+            }
+            CurrentTime = 0;
+            while (EventCalendar.Count != 0 && (CurrentTime <= MaxTime || ContinueAfterMaxTime))
+            {
+                currentEvent = EventCalendar.GetMin();
+                CurrentTime = currentEvent.OccurrenceTime;
+                currentEvent.Execute();
+            }
+        }
         public void ResetGenerators()
         {
             if (AutoSeed)
                 SetSeed();
             else
-                SetSeed(_lastUsedSeed);
+                SetSeed(Seed);
         }
+
+        protected abstract void PlanFirstEvent();
+
+        public virtual SimulationStatus RunRealTimeSimulation()
+        {
+            SimEvent currentEvent = null;
+            if (EventCalendar.Count == 0 && (Status == SimulationStatus.CANCELED || Status == SimulationStatus.FINISHED))
+            {
+                PlanFirstEvent();
+            }
+            Status = SimulationStatus.RUNNING;
+            double nextEventTime;
+            while (EventCalendar.Count != 0 && (CurrentTime <= MaxTime || ContinueAfterMaxTime))
+            {
+
+                nextEventTime = EventCalendar.Peek;
+                while (CurrentTime < nextEventTime)
+                {
+                    CurrentTime += RunClock(nextEventTime - CurrentTime);
+                    if (nextEventTime < CurrentTime)
+                        CurrentTime = nextEventTime;
+                    Controller.ClockUpdate(CurrentTime);
+                    if (CurrentTime > MaxTime && !ContinueAfterMaxTime)
+                    {
+                        Status = SimulationStatus.FINISHED;
+                        return Status;
+                    }
+                    if (Controller.RealTimeCancellation)
+                    {
+                        Status = SimulationStatus.CANCELED;
+                        return Status;
+                    }
+                }
+                CurrentTime = nextEventTime;
+                currentEvent = EventCalendar.GetMin();
+                CurrentTime = currentEvent.OccurrenceTime;
+                currentEvent.Execute();
+                Controller.AfterEventUpdate();
+            }
+            Status = SimulationStatus.FINISHED;
+            return Status;
+        }
+
         public double RunClock(double timeDifference)
         {
             int actualSpeed = Speed;

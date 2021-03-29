@@ -28,7 +28,7 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
             SimulationControl.HandleComponentSelect(this);
         }
 
-        public void UpdateAccordingToState(SourceStateData<Patient> stateData)
+        public void UpdateAccordingToState(SourceStateData stateData)
         {
             OutputText = stateData.SourceOutput.ToString();
         }

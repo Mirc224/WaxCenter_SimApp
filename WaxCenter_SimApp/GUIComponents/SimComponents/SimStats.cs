@@ -33,7 +33,7 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
         }
         public void UpdateAccordingToState(StatisticStateData stateData)
         {
-            ValueText = $"[{stateData.StatMin.ToString("F")}..{stateData.StatMax.ToString("F")}] Mean: {stateData.StatMean}";
+            ValueText = $"[{String.Format("{0:0.####}", stateData.StatMin)}..{String.Format("{0:0.####}", stateData.StatMax)}] Mean: {String.Format("{0:0.####}", stateData.StatMean)}";
         }
     }
 }

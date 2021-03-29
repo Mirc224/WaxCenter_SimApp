@@ -14,9 +14,10 @@ namespace WaxCenter_SimApp.Model.Statistics
             Numerator += value;
             ++Denominator;
             if (value < Min)
-                Min = value;
+                _min = value;
             if (value > Max)
-                Max = value;
+                _max = value;
+            _noRecords = false;
         }
     }
 }

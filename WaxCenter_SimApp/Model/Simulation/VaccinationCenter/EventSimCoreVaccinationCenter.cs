@@ -38,8 +38,6 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         // Cakaren
         public ContinuousStatistic StatWaitingRoomCapacity { get; private set; } = new ContinuousStatistic();
 
-        public Random _sourceUniformGenerator;
-
         public EventSimCoreVaccinationCenter(Controller.Controller controller, double maxTime = 0)
             : base(controller, maxTime)
         {
@@ -69,27 +67,21 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             PatientSink = new SinkComponent(this);
             WaitingRoomDelay.NextComponent = PatientSink;
 
+            SimulationComponents.Source = PatientSource;
+            SimulationComponents.ServiceComponents = new ServiceComponent[] { AdminService, ExaminationService, VaccinationService };
+            SimulationComponents.DelayComponents = new DelayComponent[] { WaitingRoomDelay};
+            SimulationComponents.Sink = PatientSink;
+            SimulationComponents.Statistics = new BaseStatistic[] {StatAdminQLength, StatAdminWaitingTime, StatExaminationQLength, StatExaminationWaitingTime,
+                                                                   StatVaccinationQLength, StatVaccinationWaitingTime, StatWaitingRoomCapacity};
+
+            //ContinueAfterMaxTime = true;
             SetSeed();
         }
 
         override
         public void DoReplication()
         {
-            SimEvent currentEvent = null;
-            if (EventCalendar.Count == 0)
-            {
-                PatientSource.Start();
-                /*                currentEvent = new CustomerArrivalEvent(this);
-                                currentEvent.OccurrenceTime = CustomerSource.Generator.Sample();
-                                EventCalendar.Insert(currentEvent.OccurrenceTime, currentEvent);*/
-            }
-            CurrentTime = 0;
-            while (EventCalendar.Count != 0 && CurrentTime <= MaxTime)
-            {
-                currentEvent = EventCalendar.GetMin();
-                CurrentTime = currentEvent.OccurrenceTime;
-                currentEvent.Execute();
-            }
+            base.DoReplication();
             Console.WriteLine("AdminQL: " + StatAdminQLength.Mean);
             Console.WriteLine("AdminWaiting Time: " + StatAdminWaitingTime.Mean);
             Console.WriteLine("AdminRS: " + AdminService.ResourcePool.Utilization + "\n");
@@ -110,28 +102,6 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             Patient.ResetGlobalID();
             ResetComponents();
             ResetStatistics();
-        }
-
-        override
-        protected void ResetComponents()
-        {
-            PatientSource.Reset();
-            AdminService.Reset();
-            ExaminationService.Reset();
-            VaccinationService.Reset();
-            WaitingRoomDelay.Reset();
-            PatientSink.Reset();
-        }
-
-        override
-        protected void ResetStatistics()
-        {
-            StatAdminQLength.Reset();
-            StatAdminWaitingTime.Reset();
-            StatExaminationQLength.Reset();
-            StatExaminationWaitingTime.Reset();
-            StatVaccinationQLength.Reset();
-            StatVaccinationWaitingTime.Reset();
         }
         
         override
@@ -204,6 +174,11 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         private double SourceGeneratorFunction()
         {
             return 60;
+        }
+
+        protected override void PlanFirstEvent()
+        {
+            PatientSource.Start();
         }
     }
 }

@@ -11,19 +11,15 @@ using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponen
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents
 {
-    public class SourceComponent<T> : BaseComponent
+    public class SourceComponent<T> : BaseSourceComponent
         where T: Agent
     {
-        public IDistribution Generator { get; private set; }
-        public int NumberOfGenerated { get; set; } = 0;
-        public SourceStateData<T> StateData { get; private set; }
-
 
         public SourceComponent(EventSimulationCore simulation, IDistribution distributionGenerator)
         {
             Simulation = simulation;
             Generator = distributionGenerator;
-            StateData = new SourceStateData<T>(this);
+            StateData = new SourceStateData(this);
         }
 
         public T GetAgent()

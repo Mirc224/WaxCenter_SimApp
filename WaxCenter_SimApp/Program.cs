@@ -21,19 +21,19 @@ namespace WaxCenter_SimApp
             /*double cislo = 2.5522;
             Console.WriteLine((int)cislo);
             Console.WriteLine((int)((cislo%1)* 100));*/
-            /*            Application.EnableVisualStyles();
-                        Application.SetCompatibleTextRenderingDefault(false);
-                        Application.Run(new AppGUI());*/
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new AppGUI());
             //Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
-            //var gen = new TriangularDistribution(10, 100, 50);
-            /*            var gen = new ExponentialDistribution(5);
-                        using (var file = new StreamWriter("triangular.txt"))
-                        {
-                            for (int i = 0; i < 1000000; ++i)
-                            {
-                                file.WriteLine(gen.Sample().ToString().Replace(",", "."));
-                            }
-                        }*/
+            //var gen = new TriangularDistribution(20, 100, 75);
+            //var gen = new ExponentialDistribution(260);
+            /*using (var file = new StreamWriter("triangular.txt"))
+            {
+                for (int i = 0; i < 1000000; ++i)
+                {
+                    file.WriteLine(gen.Sample().ToString().Replace(",", "."));
+                }
+            }*/
 
             /*            var evSimCore = new EventSimCoreNewsPapers();
                         evSimCore.MaxTime = 2000;
@@ -49,10 +49,20 @@ namespace WaxCenter_SimApp
 
                         Console.WriteLine(list.Average());*/
             //var simulation = new EventSimCoreNewsPapers(null);
-            var simulation = new EventSimCoreVaccinationCenter(null);
-            simulation.BeforeReplicationInit();
-            simulation.MaxTime = 51000 * 60;
-            simulation.DoReplication();
+            /*            var simulation = new EventSimCoreVaccinationCenter(null);
+                        simulation.BeforeReplicationInit();
+                        simulation.AutoSeed = true;
+                        simulation.Seed = 3010;
+                        simulation.MaxTime = 51000 * 60;
+                        simulation.DoReplication();
+
+
+                        simulation.BeforeReplicationInit();
+                        simulation.AutoSeed = true;
+                        simulation.Seed = 3010;
+                        simulation.MaxTime = 51000 * 60;
+                        simulation.DoReplication();
+            */
         }
     }
 }

@@ -23,7 +23,8 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events
             Agent agent = _source.GetAgent();
             this.Agent = agent;
             this.OccurrenceTime = _source.Simulation.CurrentTime + _source.Generator.Sample();
-            _source.Simulation.EventCalendar.Insert(this.OccurrenceTime, this);
+            if(this.OccurrenceTime <= _source.Simulation.MaxTime || _source.GenerateAfterMaxTime)
+                _source.Simulation.EventCalendar.Insert(this.OccurrenceTime, this);
             _source.Enter(agent);
         }
     }

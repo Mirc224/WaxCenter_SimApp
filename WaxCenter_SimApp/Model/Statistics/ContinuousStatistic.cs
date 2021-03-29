@@ -8,8 +8,8 @@ namespace WaxCenter_SimApp.Model.Statistics
 {
     public class ContinuousStatistic : BaseStatistic
     {
-        public double PreviousState { get; set; }
-        public double PreviousValue { get; set; }
+        public double PreviousState { get; private set; }
+        public double PreviousValue { get; private set; }
         override public double Mean { get => Denominator != 0 ? Numerator / Denominator : 0; }
         public void Add(double value, double time)
         {
@@ -19,9 +19,17 @@ namespace WaxCenter_SimApp.Model.Statistics
             PreviousState = time;
             PreviousValue = value;
             if (value < Min)
-                Min = value;
+                _min = value;
             if (value > Max)
-                Max = value;
+                _max = value;
+            _noRecords = false;
+        }
+        
+        override public void Reset()
+        {
+            PreviousState = 0;
+            PreviousValue = 0;
+            base.Reset();
         }
     }
 }

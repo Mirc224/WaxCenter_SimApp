@@ -61,7 +61,7 @@ namespace WaxCenter_SimApp
             this.CapacityLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.CapacityLabel.Location = new System.Drawing.Point(3, 0);
             this.CapacityLabel.Name = "CapacityLabel";
-            this.CapacityLabel.Size = new System.Drawing.Size(159, 38);
+            this.CapacityLabel.Size = new System.Drawing.Size(127, 30);
             this.CapacityLabel.TabIndex = 0;
             this.CapacityLabel.Text = "Capacity: ";
             this.CapacityLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;

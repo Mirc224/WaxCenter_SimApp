@@ -30,7 +30,7 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
         public void UpdateAccordingToState(ServiceStateData stateData)
         {
             StaffUsedText = $"{stateData.ResourcePoolMaxStaff - stateData.CurrentlyUsed}/{stateData.ResourcePoolMaxStaff}";
-            UtilizationText = $"{(int)(stateData.ResourcePoolUtilization * 100) }";
+            UtilizationText = $"{(int)(stateData.ResourcePoolUtilization * 100)}%";
         }
     }
 }

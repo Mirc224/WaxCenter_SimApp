@@ -10,7 +10,7 @@ namespace WaxCenter_SimApp.Model.Simulation.GUIData
 {
     public class GUIDataValuesVacCenter
     {
-        public SourceStateData<Patient> SourceStateData { get => _simulation.PatientSource.StateData; }
+        public SourceStateData SourceStateData { get => _simulation.PatientSource.StateData; }
         public ServiceStateData ServiceAdminStateData { get => _simulation.AdminService.ServiceStateData; }
         public ServiceStateData ServiceExaminationStateData { get => _simulation.ExaminationService.ServiceStateData; }
         public ServiceStateData ServiceVaccinationStateData { get => _simulation.VaccinationService.ServiceStateData; }

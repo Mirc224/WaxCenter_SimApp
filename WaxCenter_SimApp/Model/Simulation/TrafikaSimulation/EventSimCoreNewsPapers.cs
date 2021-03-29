@@ -48,21 +48,8 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
         override
         public void DoReplication()
         {
-            SimEvent currentEvent = null;
-            if(EventCalendar.Count == 0)
-            {
-                CustomerSource.Start();
-/*                currentEvent = new CustomerArrivalEvent(this);
-                currentEvent.OccurrenceTime = CustomerSource.Generator.Sample();
-                EventCalendar.Insert(currentEvent.OccurrenceTime, currentEvent);*/
-            }
-            CurrentTime = 0;
-            while (EventCalendar.Count != 0 && CurrentTime <= MaxTime)
-            {
-                currentEvent = EventCalendar.GetMin();
-                CurrentTime = currentEvent.OccurrenceTime;
-                currentEvent.Execute();
-            }
+            base.DoReplication();
+
             Console.WriteLine(NewsPaperWaitingTime.Mean);
             Console.WriteLine(NewsPaperQLength.Mean);
             Console.WriteLine(NewsPaperService.ResourcePool.Utilization);
@@ -100,7 +87,7 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             return 0;
         }
 
-        public SimulationStatus RunRealTimeSimulation()
+        override public SimulationStatus RunRealTimeSimulation()
         {
             SimEvent currentEvent = null;
             if (EventCalendar.Count == 0 && (Status == SimulationStatus.CANCELED || Status == SimulationStatus.FINISHED))
@@ -166,7 +153,7 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             NewsPaperWaitingTime.Reset();
             NewsPaperQLength.Reset();
             DelaySize.Reset();
-            NewsPaperQLength.PreviousState = StartTime;
+            //NewsPaperQLength.PreviousState = StartTime;
         }
 
         protected override void SeedIt()
@@ -174,6 +161,11 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             CustomerSource.Generator.SetSeed(SeedGenerator.Next());
             NewsPaperService.Generator.SetSeed(SeedGenerator.Next());
             ReadDelay.Generator.SetSeed(SeedGenerator.Next());
+        }
+
+        protected override void PlanFirstEvent()
+        {
+            CustomerSource.Start();
         }
     }
 }

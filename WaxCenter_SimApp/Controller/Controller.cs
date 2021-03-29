@@ -48,17 +48,25 @@ namespace WaxCenter_SimApp.Controller
         public bool RunRealTimeSimulation(BackgroundWorker simulationWorker)
         {
             _realTimeSimWorker = simulationWorker;
-            /*            _simulation.MaxTime = 80;
-                        _simulation.DoReplication();*/
-            /*if( _simulation.RunRealTimeSimulation() != EventSimulationCore.SimulationStatus.FINISHED)
+
+            _simulation.MaxTime = 1000;
+            if(SimulationStatus != EventSimulationCore.SimulationStatus.PAUSED)
+            {
+                _simulation.BeforeSimulation();
+                _simulation.BeforeReplicationInit();
+                _realTimeSimWorker.ReportProgress((int)UpdateDataType.SIMULATION_DATA);
+                _realTimeSimWorker.ReportProgress((int)UpdateDataType.CLOCK_DATA, new ClockUpdateData(_simulation.CurrentTime));
+            }
+            //_simulation.DoReplication();
+            if (_simulation.RunRealTimeSimulation() != EventSimulationCore.SimulationStatus.FINISHED)
             {
                 if (PauseClicked)
                     SimulationStatus = EventSimulationCore.SimulationStatus.PAUSED;
                 else
                     SimulationStatus = EventSimulationCore.SimulationStatus.CANCELED;
                 return false;
-            }*/
-            
+            }
+
             return true;
         }
 
