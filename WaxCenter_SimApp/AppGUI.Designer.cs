@@ -34,10 +34,15 @@ namespace WaxCenter_SimApp
             this.ShowSimulationButton = new System.Windows.Forms.Button();
             this.OptionsPanel = new System.Windows.Forms.Panel();
             this.ContentPanel = new System.Windows.Forms.Panel();
-            this.SimulationControlScreen = new WaxCenter_SimApp.GUIComponents.Screens.SimulationControl();
+            this.BaseSettingsPanel = new System.Windows.Forms.Panel();
             this.RealTimeSimulationWorker = new System.ComponentModel.BackgroundWorker();
+            this.SimulationOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimulationOptions();
+            this.SimulationControlScreen = new WaxCenter_SimApp.GUIComponents.Screens.SimulationControl();
+            this.ResPoolOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimResPoolOptions();
             this.MainMenuPanel.SuspendLayout();
+            this.OptionsPanel.SuspendLayout();
             this.ContentPanel.SuspendLayout();
+            this.BaseSettingsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainMenuPanel
@@ -72,31 +77,31 @@ namespace WaxCenter_SimApp
             // 
             // OptionsPanel
             // 
+            this.OptionsPanel.Controls.Add(this.ResPoolOptions);
             this.OptionsPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.OptionsPanel.Location = new System.Drawing.Point(1917, 0);
+            this.OptionsPanel.Location = new System.Drawing.Point(1670, 0);
             this.OptionsPanel.Name = "OptionsPanel";
-            this.OptionsPanel.Size = new System.Drawing.Size(219, 971);
+            this.OptionsPanel.Size = new System.Drawing.Size(314, 971);
             this.OptionsPanel.TabIndex = 2;
             // 
             // ContentPanel
             // 
+            this.ContentPanel.Controls.Add(this.BaseSettingsPanel);
             this.ContentPanel.Controls.Add(this.SimulationControlScreen);
             this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContentPanel.Location = new System.Drawing.Point(155, 0);
             this.ContentPanel.Name = "ContentPanel";
-            this.ContentPanel.Size = new System.Drawing.Size(1762, 971);
+            this.ContentPanel.Size = new System.Drawing.Size(1515, 971);
             this.ContentPanel.TabIndex = 3;
             // 
-            // SimulationControlScreen
+            // BaseSettingsPanel
             // 
-            this.SimulationControlScreen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.SimulationControlScreen.AppGUI = null;
-            this.SimulationControlScreen.GUIData = null;
-            this.SimulationControlScreen.Location = new System.Drawing.Point(0, 3);
-            this.SimulationControlScreen.Name = "SimulationControlScreen";
-            this.SimulationControlScreen.Size = new System.Drawing.Size(1759, 965);
-            this.SimulationControlScreen.TabIndex = 0;
+            this.BaseSettingsPanel.Controls.Add(this.SimulationOptions);
+            this.BaseSettingsPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BaseSettingsPanel.Location = new System.Drawing.Point(0, 0);
+            this.BaseSettingsPanel.Name = "BaseSettingsPanel";
+            this.BaseSettingsPanel.Size = new System.Drawing.Size(1515, 186);
+            this.BaseSettingsPanel.TabIndex = 1;
             // 
             // RealTimeSimulationWorker
             // 
@@ -106,11 +111,43 @@ namespace WaxCenter_SimApp
             this.RealTimeSimulationWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RealTimeSimulationWorker_ProgressChanged);
             this.RealTimeSimulationWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RealTimeSimulationWorker_RunWorkerCompleted);
             // 
+            // SimulationOptions
+            // 
+            this.SimulationOptions.AppGUI = null;
+            this.SimulationOptions.AutoSize = true;
+            this.SimulationOptions.Location = new System.Drawing.Point(6, 0);
+            this.SimulationOptions.MaxTimeInputText = "";
+            this.SimulationOptions.MinimumSize = new System.Drawing.Size(529, 130);
+            this.SimulationOptions.Name = "SimulationOptions";
+            this.SimulationOptions.SeedInputText = "";
+            this.SimulationOptions.Size = new System.Drawing.Size(564, 183);
+            this.SimulationOptions.TabIndex = 0;
+            // 
+            // SimulationControlScreen
+            // 
+            this.SimulationControlScreen.AppGUI = null;
+            this.SimulationControlScreen.AutoSize = true;
+            this.SimulationControlScreen.Location = new System.Drawing.Point(1, 189);
+            this.SimulationControlScreen.MinimumSize = new System.Drawing.Size(1536, 642);
+            this.SimulationControlScreen.Name = "SimulationControlScreen";
+            this.SimulationControlScreen.Size = new System.Drawing.Size(1536, 642);
+            this.SimulationControlScreen.TabIndex = 0;
+            // 
+            // ResPoolOptions
+            // 
+            this.ResPoolOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ResPoolOptions.Location = new System.Drawing.Point(3, 189);
+            this.ResPoolOptions.MinimumSize = new System.Drawing.Size(292, 142);
+            this.ResPoolOptions.Name = "ResPoolOptions";
+            this.ResPoolOptions.Size = new System.Drawing.Size(304, 142);
+            this.ResPoolOptions.TabIndex = 0;
+            // 
             // AppGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2136, 971);
+            this.ClientSize = new System.Drawing.Size(1984, 971);
             this.Controls.Add(this.ContentPanel);
             this.Controls.Add(this.OptionsPanel);
             this.Controls.Add(this.MainMenuPanel);
@@ -119,7 +156,11 @@ namespace WaxCenter_SimApp
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MainMenuPanel.ResumeLayout(false);
+            this.OptionsPanel.ResumeLayout(false);
             this.ContentPanel.ResumeLayout(false);
+            this.ContentPanel.PerformLayout();
+            this.BaseSettingsPanel.ResumeLayout(false);
+            this.BaseSettingsPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -133,6 +174,9 @@ namespace WaxCenter_SimApp
         private System.Windows.Forms.Panel ContentPanel;
         private SimulationControl SimulationControlScreen;
         private System.ComponentModel.BackgroundWorker RealTimeSimulationWorker;
+        private System.Windows.Forms.Panel BaseSettingsPanel;
+        private GUIComponents.OptionsComponents.SimulationOptions SimulationOptions;
+        private GUIComponents.OptionsComponents.SimResPoolOptions ResPoolOptions;
     }
 }
 

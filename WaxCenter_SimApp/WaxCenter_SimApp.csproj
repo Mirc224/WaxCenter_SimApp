@@ -60,6 +60,19 @@
     <Compile Include="GUIComponents\Clock\SimulationClock.Designer.cs">
       <DependentUpon>SimulationClock.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUIComponents\OptionsComponents\IGUIOptions.cs" />
+    <Compile Include="GUIComponents\OptionsComponents\SimResPoolOptions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\OptionsComponents\SimResPoolOptions.Designer.cs">
+      <DependentUpon>SimResPoolOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUIComponents\OptionsComponents\SimulationOptions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\OptionsComponents\SimulationOptions.Designer.cs">
+      <DependentUpon>SimulationOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUIComponents\SimComponents\GUISimComponentsWrapper\GUISimulationComponentsManager.cs" />
     <Compile Include="GUIComponents\SimComponents\ISimComponent.cs" />
     <Compile Include="Model\RandomDistribution\CustomDistribution.cs" />
@@ -81,6 +94,7 @@
     <Compile Include="Model\Simulation\SimulationBaseClasses\Core\ISimulation.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Events\ServiceEndEvent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Events\ServiceStartEvent.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Settings\BaseEventSimulationSettings.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\AdditionServiceComponents\ResourcePool.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\BaseComponent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\BaseSourceComponent.cs" />
@@ -158,17 +172,17 @@
     <Compile Include="GUIComponents\Screens\SimulationControl.Designer.cs">
       <DependentUpon>SimulationControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="SimOptResPoolControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SimOptResPoolControl.Designer.cs">
-      <DependentUpon>SimOptResPoolControl.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="AppGUI.resx">
       <DependentUpon>AppGUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUIComponents\Clock\SimulationClock.resx">
       <DependentUpon>SimulationClock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\OptionsComponents\SimResPoolOptions.resx">
+      <DependentUpon>SimResPoolOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\OptionsComponents\SimulationOptions.resx">
+      <DependentUpon>SimulationOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -205,9 +219,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUIComponents\Screens\SimulationControl.resx">
       <DependentUpon>SimulationControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SimOptResPoolControl.resx">
-      <DependentUpon>SimOptResPoolControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

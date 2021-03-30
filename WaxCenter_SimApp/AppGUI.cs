@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaxCenter_SimApp.Controller;
+using WaxCenter_SimApp.GUIComponents.OptionsComponents;
+using WaxCenter_SimApp.GUIComponents.SimComponents;
 using WaxCenter_SimApp.Model.Simulation.GUIData;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 
@@ -15,12 +17,18 @@ namespace WaxCenter_SimApp
 {
     public partial class AppGUI : Form
     {
+
         private Controller.Controller _controller;
+        private ISimComponent _selectedComponent;
         public AppGUI()
         {
             InitializeComponent();
-            this.SimulationControlScreen.AppGUI = this;
-            _controller = new Controller.Controller(this, SimulationControlScreen);
+            SimulationControlScreen.AppGUI = this;
+            SimulationOptions.AppGUI = this;
+            ResPoolOptions.AppGUI = this;
+
+            _controller = new Controller.Controller(this, SimulationControlScreen, SimulationOptions);
+            ResPoolOptions.Hide();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -171,6 +179,44 @@ namespace WaxCenter_SimApp
         private void SetRealTimeToDefault()
         {
             this.SimulationControlScreen.SetToDefault(); 
+        }
+
+        public void SignalBaseOptionsConfirm()
+        {
+            _controller.TryApplyBaseSimulationSettings();
+        }
+
+        public void HandleGUIComponentSelect(ISimComponent simComponent)
+        {
+            switch(simComponent.SimComponentType)
+            {
+                case SimComponentType.RESOURCEPOOL:
+                    _selectedComponent = simComponent;
+                    ResPoolOptions.SelectedText = simComponent.TitleText;
+                    _controller.HandleGUIComponentSelection(_selectedComponent, ResPoolOptions);
+                    ResPoolOptions.Show();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void HandleComponentOptionsConfirmSignal(IGUIOptions optionsGUI)
+        {
+            switch(optionsGUI.OptionsType)
+            {
+                case GUIOptionsType.RESPOOL:
+                    _controller.HandleGUIComponentOptionsConfirmation(_selectedComponent, optionsGUI);
+                    break;
+                default:
+                    break;
+            }
+            _controller.ResetRealTimeSimulation();
+        }
+
+        private void HideAllComponentOptions()
+        {
+            ResPoolOptions.Hide();
         }
     }
 }

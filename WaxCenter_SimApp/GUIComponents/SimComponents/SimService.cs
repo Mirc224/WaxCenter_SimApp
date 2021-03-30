@@ -8,12 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaxCenter_SimApp.GUIComponents.Screens;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.ComponentValuesClasses;
 
 namespace WaxCenter_SimApp.GUIComponents.SimComponents
 {
     public partial class SimService : UserControl, ISimComponent
     {
+        public ServiceComponent ServiceModelComponent { get; set; }
         public SimService()
         {
             InitializeComponent();
@@ -31,6 +33,11 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
             OutputText = stateData.AgentsLeaved.ToString();
             QueueText = stateData.QueueSize.ToString();
             CurrentlyUsedText = stateData.CurrentlyUsed.ToString();
+        }
+
+        public void UpdateAccordingToState()
+        {
+            UpdateAccordingToState(ServiceModelComponent.ServiceStateData);
         }
     }
     

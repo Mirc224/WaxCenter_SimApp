@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WaxCenter_SimApp.GUIComponents.OptionsComponents;
 using WaxCenter_SimApp.GUIComponents.Screens;
+using WaxCenter_SimApp.GUIComponents.SimComponents;
 using WaxCenter_SimApp.Model.Simulation.GUIData;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 using WaxCenter_SimApp.Model.Simulation.TrafikaSimulation;
@@ -25,31 +27,67 @@ namespace WaxCenter_SimApp.Controller
     {
         private AppGUI _applicationGUI;
         private EventSimCoreVaccinationCenter _simulation;
+        private SimulationOptions _simOptions;
+
         private BackgroundWorker _realTimeSimWorker;
+        private SimulationControl _realSimControl;
         private int[] _speedList = new int[] { 1, 2, 5, 10, 25, 50, 100, 1000 };
-        public GUIDataValuesVacCenter GUIData { get; private set; }
+        //public GUIDataValuesVacCenter GUIData { get; private set; }
         public EventSimulationCore.SimulationStatus SimulationStatus { get => _simulation.Status; private set => _simulation.Status = value; }
         //private SimulationControl _realTimeSimulation;
         public bool PauseClicked { get; set; } = false;
 
         public bool RealTimeCancellation { get => _realTimeSimWorker.CancellationPending; }
 
-        public Controller(AppGUI appGUI, SimulationControl realTimeSim)
+        public Controller(AppGUI appGUI, SimulationControl realTimeSim, SimulationOptions simOptions)
         {
             _applicationGUI = appGUI;
             _simulation = new EventSimCoreVaccinationCenter(this);
             _simulation.Controller = this;
-            GUIData = new GUIDataValuesVacCenter(_simulation);
-            realTimeSim.GUIData = GUIData;
-            //_realTimeSimulation = realTimeSim;
+            //GUIData = new GUIDataValuesVacCenter(_simulation);
 
+            _realSimControl = realTimeSim;
+            //_realSimControl.ComponentsManager = _simulation.SimulationComponentsManager;
+            //_realSimControl.GUIData = GUIData;
+            //_realSimControl.Controller = this;
+
+            _simOptions = simOptions;
+            _simOptions.PreFillSettings(_simulation.SimulationSettings);
+            
+            for(int i = 0; i < _simulation.SimulationComponentsManager.ServiceComponents.Length; ++i)
+            {
+                _realSimControl.GUISimComponentManager.GSimResourcePools[i].ID = i;
+                _realSimControl.GUISimComponentManager.GSimResourcePools[i].ServiceModelComponent = 
+                    _simulation.SimulationComponentsManager.ServiceComponents[i];
+
+                _realSimControl.GUISimComponentManager.GSimServices[i].ID = i;
+                _realSimControl.GUISimComponentManager.GSimServices[i].ServiceModelComponent =
+                    _simulation.SimulationComponentsManager.ServiceComponents[i];
+            }
+
+            for (int i = 0; i < _simulation.SimulationComponentsManager.DelayComponents.Length; ++i)
+            {
+                _realSimControl.GUISimComponentManager.GSimDelays[i].ID = i;
+                _realSimControl.GUISimComponentManager.GSimDelays[i].DelayModelComponent =
+                    _simulation.SimulationComponentsManager.DelayComponents[i];
+            }
+
+            for (int i = 0; i < _simulation.SimulationComponentsManager.Statistics.Length; ++i)
+            {
+                _realSimControl.GUISimComponentManager.GSimStats[i].ID = i;
+                _realSimControl.GUISimComponentManager.GSimStats[i].StatisticModel =
+                    _simulation.SimulationComponentsManager.Statistics[i];
+            }
+
+            _realSimControl.GUISimComponentManager.GSimSource.SourceModelComponent = _simulation.SimulationComponentsManager.Source;
+            _realSimControl.GUISimComponentManager.GSimSink.SinkModelComponent = _simulation.SimulationComponentsManager.Sink;
+
+            _realSimControl.UpdateValues();
         }
 
         public bool RunRealTimeSimulation(BackgroundWorker simulationWorker)
         {
             _realTimeSimWorker = simulationWorker;
-
-            _simulation.MaxTime = 1000;
             if(SimulationStatus != EventSimulationCore.SimulationStatus.PAUSED)
             {
                 _simulation.BeforeSimulation();
@@ -93,6 +131,8 @@ namespace WaxCenter_SimApp.Controller
         {
             PauseClicked = false;
             _simulation.ResetSimulation();
+            _realSimControl.UpdateValues();
+            _realSimControl.SetClockValue("0");
         }
 
         public void CancelRealTimeSimulation()
@@ -108,6 +148,99 @@ namespace WaxCenter_SimApp.Controller
         public void AfterRealTimeSimulationStopped()
         {
             SimulationStatus = EventSimulationCore.SimulationStatus.CANCELED;
+        }
+
+        public void TryApplyBaseSimulationSettings()
+        {
+            bool errorOccured = false;
+            int seed = 0;
+            double maxTime;
+
+            if(!double.TryParse(_simOptions.MaxTimeInputText, out maxTime))
+            {
+                _simOptions.MaxTimeInputText = "Invalid input!";
+                errorOccured = true;
+            }
+
+            if(!_simOptions.AutoSeedChecked)
+            {
+                if(!Int32.TryParse(_simOptions.SeedInputText, out seed))
+                {
+                    _simOptions.SeedInputText = "Invalid input!";
+                    errorOccured = true;
+                }
+            }
+            if(!errorOccured)
+            {
+                _simulation.SimulationSettings.Units = _simOptions.SelectedTimeUnits;
+                _simulation.MaxTime = maxTime;
+                _simulation.AutoSeed = _simOptions.AutoSeedChecked;
+                if(!_simulation.AutoSeed)
+                {
+                    _simulation.Seed = seed;
+                }
+                _simulation.ContinueAfterMaxTime = _simOptions.AfterMaxTimeChecked;
+            }
+        }
+
+        public void HandleGUIComponentSelection(ISimComponent simComponent, IGUIOptions optionsComponent)
+        {
+            switch(simComponent.SimComponentType)
+            {
+                case SimComponentType.RESOURCEPOOL:
+                    var resPoolOptions = (SimResPoolOptions)optionsComponent;
+                    var resPoolGUIComponent = (SimResourcePool)simComponent;
+                    resPoolOptions.StaffInputText = resPoolGUIComponent.ServiceModelComponent.MaxService.ToString();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void HandleGUIComponentOptionsConfirmation(ISimComponent simComponent, IGUIOptions optionsComponent)
+        {
+            switch (simComponent.SimComponentType)
+            {
+                case SimComponentType.RESOURCEPOOL:
+                    var resPoolOptions = (SimResPoolOptions)optionsComponent;
+                    var resPoolGUIComponent = (SimResourcePool)simComponent;
+                    TryParseResourcePoolOptions(resPoolOptions, resPoolGUIComponent);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void ResetSimulation()
+        {
+            _simulation.ResetSimulation();
+        }
+
+        private void TryParseResourcePoolOptions(SimResPoolOptions options, SimResourcePool resPoolGUI)
+        {
+            bool error = false;
+            int maxStaff = 0;
+
+            if(!Int32.TryParse(options.StaffInputText, out maxStaff))
+            {
+                error = true;
+                options.StaffInputText = "Invalid number";
+            }
+            else
+            {
+                if (maxStaff < 1)
+                {
+                    options.StaffInputText = "Number have to be between <1, inf)!";
+                    error = true;
+                }  
+            }
+            
+            if(!error)
+            {
+                resPoolGUI.ServiceModelComponent.MaxStaff = maxStaff;
+                resPoolGUI.UpdateAccordingToState();
+            }
+
         }
     }
 }

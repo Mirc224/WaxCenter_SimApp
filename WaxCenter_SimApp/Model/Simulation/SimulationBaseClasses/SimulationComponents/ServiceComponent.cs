@@ -19,6 +19,15 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         public int QueueSize { get => WaitingQueue.Count; }
         public Func<ServiceComponent, Agent, int> OnEnterDelay { get; set; } = null;
         public ServiceStateData ServiceStateData { get=> (ServiceStateData)StateData; }
+        public int MaxStaff 
+        {
+            get => MaxService;  
+            set
+            {
+                MaxService = value;
+                ResourcePool.SetMaxStaff(value);
+            }
+        }
         public ServiceComponent(EventSimulationCore simulation, IDistribution generator, int maxService = 1): 
             base(simulation, generator, maxService)
         {

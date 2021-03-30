@@ -77,7 +77,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             SimulationComponentsManager.Statistics = new BaseStatistic[] {StatAdminQLength, StatAdminWaitingTime, StatExaminationQLength, StatExaminationWaitingTime,
                                                                    StatVaccinationQLength, StatVaccinationWaitingTime, StatWaitingRoomCapacity};
 
-            //ContinueAfterMaxTime = true;
+            ContinueAfterMaxTime = true;
             SetSeed();
         }
 

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WaxCenter_SimApp.DataStructures;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events.BaseEvents;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Settings;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.SimulationComponentsWrapper;
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
@@ -34,37 +35,38 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
             RUNNING,
             INTERRUPTED
         }
+
+        public SimulationStatus Status { get; set; } = SimulationStatus.FINISHED;
         public PairingHeap<double, SimEvent> EventCalendar { get; protected set; } = new PairingHeap<double, SimEvent>();
-        public int Speed { get; set; } = 1;
+        public Controller.Controller Controller { get; set; }
         public Random SeedGenerator { get; protected set; }
         public double CurrentTime { get; protected set; } = 0;
-        public double MaxTime { get; set; } = 0;
-        public Controller.Controller Controller { get; set; }
-        public SimulationStatus Status { get; set; } = SimulationStatus.FINISHED;
-        public bool ContinueAfterMaxTime { get; set; } = false;
         public SimulationComponentsManager SimulationComponentsManager { get; protected set; } = new SimulationComponentsManager();
+        public BaseEventSimulationSettings SimulationSettings { get; protected set; } = new BaseEventSimulationSettings();
+        public int Speed { get => SimulationSettings.Speed; set => SimulationSettings.Speed = value; }
+        public double MaxTime { get => SimulationSettings.MaxTime *(int)SimulationSettings.Units ; set => SimulationSettings.MaxTime = value; }
+        private double _realMaxTimeInSec { get => SimulationSettings.MaxTime; }
+        public bool ContinueAfterMaxTime { get; set; } = false;
         public int Seed { 
-            get => _lastUsedSeed; 
+            get => SimulationSettings.LastUsedSeed; 
             set 
-            { 
-                _lastUsedSeed = value;
-                SetSeed(_lastUsedSeed);
+            {
+                SimulationSettings.LastUsedSeed = value;
+                SetSeed(SimulationSettings.LastUsedSeed);
             } 
         }
         public bool AutoSeed 
         { 
-            get => _autoSeed;
+            get => SimulationSettings.AutoSeed;
             set
             {
-                _autoSeed = value;
+                SimulationSettings.AutoSeed = value;
                 if (value)
                     SetSeed();
                 else
-                    SetSeed(_lastUsedSeed);
+                    SetSeed(SimulationSettings.LastUsedSeed);
             } 
         }
-        private int _lastUsedSeed = 224;
-        private bool _autoSeed = false;
         
         public EventSimulationCore(Controller.Controller controller, double maxTime = 0)
         {
@@ -88,14 +90,15 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
 
         public void BeforeSimulation()
         {
-            if (_autoSeed)
+            if (SimulationSettings.AutoSeed)
                 SetSeed();
             else
-                SetSeed(_lastUsedSeed);
+                SetSeed(SimulationSettings.LastUsedSeed);
         }
         public abstract void BeforeReplicationInit();
         public void ResetSimulation()
         {
+            Status = SimulationStatus.FINISHED;
             ResetComponents();
             ResetStatistics();
             ResetGenerators();
@@ -118,7 +121,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
         }
         protected void SetSeed(int seed)
         {
-            _lastUsedSeed = seed;
+            SimulationSettings.LastUsedSeed = seed;
             SeedGenerator = new Random(seed);
             SeedIt();
         }
@@ -137,7 +140,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
                                 EventCalendar.Insert(currentEvent.OccurrenceTime, currentEvent);*/
             }
             CurrentTime = 0;
-            while (EventCalendar.Count != 0 && (CurrentTime <= MaxTime || ContinueAfterMaxTime))
+            while (EventCalendar.Count != 0 && (CurrentTime <= _realMaxTimeInSec || ContinueAfterMaxTime))
             {
                 currentEvent = EventCalendar.GetMin();
                 CurrentTime = currentEvent.OccurrenceTime;
@@ -163,7 +166,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
             }
             Status = SimulationStatus.RUNNING;
             double nextEventTime;
-            while (EventCalendar.Count != 0 && (CurrentTime <= MaxTime || ContinueAfterMaxTime))
+            while (EventCalendar.Count != 0 && (CurrentTime <= _realMaxTimeInSec || ContinueAfterMaxTime))
             {
 
                 nextEventTime = EventCalendar.Peek;
@@ -173,7 +176,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
                     if (nextEventTime < CurrentTime)
                         CurrentTime = nextEventTime;
                     Controller.ClockUpdate(CurrentTime);
-                    if (CurrentTime > MaxTime && !ContinueAfterMaxTime)
+                    if (CurrentTime > _realMaxTimeInSec && !ContinueAfterMaxTime)
                     {
                         Status = SimulationStatus.FINISHED;
                         return Status;
@@ -196,6 +199,13 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
 
         public double RunClock(double timeDifference)
         {
+            /*int actualSpeed = Speed;
+            double tmpTimeDifference = timeDifference / ((double)SimulationSettings.Units);
+            int time = tmpTimeDifference - 1 >= 0 ? 1000 / actualSpeed : (int)((tmpTimeDifference * 1000) / actualSpeed);
+            Thread.Sleep(time);
+            if (tmpTimeDifference < 1)
+                return timeDifference;
+            return 1 * ((double)SimulationSettings.Units);*/
             int actualSpeed = Speed;
             int time = timeDifference - 1 >= 0 ? 1000 / actualSpeed : (int)((timeDifference * 1000) / actualSpeed);
             Thread.Sleep(time);

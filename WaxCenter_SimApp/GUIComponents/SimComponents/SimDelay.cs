@@ -8,12 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaxCenter_SimApp.GUIComponents.Screens;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.ComponentValuesClasses;
 
 namespace WaxCenter_SimApp.GUIComponents.SimComponents
 {
     public partial class SimDelay : UserControl, ISimComponent
     {
+        public DelayComponent DelayModelComponent { get; set; }
         public SimDelay()
         {
             InitializeComponent();
@@ -33,6 +35,11 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
             InputText = stateData.AgentsEntered.ToString();
             OutputText = stateData.AgentsLeaved.ToString();
             CurrentlyUsedText = stateData.CurrentlyUsed.ToString();
+        }
+
+        public void UpdateAccordingToState()
+        {
+            UpdateAccordingToState(DelayModelComponent.StateData);
         }
     }
 }

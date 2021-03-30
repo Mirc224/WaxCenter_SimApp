@@ -60,7 +60,7 @@
             this.ResourcePoolPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ResourcePoolPicture.TabIndex = 1;
             this.ResourcePoolPicture.TabStop = false;
-            this.ResourcePoolPicture.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ResourcePoolPicture_MouseClick);
+            this.ResourcePoolPicture.Click += new System.EventHandler(this.ResourcePoolPicture_Click);
             // 
             // UtilizationLabel
             // 

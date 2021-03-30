@@ -21,5 +21,6 @@ namespace WaxCenter_SimApp.GUIComponents.SimComponents
         int ID { get; set; }
         SimComponentType SimComponentType { get; }
         Screens.SimulationControl SimulationControl { get; set; }
+        string TitleText { get; set; }
     }
 }
