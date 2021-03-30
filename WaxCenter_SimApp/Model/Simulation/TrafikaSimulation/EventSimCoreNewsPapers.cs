@@ -167,5 +167,10 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
         {
             CustomerSource.Start();
         }
+
+        protected override void UpdateReplicationResults()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

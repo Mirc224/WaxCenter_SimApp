@@ -12,6 +12,6 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
         void AfterSimulation();
         void DoReplication();
         void BeforeReplication();
-        void AferReplication();
+        void AfterReplication();
     }
 }

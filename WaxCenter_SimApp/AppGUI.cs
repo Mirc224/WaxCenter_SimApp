@@ -26,9 +26,10 @@ namespace WaxCenter_SimApp
             SimulationControlScreen.AppGUI = this;
             SimulationOptions.AppGUI = this;
             ResPoolOptions.AppGUI = this;
+            SourceOptions.AppGUI = this;
 
             _controller = new Controller.Controller(this, SimulationControlScreen, SimulationOptions);
-            ResPoolOptions.Hide();
+            HideAllComponentOptions();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -188,8 +189,14 @@ namespace WaxCenter_SimApp
 
         public void HandleGUIComponentSelect(ISimComponent simComponent)
         {
+            HideAllComponentOptions();
             switch(simComponent.SimComponentType)
             {
+                case SimComponentType.SOURCE:
+                    _selectedComponent = simComponent;
+                    _controller.HandleGUIComponentSelection(_selectedComponent, SourceOptions);
+                    SourceOptions.Show();
+                    break;
                 case SimComponentType.RESOURCEPOOL:
                     _selectedComponent = simComponent;
                     ResPoolOptions.SelectedText = simComponent.TitleText;
@@ -205,6 +212,9 @@ namespace WaxCenter_SimApp
         {
             switch(optionsGUI.OptionsType)
             {
+                case GUIOptionsType.SOURCE:
+                    _controller.HandleGUIComponentOptionsConfirmation(_selectedComponent, optionsGUI);
+                    break;
                 case GUIOptionsType.RESPOOL:
                     _controller.HandleGUIComponentOptionsConfirmation(_selectedComponent, optionsGUI);
                     break;
@@ -217,6 +227,7 @@ namespace WaxCenter_SimApp
         private void HideAllComponentOptions()
         {
             ResPoolOptions.Hide();
+            SourceOptions.Hide();
         }
     }
 }

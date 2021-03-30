@@ -9,6 +9,8 @@ using WaxCenter_SimApp.GUIComponents.Screens;
 using WaxCenter_SimApp.GUIComponents.SimComponents;
 using WaxCenter_SimApp.Model.Simulation.GUIData;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Settings;
 using WaxCenter_SimApp.Model.Simulation.TrafikaSimulation;
 using WaxCenter_SimApp.Model.Simulation.VaccinationCenter;
 
@@ -31,6 +33,10 @@ namespace WaxCenter_SimApp.Controller
 
         private BackgroundWorker _realTimeSimWorker;
         private SimulationControl _realSimControl;
+
+        private ReplicationsSettings _replicationsSettings;
+        private ReplicationsResults _replicationsResults;
+
         private int[] _speedList = new int[] { 1, 2, 5, 10, 25, 50, 100, 1000 };
         //public GUIDataValuesVacCenter GUIData { get; private set; }
         public EventSimulationCore.SimulationStatus SimulationStatus { get => _simulation.Status; private set => _simulation.Status = value; }
@@ -83,6 +89,45 @@ namespace WaxCenter_SimApp.Controller
             _realSimControl.GUISimComponentManager.GSimSink.SinkModelComponent = _simulation.SimulationComponentsManager.Sink;
 
             _realSimControl.UpdateValues();
+        }
+
+        public Controller(EventSimCoreVaccinationCenter simulation)
+        {
+            _simulation = simulation;
+            _replicationsSettings = new ReplicationsSettings();
+            _replicationsSettings.NumberOfReplications = 10000;
+            _replicationsResults = new ReplicationsResults();
+            /*_replicationsResults.CurrentReplications = 0;
+            _replicationsResults.ObservedValues = new double[7];*/
+        }
+
+
+        public bool RunReplications()
+        {
+            _simulation.BeforeSimulation();
+            for(int i = _simulation.ReplicationResults.CurrentReplications; i < _replicationsSettings.NumberOfReplications; ++i)
+            {
+                _simulation.BeforeReplication();
+                _simulation.DoReplication();
+                _simulation.AfterReplication();
+            }
+            UpdateGUIAfterReplication();
+            //for(int i = )
+
+            return true;
+        }
+
+        private void UpdateGUIAfterReplication()
+        {
+            string[] outputTitle = new string[] { "Mean admin QL: ", "Mean admin WT: ", "Mean examination QL: ", "Mean examination WT: ",
+                                                  "Mean vaccination QL: ", "Mean vaccination WT: ", "Mean waiting room capacity used: ",
+                                                  "Admin utilization: ", "Examination utilization: ", "Vaccination utilization: "};
+
+            for(int i = 0; i < _simulation.ReplicationResults.ObservedValues.Length; ++i)
+            {
+                Console.WriteLine(outputTitle[i] + (_simulation.ReplicationResults.ObservedValues[i]/ _simulation.ReplicationResults.CurrentReplications));
+            }
+
         }
 
         public bool RunRealTimeSimulation(BackgroundWorker simulationWorker)
@@ -187,6 +232,12 @@ namespace WaxCenter_SimApp.Controller
         {
             switch(simComponent.SimComponentType)
             {
+                case SimComponentType.SOURCE:
+                    var sourceOptions = (SimSourceOptions)optionsComponent;
+                    var sourceGUIComponent = (SimSource)simComponent;
+                    sourceOptions.AgentsInputText = _simulation.PatientGenerated.ToString();
+                    sourceOptions.IntervalInputText = _simulation.SourceInterval.ToString();
+                    break;
                 case SimComponentType.RESOURCEPOOL:
                     var resPoolOptions = (SimResPoolOptions)optionsComponent;
                     var resPoolGUIComponent = (SimResourcePool)simComponent;
@@ -201,6 +252,11 @@ namespace WaxCenter_SimApp.Controller
         {
             switch (simComponent.SimComponentType)
             {
+                case SimComponentType.SOURCE:
+                    var sourceOptions = (SimSourceOptions)optionsComponent;
+                    var sourceGUIComponent = (SimSource)simComponent;
+                    TryParseSourceOptions(sourceOptions, sourceGUIComponent);
+                    break;
                 case SimComponentType.RESOURCEPOOL:
                     var resPoolOptions = (SimResPoolOptions)optionsComponent;
                     var resPoolGUIComponent = (SimResourcePool)simComponent;
@@ -216,6 +272,47 @@ namespace WaxCenter_SimApp.Controller
             _simulation.ResetSimulation();
         }
 
+        private void TryParseSourceOptions(SimSourceOptions options, SimSource resPoolGUI)
+        {
+            bool error = false;
+            int agentsGenerated = 0;
+            double intervalRate = 0;
+
+            if (!double.TryParse(options.IntervalInputText, out intervalRate))
+            {
+                error = true;
+                options.IntervalInputText = "Invalid number";
+            }
+            else
+            {
+                if (intervalRate <=0)
+                {
+                    options.IntervalInputText = "Number have to be between (0, inf)!";
+                    error = true;
+                }
+            }
+
+            if (!Int32.TryParse(options.AgentsInputText, out agentsGenerated))
+            {
+                error = true;
+                options.AgentsInputText = "Invalid number";
+            }
+            else
+            {
+                if (agentsGenerated < 1)
+                {
+                    options.AgentsInputText = "Number have to be between <1, inf)!";
+                    error = true;
+                }
+            }
+
+            if(!error)
+            {
+                _simulation.SourceInterval = intervalRate;
+                _simulation.PatientGenerated = agentsGenerated;
+            }
+
+        }
         private void TryParseResourcePoolOptions(SimResPoolOptions options, SimResourcePool resPoolGUI)
         {
             bool error = false;

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WaxCenter_SimApp.DataStructures;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events.BaseEvents;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Settings;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.SimulationComponentsWrapper;
 
@@ -38,6 +39,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
 
         public SimulationStatus Status { get; set; } = SimulationStatus.FINISHED;
         public PairingHeap<double, SimEvent> EventCalendar { get; protected set; } = new PairingHeap<double, SimEvent>();
+        public ReplicationsResults ReplicationResults { get; protected set; }
         public Controller.Controller Controller { get; set; }
         public Random SeedGenerator { get; protected set; }
         public double CurrentTime { get; protected set; } = 0;
@@ -73,9 +75,9 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
             Controller = controller;
             MaxTime = maxTime;
         }
-        public void AferReplication()
+        public void AfterReplication()
         {
-            throw new NotImplementedException();
+            UpdateReplicationResults();
         }
 
         public void AfterSimulation()
@@ -85,7 +87,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
 
         public void BeforeReplication()
         {
-            throw new NotImplementedException();
+            ResetSimulation();
         }
 
         public void BeforeSimulation()
@@ -94,11 +96,17 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
                 SetSeed();
             else
                 SetSeed(SimulationSettings.LastUsedSeed);
+
+            if (ReplicationResults != null)
+                ReplicationResults.Reset();
         }
+        protected abstract void UpdateReplicationResults();
         public abstract void BeforeReplicationInit();
         public void ResetSimulation()
         {
             Status = SimulationStatus.FINISHED;
+            CurrentTime = 0;
+            EventCalendar.Reset();
             ResetComponents();
             ResetStatistics();
             ResetGenerators();

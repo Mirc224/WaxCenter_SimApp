@@ -8,6 +8,7 @@ namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
 {
     public enum GUIOptionsType
     {
+        SOURCE,
         RESPOOL
     }
     public interface IGUIOptions

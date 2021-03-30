@@ -73,15 +73,16 @@ namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
             this.panel1.Controls.Add(this.SelectedResPool);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.MinimumSize = new System.Drawing.Size(292, 142);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(292, 142);
             this.panel1.TabIndex = 2;
             // 
             // ResPoolButton
             // 
-            this.ResPoolButton.Location = new System.Drawing.Point(73, 100);
+            this.ResPoolButton.Location = new System.Drawing.Point(78, 106);
             this.ResPoolButton.Name = "ResPoolButton";
-            this.ResPoolButton.Size = new System.Drawing.Size(140, 36);
+            this.ResPoolButton.Size = new System.Drawing.Size(131, 33);
             this.ResPoolButton.TabIndex = 3;
             this.ResPoolButton.Text = "Apply";
             this.ResPoolButton.UseVisualStyleBackColor = true;

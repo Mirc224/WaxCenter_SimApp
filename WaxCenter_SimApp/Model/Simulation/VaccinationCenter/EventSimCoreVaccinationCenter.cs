@@ -7,6 +7,7 @@ using WaxCenter_SimApp.Model.RandomDistribution;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Agents;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events.BaseEvents;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents;
 using WaxCenter_SimApp.Model.Statistics;
 
@@ -15,8 +16,8 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
     public class EventSimCoreVaccinationCenter : EventSimulationCore
     {
 
-        public int NumberOfGeneratedAgents { get; set; } = 540;
-        public double EndTime { get; set; } = 540 * 60;
+        public double SourceInterval { get; set; } = 60;
+        public int PatientGenerated { get; set; } = 540;
         // Komponenty
         public SourceComponent<Patient> PatientSource { get; private set; }
         public ServiceComponent AdminService { get; private set; }
@@ -77,7 +78,13 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             SimulationComponentsManager.Statistics = new BaseStatistic[] {StatAdminQLength, StatAdminWaitingTime, StatExaminationQLength, StatExaminationWaitingTime,
                                                                    StatVaccinationQLength, StatVaccinationWaitingTime, StatWaitingRoomCapacity};
 
-            ContinueAfterMaxTime = true;
+            int noStatistics = SimulationComponentsManager.ServiceComponents.Length + SimulationComponentsManager.Statistics.Length;
+            ReplicationResults = new ReplicationsResults();
+            ReplicationResults.CurrentReplications = 0;
+            ReplicationResults.ObservedValues = new double[noStatistics];
+            //ContinueAfterMaxTime = true;
+            ContinueAfterMaxTime = false;
+            MaxTime = 540 * 60;
             SetSeed();
         }
 
@@ -85,7 +92,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         public void DoReplication()
         {
             base.DoReplication();
-            Console.WriteLine("AdminQL: " + StatAdminQLength.Mean);
+/*            Console.WriteLine("AdminQL: " + StatAdminQLength.Mean);
             Console.WriteLine("AdminWaiting Time: " + StatAdminWaitingTime.Mean);
             Console.WriteLine("AdminRS: " + AdminService.ResourcePool.Utilization + "\n");
             Console.WriteLine("ExaminationQL: " + StatExaminationQLength.Mean);
@@ -94,7 +101,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             Console.WriteLine("VaccinationQL: " + StatVaccinationQLength.Mean);
             Console.WriteLine("VaccinationWaiting Time: " + StatVaccinationWaitingTime.Mean);
             Console.WriteLine("SisterRS: " + VaccinationService.ResourcePool.Utilization + "\n");
-            Console.WriteLine("StatWaitingRoom: " + StatWaitingRoomCapacity.Mean + "\n");
+            Console.WriteLine("StatWaitingRoom: " + StatWaitingRoomCapacity.Mean + "\n");*/
         }
 
         override
@@ -103,8 +110,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             CurrentTime = 0;
             EventCalendar.Reset();
             Patient.ResetGlobalID();
-            ResetComponents();
-            ResetStatistics();
+            base.BeforeReplication();
         }
 
         private int AdminOnEnter(DelayComponent self, Agent agent)
@@ -166,12 +172,30 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         }
         private double SourceGeneratorFunction()
         {
-            return ((EndTime/60.0)/NumberOfGeneratedAgents)*60;
+            //return ((EndTime/60.0)/NumberOfGeneratedAgents)*60;
+            return SourceInterval;
         }
 
         protected override void PlanFirstEvent()
         {
             PatientSource.Start();
+        }
+
+        protected override void UpdateReplicationResults()
+        {
+            int noStats = SimulationComponentsManager.Statistics.Length;
+            int noServices = SimulationComponentsManager.ServiceComponents.Length;
+            ++ReplicationResults.CurrentReplications;
+            for(int i = 0; i < noStats; ++i)
+            {
+                ReplicationResults.ObservedValues[i] += SimulationComponentsManager.Statistics[i].Mean;
+            }
+
+            for (int i = noStats; i < noStats + noServices; ++i)
+            {
+                ReplicationResults.ObservedValues[i] += SimulationComponentsManager.ServiceComponents[i - noStats].ResourcePool.Utilization;
+            }
+
         }
     }
 }

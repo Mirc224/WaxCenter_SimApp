@@ -38,6 +38,7 @@ namespace WaxCenter_SimApp
             this.RealTimeSimulationWorker = new System.ComponentModel.BackgroundWorker();
             this.SimulationOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimulationOptions();
             this.SimulationControlScreen = new WaxCenter_SimApp.GUIComponents.Screens.SimulationControl();
+            this.SourceOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimSourceOptions();
             this.ResPoolOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimResPoolOptions();
             this.MainMenuPanel.SuspendLayout();
             this.OptionsPanel.SuspendLayout();
@@ -77,6 +78,7 @@ namespace WaxCenter_SimApp
             // 
             // OptionsPanel
             // 
+            this.OptionsPanel.Controls.Add(this.SourceOptions);
             this.OptionsPanel.Controls.Add(this.ResPoolOptions);
             this.OptionsPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.OptionsPanel.Location = new System.Drawing.Point(1670, 0);
@@ -127,20 +129,34 @@ namespace WaxCenter_SimApp
             // 
             this.SimulationControlScreen.AppGUI = null;
             this.SimulationControlScreen.AutoSize = true;
-            this.SimulationControlScreen.Location = new System.Drawing.Point(1, 189);
+            this.SimulationControlScreen.Location = new System.Drawing.Point(0, 189);
             this.SimulationControlScreen.MinimumSize = new System.Drawing.Size(1536, 642);
             this.SimulationControlScreen.Name = "SimulationControlScreen";
             this.SimulationControlScreen.Size = new System.Drawing.Size(1536, 642);
             this.SimulationControlScreen.TabIndex = 0;
             // 
+            // SourceOptions
+            // 
+            this.SourceOptions.AgentsInputText = "";
+            this.SourceOptions.AppGUI = null;
+            this.SourceOptions.IntervalInputText = "";
+            this.SourceOptions.Location = new System.Drawing.Point(3, 189);
+            this.SourceOptions.MinimumSize = new System.Drawing.Size(292, 142);
+            this.SourceOptions.Name = "SourceOptions";
+            this.SourceOptions.Size = new System.Drawing.Size(299, 142);
+            this.SourceOptions.TabIndex = 1;
+            // 
             // ResPoolOptions
             // 
             this.ResPoolOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.ResPoolOptions.AppGUI = null;
             this.ResPoolOptions.Location = new System.Drawing.Point(3, 189);
             this.ResPoolOptions.MinimumSize = new System.Drawing.Size(292, 142);
             this.ResPoolOptions.Name = "ResPoolOptions";
+            this.ResPoolOptions.SelectedText = "Selected";
             this.ResPoolOptions.Size = new System.Drawing.Size(304, 142);
+            this.ResPoolOptions.StaffInputText = "";
             this.ResPoolOptions.TabIndex = 0;
             // 
             // AppGUI
@@ -177,6 +193,7 @@ namespace WaxCenter_SimApp
         private System.Windows.Forms.Panel BaseSettingsPanel;
         private GUIComponents.OptionsComponents.SimulationOptions SimulationOptions;
         private GUIComponents.OptionsComponents.SimResPoolOptions ResPoolOptions;
+        private GUIComponents.OptionsComponents.SimSourceOptions SourceOptions;
     }
 }
 

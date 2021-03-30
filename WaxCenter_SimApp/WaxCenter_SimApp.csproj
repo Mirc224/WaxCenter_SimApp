@@ -67,6 +67,12 @@
     <Compile Include="GUIComponents\OptionsComponents\SimResPoolOptions.Designer.cs">
       <DependentUpon>SimResPoolOptions.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUIComponents\OptionsComponents\SimSourceOptions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\OptionsComponents\SimSourceOptions.Designer.cs">
+      <DependentUpon>SimSourceOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUIComponents\OptionsComponents\SimulationOptions.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -94,7 +100,9 @@
     <Compile Include="Model\Simulation\SimulationBaseClasses\Core\ISimulation.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Events\ServiceEndEvent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Events\ServiceStartEvent.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Results\ReplicationsResults.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Settings\BaseEventSimulationSettings.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Settings\ReplicationsSettings.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\AdditionServiceComponents\ResourcePool.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\BaseComponent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\BaseSourceComponent.cs" />
@@ -180,6 +188,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUIComponents\OptionsComponents\SimResPoolOptions.resx">
       <DependentUpon>SimResPoolOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\OptionsComponents\SimSourceOptions.resx">
+      <DependentUpon>SimSourceOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUIComponents\OptionsComponents\SimulationOptions.resx">
       <DependentUpon>SimulationOptions.cs</DependentUpon>
