@@ -81,6 +81,12 @@
     </Compile>
     <Compile Include="GUIComponents\SimComponents\GUISimComponentsWrapper\GUISimulationComponentsManager.cs" />
     <Compile Include="GUIComponents\SimComponents\ISimComponent.cs" />
+    <Compile Include="GUIComponents\StatsComponents\StatsTable.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\StatsComponents\StatsTable.Designer.cs">
+      <DependentUpon>StatsTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\RandomDistribution\CustomDistribution.cs" />
     <Compile Include="Model\RandomDistribution\DiscreteDistribution.cs" />
     <Compile Include="Model\RandomDistribution\ExponentialDistribution.cs" />
@@ -100,7 +106,9 @@
     <Compile Include="Model\Simulation\SimulationBaseClasses\Core\ISimulation.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Events\ServiceEndEvent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Events\ServiceStartEvent.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Results\BaseResults.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Results\ReplicationsResults.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Results\ServiceResults.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Settings\BaseEventSimulationSettings.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Settings\ReplicationsSettings.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\AdditionServiceComponents\ResourcePool.cs" />
@@ -194,6 +202,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUIComponents\OptionsComponents\SimulationOptions.resx">
       <DependentUpon>SimulationOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\StatsComponents\StatsTable.resx">
+      <DependentUpon>StatsTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

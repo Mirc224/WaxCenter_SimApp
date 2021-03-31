@@ -17,6 +17,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         private List<ServiceStaff> _availableStaff;
         private double _totalTimeOccupied;
         public double Utilization { get => _service.Simulation.CurrentTime == 0 ? 0 : _totalTimeOccupied / (MaxStaff * _service.Simulation.CurrentTime); }
+        public ServiceStaff[] Staff { get => _staff; }
         public ResourcePool(ServiceComponent service, int maxStaff)
         {
             _service = service;

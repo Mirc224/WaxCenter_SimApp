@@ -107,11 +107,20 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
             Status = SimulationStatus.FINISHED;
             CurrentTime = 0;
             EventCalendar.Reset();
+            ResetSeeds();
             ResetComponents();
             ResetStatistics();
             ResetGenerators();
         }
 
+        protected void ResetSeeds()
+        {
+            if (AutoSeed)
+                SeedGenerator = new Random();
+            else
+                SeedGenerator = new Random(Seed);
+            SeedIt();
+        }
         protected virtual void ResetComponents()
         {
             SimulationComponentsManager.ResetAllComponents();

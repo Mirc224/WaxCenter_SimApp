@@ -33,6 +33,10 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ReplicationsTopPanel = new System.Windows.Forms.Panel();
             this.ReplicationsOptionsPanel = new System.Windows.Forms.Panel();
             this.RepOptionsTitleLabel = new System.Windows.Forms.Label();
+            this.AdminStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
+            this.ExaminationStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
+            this.VaccinationStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
+            this.WaitingRoomStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
             this.ReplicationsTopPanel.SuspendLayout();
             this.ReplicationsOptionsPanel.SuspendLayout();
             this.SuspendLayout();
@@ -75,10 +79,54 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.RepOptionsTitleLabel.TabIndex = 0;
             this.RepOptionsTitleLabel.Text = "Options";
             // 
+            // AdminStats
+            // 
+            this.AdminStats.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.AdminStats.Location = new System.Drawing.Point(3, 85);
+            this.AdminStats.MinimumSize = new System.Drawing.Size(204, 181);
+            this.AdminStats.Name = "AdminStats";
+            this.AdminStats.Size = new System.Drawing.Size(204, 181);
+            this.AdminStats.TabIndex = 3;
+            this.AdminStats.TitleText = "Administration";
+            // 
+            // ExaminationStats
+            // 
+            this.ExaminationStats.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ExaminationStats.Location = new System.Drawing.Point(213, 85);
+            this.ExaminationStats.MinimumSize = new System.Drawing.Size(204, 181);
+            this.ExaminationStats.Name = "ExaminationStats";
+            this.ExaminationStats.Size = new System.Drawing.Size(204, 181);
+            this.ExaminationStats.TabIndex = 4;
+            this.ExaminationStats.TitleText = "Examination";
+            // 
+            // VaccinationStats
+            // 
+            this.VaccinationStats.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.VaccinationStats.Location = new System.Drawing.Point(423, 85);
+            this.VaccinationStats.MinimumSize = new System.Drawing.Size(204, 181);
+            this.VaccinationStats.Name = "VaccinationStats";
+            this.VaccinationStats.Size = new System.Drawing.Size(204, 181);
+            this.VaccinationStats.TabIndex = 5;
+            this.VaccinationStats.TitleText = "Vaccination";
+            // 
+            // WaitingRoomStats
+            // 
+            this.WaitingRoomStats.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.WaitingRoomStats.Location = new System.Drawing.Point(633, 85);
+            this.WaitingRoomStats.MinimumSize = new System.Drawing.Size(204, 181);
+            this.WaitingRoomStats.Name = "WaitingRoomStats";
+            this.WaitingRoomStats.Size = new System.Drawing.Size(204, 181);
+            this.WaitingRoomStats.TabIndex = 6;
+            this.WaitingRoomStats.TitleText = "Waiting room";
+            // 
             // ReplicationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.WaitingRoomStats);
+            this.Controls.Add(this.VaccinationStats);
+            this.Controls.Add(this.ExaminationStats);
+            this.Controls.Add(this.AdminStats);
             this.Controls.Add(this.ReplicationsOptionsPanel);
             this.Controls.Add(this.ReplicationsTopPanel);
             this.Name = "ReplicationControl";
@@ -97,5 +145,9 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         private System.Windows.Forms.Panel ReplicationsTopPanel;
         private System.Windows.Forms.Panel ReplicationsOptionsPanel;
         private System.Windows.Forms.Label RepOptionsTitleLabel;
+        private StatsComponents.StatsTable AdminStats;
+        private StatsComponents.StatsTable ExaminationStats;
+        private StatsComponents.StatsTable VaccinationStats;
+        private StatsComponents.StatsTable WaitingRoomStats;
     }
 }

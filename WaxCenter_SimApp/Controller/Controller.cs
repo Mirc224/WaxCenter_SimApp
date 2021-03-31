@@ -95,7 +95,7 @@ namespace WaxCenter_SimApp.Controller
         {
             _simulation = simulation;
             _replicationsSettings = new ReplicationsSettings();
-            _replicationsSettings.NumberOfReplications = 10000;
+            _replicationsSettings.NumberOfReplications = 15000;
             _replicationsResults = new ReplicationsResults();
             /*_replicationsResults.CurrentReplications = 0;
             _replicationsResults.ObservedValues = new double[7];*/
