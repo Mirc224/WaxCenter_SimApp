@@ -32,18 +32,16 @@ namespace WaxCenter_SimApp
             this.MainMenuPanel = new System.Windows.Forms.Panel();
             this.ShowReplicationButton = new System.Windows.Forms.Button();
             this.ShowSimulationButton = new System.Windows.Forms.Button();
-            this.OptionsPanel = new System.Windows.Forms.Panel();
-            this.ContentPanel = new System.Windows.Forms.Panel();
-            this.BaseSettingsPanel = new System.Windows.Forms.Panel();
             this.RealTimeSimulationWorker = new System.ComponentModel.BackgroundWorker();
+            this.ReplicationsWorker = new System.ComponentModel.BackgroundWorker();
+            this.BaseSettingsPanel = new System.Windows.Forms.Panel();
+            this.ContentPanel = new System.Windows.Forms.Panel();
+            this.ReplicationControlScreen = new WaxCenter_SimApp.GUIComponents.Screens.ReplicationControl();
             this.SimulationOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimulationOptions();
             this.SimulationControlScreen = new WaxCenter_SimApp.GUIComponents.Screens.SimulationControl();
-            this.SourceOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimSourceOptions();
-            this.ResPoolOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimResPoolOptions();
             this.MainMenuPanel.SuspendLayout();
-            this.OptionsPanel.SuspendLayout();
-            this.ContentPanel.SuspendLayout();
             this.BaseSettingsPanel.SuspendLayout();
+            this.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainMenuPanel
@@ -53,7 +51,7 @@ namespace WaxCenter_SimApp
             this.MainMenuPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.MainMenuPanel.Location = new System.Drawing.Point(0, 0);
             this.MainMenuPanel.Name = "MainMenuPanel";
-            this.MainMenuPanel.Size = new System.Drawing.Size(155, 971);
+            this.MainMenuPanel.Size = new System.Drawing.Size(155, 1019);
             this.MainMenuPanel.TabIndex = 0;
             // 
             // ShowReplicationButton
@@ -76,35 +74,6 @@ namespace WaxCenter_SimApp
             this.ShowSimulationButton.UseVisualStyleBackColor = true;
             this.ShowSimulationButton.Click += new System.EventHandler(this.ShowSimulationButton_Click);
             // 
-            // OptionsPanel
-            // 
-            this.OptionsPanel.Controls.Add(this.SourceOptions);
-            this.OptionsPanel.Controls.Add(this.ResPoolOptions);
-            this.OptionsPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.OptionsPanel.Location = new System.Drawing.Point(1670, 0);
-            this.OptionsPanel.Name = "OptionsPanel";
-            this.OptionsPanel.Size = new System.Drawing.Size(314, 971);
-            this.OptionsPanel.TabIndex = 2;
-            // 
-            // ContentPanel
-            // 
-            this.ContentPanel.Controls.Add(this.BaseSettingsPanel);
-            this.ContentPanel.Controls.Add(this.SimulationControlScreen);
-            this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ContentPanel.Location = new System.Drawing.Point(155, 0);
-            this.ContentPanel.Name = "ContentPanel";
-            this.ContentPanel.Size = new System.Drawing.Size(1515, 971);
-            this.ContentPanel.TabIndex = 3;
-            // 
-            // BaseSettingsPanel
-            // 
-            this.BaseSettingsPanel.Controls.Add(this.SimulationOptions);
-            this.BaseSettingsPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BaseSettingsPanel.Location = new System.Drawing.Point(0, 0);
-            this.BaseSettingsPanel.Name = "BaseSettingsPanel";
-            this.BaseSettingsPanel.Size = new System.Drawing.Size(1515, 186);
-            this.BaseSettingsPanel.TabIndex = 1;
-            // 
             // RealTimeSimulationWorker
             // 
             this.RealTimeSimulationWorker.WorkerReportsProgress = true;
@@ -112,6 +81,41 @@ namespace WaxCenter_SimApp
             this.RealTimeSimulationWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.RealTimeSimulationWorker_DoWork);
             this.RealTimeSimulationWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RealTimeSimulationWorker_ProgressChanged);
             this.RealTimeSimulationWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RealTimeSimulationWorker_RunWorkerCompleted);
+            // 
+            // ReplicationsWorker
+            // 
+            this.ReplicationsWorker.WorkerReportsProgress = true;
+            this.ReplicationsWorker.WorkerSupportsCancellation = true;
+            this.ReplicationsWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.ReplicationsWorker_DoWork);
+            // 
+            // BaseSettingsPanel
+            // 
+            this.BaseSettingsPanel.Controls.Add(this.SimulationOptions);
+            this.BaseSettingsPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BaseSettingsPanel.Location = new System.Drawing.Point(0, 0);
+            this.BaseSettingsPanel.Name = "BaseSettingsPanel";
+            this.BaseSettingsPanel.Size = new System.Drawing.Size(1835, 186);
+            this.BaseSettingsPanel.TabIndex = 1;
+            // 
+            // ContentPanel
+            // 
+            this.ContentPanel.Controls.Add(this.ReplicationControlScreen);
+            this.ContentPanel.Controls.Add(this.BaseSettingsPanel);
+            this.ContentPanel.Controls.Add(this.SimulationControlScreen);
+            this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ContentPanel.Location = new System.Drawing.Point(155, 0);
+            this.ContentPanel.Name = "ContentPanel";
+            this.ContentPanel.Size = new System.Drawing.Size(1835, 1019);
+            this.ContentPanel.TabIndex = 3;
+            // 
+            // ReplicationControlScreen
+            // 
+            this.ReplicationControlScreen.AppGUI = null;
+            this.ReplicationControlScreen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ReplicationControlScreen.Location = new System.Drawing.Point(0, 189);
+            this.ReplicationControlScreen.Name = "ReplicationControlScreen";
+            this.ReplicationControlScreen.Size = new System.Drawing.Size(1832, 818);
+            this.ReplicationControlScreen.TabIndex = 2;
             // 
             // SimulationOptions
             // 
@@ -129,54 +133,28 @@ namespace WaxCenter_SimApp
             // 
             this.SimulationControlScreen.AppGUI = null;
             this.SimulationControlScreen.AutoSize = true;
-            this.SimulationControlScreen.Location = new System.Drawing.Point(0, 189);
+            this.SimulationControlScreen.Location = new System.Drawing.Point(6, 189);
             this.SimulationControlScreen.MinimumSize = new System.Drawing.Size(1536, 642);
             this.SimulationControlScreen.Name = "SimulationControlScreen";
-            this.SimulationControlScreen.Size = new System.Drawing.Size(1536, 642);
+            this.SimulationControlScreen.Size = new System.Drawing.Size(1835, 642);
             this.SimulationControlScreen.TabIndex = 0;
-            // 
-            // SourceOptions
-            // 
-            this.SourceOptions.AgentsInputText = "";
-            this.SourceOptions.AppGUI = null;
-            this.SourceOptions.IntervalInputText = "";
-            this.SourceOptions.Location = new System.Drawing.Point(3, 189);
-            this.SourceOptions.MinimumSize = new System.Drawing.Size(292, 142);
-            this.SourceOptions.Name = "SourceOptions";
-            this.SourceOptions.Size = new System.Drawing.Size(299, 142);
-            this.SourceOptions.TabIndex = 1;
-            // 
-            // ResPoolOptions
-            // 
-            this.ResPoolOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ResPoolOptions.AppGUI = null;
-            this.ResPoolOptions.Location = new System.Drawing.Point(3, 189);
-            this.ResPoolOptions.MinimumSize = new System.Drawing.Size(292, 142);
-            this.ResPoolOptions.Name = "ResPoolOptions";
-            this.ResPoolOptions.SelectedText = "Selected";
-            this.ResPoolOptions.Size = new System.Drawing.Size(304, 142);
-            this.ResPoolOptions.StaffInputText = "";
-            this.ResPoolOptions.TabIndex = 0;
             // 
             // AppGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1984, 971);
+            this.ClientSize = new System.Drawing.Size(1990, 1019);
             this.Controls.Add(this.ContentPanel);
-            this.Controls.Add(this.OptionsPanel);
             this.Controls.Add(this.MainMenuPanel);
             this.Name = "AppGUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MainMenuPanel.ResumeLayout(false);
-            this.OptionsPanel.ResumeLayout(false);
-            this.ContentPanel.ResumeLayout(false);
-            this.ContentPanel.PerformLayout();
             this.BaseSettingsPanel.ResumeLayout(false);
             this.BaseSettingsPanel.PerformLayout();
+            this.ContentPanel.ResumeLayout(false);
+            this.ContentPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -186,14 +164,13 @@ namespace WaxCenter_SimApp
         private System.Windows.Forms.Panel MainMenuPanel;
         private System.Windows.Forms.Button ShowReplicationButton;
         private System.Windows.Forms.Button ShowSimulationButton;
-        private System.Windows.Forms.Panel OptionsPanel;
-        private System.Windows.Forms.Panel ContentPanel;
-        private SimulationControl SimulationControlScreen;
         private System.ComponentModel.BackgroundWorker RealTimeSimulationWorker;
+        private System.ComponentModel.BackgroundWorker ReplicationsWorker;
+        private SimulationControl SimulationControlScreen;
         private System.Windows.Forms.Panel BaseSettingsPanel;
         private GUIComponents.OptionsComponents.SimulationOptions SimulationOptions;
-        private GUIComponents.OptionsComponents.SimResPoolOptions ResPoolOptions;
-        private GUIComponents.OptionsComponents.SimSourceOptions SourceOptions;
+        private ReplicationControl ReplicationControlScreen;
+        private System.Windows.Forms.Panel ContentPanel;
     }
 }
 

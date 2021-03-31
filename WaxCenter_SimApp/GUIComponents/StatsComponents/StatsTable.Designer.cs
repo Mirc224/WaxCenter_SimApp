@@ -49,9 +49,6 @@ namespace WaxCenter_SimApp.GUIComponents.StatsComponents
             // 
             // StatGridView
             // 
-            this.StatGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.StatGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.StatGridView.ColumnHeadersHeight = 29;
             this.StatGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -67,11 +64,12 @@ namespace WaxCenter_SimApp.GUIComponents.StatsComponents
             this.StatGridView.ShowCellToolTips = false;
             this.StatGridView.ShowEditingIcon = false;
             this.StatGridView.ShowRowErrors = false;
-            this.StatGridView.Size = new System.Drawing.Size(196, 148);
+            this.StatGridView.Size = new System.Drawing.Size(338, 214);
             this.StatGridView.TabIndex = 2;
             // 
             // Statistic
             // 
+            this.Statistic.FillWeight = 93.04813F;
             this.Statistic.HeaderText = "Statistic";
             this.Statistic.MinimumWidth = 6;
             this.Statistic.Name = "Statistic";
@@ -79,6 +77,7 @@ namespace WaxCenter_SimApp.GUIComponents.StatsComponents
             // 
             // Value
             // 
+            this.Value.FillWeight = 106.9519F;
             this.Value.HeaderText = "Value";
             this.Value.MinimumWidth = 6;
             this.Value.Name = "Value";
@@ -88,12 +87,13 @@ namespace WaxCenter_SimApp.GUIComponents.StatsComponents
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.StatGridView);
             this.Controls.Add(this.StatTitleLabel);
-            this.MinimumSize = new System.Drawing.Size(204, 181);
+            this.MinimumSize = new System.Drawing.Size(292, 224);
             this.Name = "StatsTable";
-            this.Size = new System.Drawing.Size(202, 179);
+            this.Size = new System.Drawing.Size(275, 196);
             ((System.ComponentModel.ISupportInitialize)(this.StatGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

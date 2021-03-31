@@ -67,7 +67,7 @@ namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
             this.TableOptionsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TableOptionsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TableOptionsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.TableOptionsLayout.Size = new System.Drawing.Size(554, 88);
+            this.TableOptionsLayout.Size = new System.Drawing.Size(548, 88);
             this.TableOptionsLayout.TabIndex = 0;
             // 
             // MaxTimeLabel

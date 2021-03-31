@@ -36,14 +36,18 @@ namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
             this.AgentsInput = new System.Windows.Forms.MaskedTextBox();
             this.AgentsGeneratedLabel = new System.Windows.Forms.Label();
             this.ConfirmButton = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.TableLayout.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // TitleLabel
             // 
+            this.TitleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TitleLabel.AutoSize = true;
             this.TitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.TitleLabel.Location = new System.Drawing.Point(62, 0);
+            this.TitleLabel.Location = new System.Drawing.Point(74, 11);
             this.TitleLabel.Name = "TitleLabel";
             this.TitleLabel.Size = new System.Drawing.Size(162, 25);
             this.TitleLabel.TabIndex = 0;
@@ -60,12 +64,12 @@ namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
             this.TableLayout.Controls.Add(this.SourceRateInput, 1, 0);
             this.TableLayout.Controls.Add(this.AgentsInput, 1, 1);
             this.TableLayout.Controls.Add(this.AgentsGeneratedLabel, 0, 1);
-            this.TableLayout.Location = new System.Drawing.Point(2, 39);
+            this.TableLayout.Location = new System.Drawing.Point(3, 39);
             this.TableLayout.Name = "TableLayout";
             this.TableLayout.RowCount = 2;
             this.TableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.TableLayout.Size = new System.Drawing.Size(273, 61);
+            this.TableLayout.Size = new System.Drawing.Size(303, 61);
             this.TableLayout.TabIndex = 1;
             // 
             // SourceRateLabel
@@ -85,14 +89,14 @@ namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
             // 
             this.SourceRateInput.Location = new System.Drawing.Point(154, 3);
             this.SourceRateInput.Name = "SourceRateInput";
-            this.SourceRateInput.Size = new System.Drawing.Size(119, 22);
+            this.SourceRateInput.Size = new System.Drawing.Size(109, 22);
             this.SourceRateInput.TabIndex = 1;
             // 
             // AgentsInput
             // 
-            this.AgentsInput.Location = new System.Drawing.Point(154, 37);
+            this.AgentsInput.Location = new System.Drawing.Point(154, 31);
             this.AgentsInput.Name = "AgentsInput";
-            this.AgentsInput.Size = new System.Drawing.Size(119, 22);
+            this.AgentsInput.Size = new System.Drawing.Size(109, 22);
             this.AgentsInput.TabIndex = 2;
             // 
             // AgentsGeneratedLabel
@@ -101,7 +105,7 @@ namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
             | System.Windows.Forms.AnchorStyles.Right)));
             this.AgentsGeneratedLabel.AutoSize = true;
             this.AgentsGeneratedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F);
-            this.AgentsGeneratedLabel.Location = new System.Drawing.Point(3, 34);
+            this.AgentsGeneratedLabel.Location = new System.Drawing.Point(3, 28);
             this.AgentsGeneratedLabel.Name = "AgentsGeneratedLabel";
             this.AgentsGeneratedLabel.Size = new System.Drawing.Size(145, 20);
             this.AgentsGeneratedLabel.TabIndex = 3;
@@ -110,7 +114,7 @@ namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
             // 
             // ConfirmButton
             // 
-            this.ConfirmButton.Location = new System.Drawing.Point(79, 106);
+            this.ConfirmButton.Location = new System.Drawing.Point(88, 118);
             this.ConfirmButton.Name = "ConfirmButton";
             this.ConfirmButton.Size = new System.Drawing.Size(131, 33);
             this.ConfirmButton.TabIndex = 2;
@@ -118,20 +122,33 @@ namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
             this.ConfirmButton.UseVisualStyleBackColor = true;
             this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButton_Click);
             // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.TitleLabel);
+            this.panel1.Controls.Add(this.ConfirmButton);
+            this.panel1.Controls.Add(this.TableLayout);
+            this.panel1.Location = new System.Drawing.Point(4, 4);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(309, 188);
+            this.panel1.TabIndex = 3;
+            // 
             // SimSourceOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.ConfirmButton);
-            this.Controls.Add(this.TableLayout);
-            this.Controls.Add(this.TitleLabel);
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.panel1);
             this.MinimumSize = new System.Drawing.Size(292, 142);
             this.Name = "SimSourceOptions";
-            this.Size = new System.Drawing.Size(292, 142);
+            this.Size = new System.Drawing.Size(315, 161);
             this.TableLayout.ResumeLayout(false);
             this.TableLayout.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -144,6 +161,7 @@ namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
         private System.Windows.Forms.MaskedTextBox AgentsInput;
         private System.Windows.Forms.Label AgentsGeneratedLabel;
         private System.Windows.Forms.Button ConfirmButton;
+        private System.Windows.Forms.Panel panel1;
 
         public string IntervalInputText { get => SourceRateInput.Text; set => SourceRateInput.Text = value; }
         public string AgentsInputText { get => AgentsInput.Text; set => AgentsInput.Text = value; }

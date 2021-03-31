@@ -28,7 +28,9 @@ namespace WaxCenter_SimApp.GUIComponents.StatsComponents
                 {
                     for (int i = 0; i < Result.Names.Length; ++i)
                     {
-                        StatGridView.Rows.Add(new string[] { Result.Names[i], Result.Values[i].ToString() });
+                        StatGridView.Rows.Add(new string[] { Result.Names[i], 
+                            (ResultGroup.ReplicationsResult.CurrentReplications == 0 ? 
+                            0 :  Result.Values[i]/ResultGroup.ReplicationsResult.CurrentReplications).ToString() });
                     }
                 }
             }
@@ -38,14 +40,14 @@ namespace WaxCenter_SimApp.GUIComponents.StatsComponents
         {
             if (ResultGroup != null)
             {
-                StatGridView.Rows.Clear();
                 int index = 0;
                 foreach (var Result in ResultGroup.GroupResults)
                 {
                     for (int i = 0; i < Result.Names.Length; ++i)
                     {
                         var dataRow = StatGridView.Rows[index++];
-                        dataRow.Cells[1].Value = Result.Values[i].ToString();
+                        dataRow.Cells[1].Value = (ResultGroup.ReplicationsResult.CurrentReplications == 0 ?
+                                                  0 : Result.Values[i] / ResultGroup.ReplicationsResult.CurrentReplications).ToString();
                     }
                 }
             }

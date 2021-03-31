@@ -21,9 +21,9 @@ namespace WaxCenter_SimApp
             /*double cislo = 2.5522;
             Console.WriteLine((int)cislo);
             Console.WriteLine((int)((cislo%1)* 100));*/
-            /*Application.EnableVisualStyles();
+            Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AppGUI());*/
+            Application.Run(new AppGUI());
             //Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
             //var gen = new TriangularDistribution(20, 100, 75);
             //var gen = new ExponentialDistribution(260);
@@ -49,14 +49,14 @@ namespace WaxCenter_SimApp
 
                         Console.WriteLine(list.Average());*/
             //var simulation = new EventSimCoreNewsPapers(null);
-            var simulation = new EventSimCoreVaccinationCenter(null);
-            //simulation.BeforeReplicationInit();
-            simulation.AutoSeed = true;
-            //simulation.Seed = 3010;
-            //simulation.MaxTime = 54000 * 60;
-            //simulation.DoReplication();
-            var cont = new Controller.Controller(simulation);
-            cont.RunReplications();
+            /*            var simulation = new EventSimCoreVaccinationCenter(null);
+                        //simulation.BeforeReplicationInit();
+                        simulation.AutoSeed = true;
+                        //simulation.Seed = 3010;
+                        //simulation.MaxTime = 54000 * 60;
+                        //simulation.DoReplication();
+                        var cont = new Controller.Controller(simulation);
+                        cont.RunReplications();*/
 
 
             /*            simulation.BeforeReplicationInit();

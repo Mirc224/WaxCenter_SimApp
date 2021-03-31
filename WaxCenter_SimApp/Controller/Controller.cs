@@ -34,6 +34,9 @@ namespace WaxCenter_SimApp.Controller
         private BackgroundWorker _realTimeSimWorker;
         private SimulationControl _realSimControl;
 
+        private BackgroundWorker _replicationsWorker;
+        private ReplicationControl _replicationSimControl;
+
         private ReplicationsSettings _replicationsSettings;
         private ReplicationsResults _replicationsResults;
 
@@ -45,7 +48,7 @@ namespace WaxCenter_SimApp.Controller
 
         public bool RealTimeCancellation { get => _realTimeSimWorker.CancellationPending; }
 
-        public Controller(AppGUI appGUI, SimulationControl realTimeSim, SimulationOptions simOptions)
+        public Controller(AppGUI appGUI, SimulationControl realTimeSim, ReplicationControl replicationSim, SimulationOptions simOptions)
         {
             _applicationGUI = appGUI;
             _simulation = new EventSimCoreVaccinationCenter(this);
@@ -89,29 +92,37 @@ namespace WaxCenter_SimApp.Controller
             _realSimControl.GUISimComponentManager.GSimSink.SinkModelComponent = _simulation.SimulationComponentsManager.Sink;
 
             _realSimControl.UpdateValues();
+
+            _replicationSimControl = replicationSim;
+            _replicationSimControl.SetReplicationResults(_simulation.ReplicationResults);
+
+            _replicationsSettings = new ReplicationsSettings();
+            _replicationsSettings.NumberOfReplications = 1000;
         }
 
         public Controller(EventSimCoreVaccinationCenter simulation)
         {
             _simulation = simulation;
             _replicationsSettings = new ReplicationsSettings();
-            _replicationsSettings.NumberOfReplications = 1000;
-            _replicationsResults = new ReplicationsResults();
+            _replicationsSettings.NumberOfReplications = 10000;
+            //_replicationsResults = new ReplicationsResults();
             /*_replicationsResults.CurrentReplications = 0;
             _replicationsResults.ObservedValues = new double[7];*/
         }
 
 
-        public bool RunReplications()
+        public bool RunReplicationsWithGUIUpdate(BackgroundWorker replicationWorek)
         {
+            _replicationsWorker = replicationWorek;
+            _replicationsSettings.NumberOfReplications = 10000;
             _simulation.BeforeSimulation();
             for(int i = _simulation.ReplicationResults.CurrentReplications; i < _replicationsSettings.NumberOfReplications; ++i)
             {
                 _simulation.BeforeReplication();
                 _simulation.DoReplication();
                 _simulation.AfterReplication();
+                UpdateGUIAfterReplication();
             }
-            UpdateGUIAfterReplication();
             //for(int i = )
 
             return true;
@@ -127,7 +138,8 @@ namespace WaxCenter_SimApp.Controller
             {
                 Console.WriteLine(outputTitle[i] + (_simulation.ReplicationResults.ObservedValues[i]/ _simulation.ReplicationResults.CurrentReplications));
             }*/
-            foreach(var group in _simulation.ReplicationResults.ResultGroups)
+            _replicationSimControl.UpdateStatTables();
+            /*foreach(var group in _simulation.ReplicationResults.ResultGroups)
             {
                 foreach(var stat in group.GroupResults)
                 {
@@ -136,7 +148,7 @@ namespace WaxCenter_SimApp.Controller
                         Console.WriteLine(stat.Names[i] + ": " + (stat.Values[i]/_simulation.ReplicationResults.CurrentReplications));
                     }
                 }
-            }
+            }*/
 
         }
 

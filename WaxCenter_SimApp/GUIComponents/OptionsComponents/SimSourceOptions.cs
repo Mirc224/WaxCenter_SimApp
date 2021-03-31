@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WaxCenter_SimApp.GUIComponents.Screens;
 
 namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
 {
     public partial class SimSourceOptions : UserControl, IGUIOptions
     {
-        public AppGUI AppGUI { get; set; }
+        public SimulationControl SimulationControl { get; set; }
         public GUIOptionsType OptionsType { get => GUIOptionsType.SOURCE; }
         public SimSourceOptions()
         {
@@ -21,7 +22,7 @@ namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
 
         private void ConfirmButton_Click(object sender, EventArgs e)
         {
-            AppGUI.HandleComponentOptionsConfirmSignal(this);
+            SimulationControl.HandleComponentOptionsConfirmSignal(this);
         }
     }
 }

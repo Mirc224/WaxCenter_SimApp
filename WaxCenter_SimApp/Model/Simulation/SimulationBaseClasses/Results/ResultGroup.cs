@@ -9,6 +9,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results
     public class ResultGroup
     {
         public BaseResults[] GroupResults { get; set; }
+        public ReplicationsResults ReplicationsResult { get; set; }
 
         public ResultGroup(BaseResults[] results)
         {

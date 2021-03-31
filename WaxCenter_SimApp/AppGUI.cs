@@ -18,24 +18,23 @@ namespace WaxCenter_SimApp
     public partial class AppGUI : Form
     {
 
-        private Controller.Controller _controller;
-        private ISimComponent _selectedComponent;
+        public Controller.Controller Controller { get; private set; }
+
         public AppGUI()
         {
             InitializeComponent();
             SimulationControlScreen.AppGUI = this;
+            ReplicationControlScreen.AppGUI = this;
             SimulationOptions.AppGUI = this;
-            ResPoolOptions.AppGUI = this;
-            SourceOptions.AppGUI = this;
 
-            _controller = new Controller.Controller(this, SimulationControlScreen, SimulationOptions);
+            Controller = new Controller.Controller(this, SimulationControlScreen, ReplicationControlScreen, SimulationOptions);
             HideAllScreens();
-            HideAllComponentOptions();
         }
 
         private void HideAllScreens()
         {
             SimulationControlScreen.Hide();
+            ReplicationControlScreen.Hide();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -46,13 +45,16 @@ namespace WaxCenter_SimApp
 
         private void ShowSimulationButton_Click(object sender, EventArgs e)
         {
-            //SimulationControlScreen.Show();
+            HideAllScreens();
+            SimulationControlScreen.Show();
             //ReplicationControlScreen.Hide();
 
         }
 
         private void ShowReplicationButton_Click(object sender, EventArgs e)
         {
+            HideAllScreens();
+            ReplicationControlScreen.Show();
             //SimulationControlScreen.Hide();
             //ReplicationControlScreen.Show();
         }
@@ -73,7 +75,7 @@ namespace WaxCenter_SimApp
         {
             if(!RealTimeSimulationWorker.IsBusy)
             {
-                if (_controller.SimulationStatus == EventSimulationCore.SimulationStatus.FINISHED || _controller.SimulationStatus == EventSimulationCore.SimulationStatus.CANCELED)
+                if (Controller.SimulationStatus == EventSimulationCore.SimulationStatus.FINISHED || Controller.SimulationStatus == EventSimulationCore.SimulationStatus.CANCELED)
                 {
                     StartSimulation();
                 }
@@ -111,7 +113,7 @@ namespace WaxCenter_SimApp
 
         private void RealTimeSimulationWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            if(_controller.SimulationStatus == EventSimulationCore.SimulationStatus.PAUSED)
+            if(Controller.SimulationStatus == EventSimulationCore.SimulationStatus.PAUSED)
             {
                 RealTimeSimulationWorker.ReportProgress((int)UpdateDataType.SIMULATION_CONTINUE);
             }
@@ -119,7 +121,7 @@ namespace WaxCenter_SimApp
             {
                 RealTimeSimulationWorker.ReportProgress((int)UpdateDataType.SIMULATION_START);
             }
-            if (!_controller.RunRealTimeSimulation(RealTimeSimulationWorker))
+            if (!Controller.RunRealTimeSimulation(RealTimeSimulationWorker))
             {
                 e.Cancel = true;
             }
@@ -127,16 +129,38 @@ namespace WaxCenter_SimApp
 
         public void ChangeSimulationSpeed(int speedIndex)
         {
-            _controller.SetSimulationSpeed(speedIndex);
+            Controller.SetSimulationSpeed(speedIndex);
+        }
+
+        public void SignalRunPauseReplications()
+        {
+            if (!ReplicationsWorker.IsBusy)
+            {
+                ReplicationsWorker.RunWorkerAsync();
+                /*if (_controller.SimulationStatus == EventSimulationCore.SimulationStatus.FINISHED || _controller.SimulationStatus == EventSimulationCore.SimulationStatus.CANCELED)
+                {
+                    //StartSimulation();
+                }
+                else
+                    //ContinueSimulation();*/
+            }
+            else
+            {
+                //PauseSimulation();
+            }
+        }
+        public void RunReplications()
+        {
+
         }
 
         private void RealTimeSimulationWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (_controller.SimulationStatus != EventSimulationCore.SimulationStatus.FINISHED)
+            if (Controller.SimulationStatus != EventSimulationCore.SimulationStatus.FINISHED)
             {
-                if(_controller.SimulationStatus == EventSimulationCore.SimulationStatus.PAUSED)
+                if(Controller.SimulationStatus == EventSimulationCore.SimulationStatus.PAUSED)
                 {
-                    _controller.PauseClicked = false;
+                    Controller.PauseClicked = false;
                     SimulationControlScreen.SetPauseSimulationSettings();
                 }
                 else
@@ -152,7 +176,7 @@ namespace WaxCenter_SimApp
 
         private void AfterRealTimeSimulationStopped()
         {
-            _controller.AfterRealTimeSimulationStopped();
+            Controller.AfterRealTimeSimulationStopped();
             SetRealTimeToDefault();
         }
         private void AfterRealTimeSimulationCompleted()
@@ -168,17 +192,17 @@ namespace WaxCenter_SimApp
 
         private void StartSimulation()
         {
-            _controller.PauseClicked = false;
+            Controller.PauseClicked = false;
             //_controller.ResetRealTimeSimulation();
             //SimulationControlScreen.SetStartSimulationSettings();
             //SimulationControlScreen.DisableButtons();
-            _controller.ResetRealTimeSimulation();
+            Controller.ResetRealTimeSimulation();
             RealTimeSimulationWorker.RunWorkerAsync();
         }
 
         private void PauseSimulation()
         {
-            _controller.PauseClicked = true;
+            Controller.PauseClicked = true;
             SimulationControlScreen.DisableButtons();
             RealTimeSimulationWorker.CancelAsync();
         }
@@ -190,50 +214,16 @@ namespace WaxCenter_SimApp
 
         public void SignalBaseOptionsConfirm()
         {
-            _controller.TryApplyBaseSimulationSettings();
+            Controller.TryApplyBaseSimulationSettings();
+        }
+        private void ReplicationsWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Controller.RunReplicationsWithGUIUpdate(ReplicationsWorker);
         }
 
-        public void HandleGUIComponentSelect(ISimComponent simComponent)
+        private void ReplicationsWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            HideAllComponentOptions();
-            switch(simComponent.SimComponentType)
-            {
-                case SimComponentType.SOURCE:
-                    _selectedComponent = simComponent;
-                    _controller.HandleGUIComponentSelection(_selectedComponent, SourceOptions);
-                    SourceOptions.Show();
-                    break;
-                case SimComponentType.RESOURCEPOOL:
-                    _selectedComponent = simComponent;
-                    ResPoolOptions.SelectedText = simComponent.TitleText;
-                    _controller.HandleGUIComponentSelection(_selectedComponent, ResPoolOptions);
-                    ResPoolOptions.Show();
-                    break;
-                default:
-                    break;
-            }
-        }
 
-        public void HandleComponentOptionsConfirmSignal(IGUIOptions optionsGUI)
-        {
-            switch(optionsGUI.OptionsType)
-            {
-                case GUIOptionsType.SOURCE:
-                    _controller.HandleGUIComponentOptionsConfirmation(_selectedComponent, optionsGUI);
-                    break;
-                case GUIOptionsType.RESPOOL:
-                    _controller.HandleGUIComponentOptionsConfirmation(_selectedComponent, optionsGUI);
-                    break;
-                default:
-                    break;
-            }
-            _controller.ResetRealTimeSimulation();
-        }
-
-        private void HideAllComponentOptions()
-        {
-            ResPoolOptions.Hide();
-            SourceOptions.Hide();
         }
     }
 }

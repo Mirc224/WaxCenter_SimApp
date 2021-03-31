@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WaxCenter_SimApp.GUIComponents.OptionsComponents;
 using WaxCenter_SimApp.GUIComponents.SimComponents;
 using WaxCenter_SimApp.GUIComponents.SimComponents.GUISimComponentsWrapper;
 using WaxCenter_SimApp.Model.Simulation.GUIData;
@@ -17,6 +18,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
     public partial class SimulationControl : UserControl
     {
         public AppGUI AppGUI { get; set; }
+        private ISimComponent _selectedComponent;
+
         //public SimulationComponentsManager ComponentsManager { get; set; }
         public GUISimulationComponentsManager GUISimComponentManager { get; private set; } = new GUISimulationComponentsManager();
         public SimulationControl()
@@ -32,15 +35,58 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 
             GUISimComponentManager.SetSimulationControlForComponents(this);
             this.SimulationClock.SimulationControl = this;
-            
+            ResPoolOptions.SimulationControl = this;
+            SourceOptions.SimulationControl = this;
             this.SetToDefault();
+            HideAllComponentOptions();
         }
 
-        public void HandleComponentSelect(ISimComponent selectedComponent)
+        private void HideAllComponentOptions()
+        {
+            ResPoolOptions.Hide();
+            SourceOptions.Hide();
+        }
+            public void HandleComponentSelect(ISimComponent selectedComponent)
         {
             //Console.WriteLine($"Type {selectedComponent.SimComponentType.ToString()} ID: {selectedComponent.ID}");
-            AppGUI.HandleGUIComponentSelect(selectedComponent);
+            _selectedComponent = selectedComponent;
+
+            HideAllComponentOptions();
+            switch (selectedComponent.SimComponentType)
+            {
+                case SimComponentType.SOURCE:
+                    _selectedComponent = selectedComponent;
+                    AppGUI.Controller.HandleGUIComponentSelection(_selectedComponent, SourceOptions);
+                    SourceOptions.Show();
+                    break;
+                case SimComponentType.RESOURCEPOOL:
+                    _selectedComponent = selectedComponent;
+                    ResPoolOptions.SelectedText = selectedComponent.TitleText;
+                    AppGUI.Controller.HandleGUIComponentSelection(_selectedComponent, ResPoolOptions);
+                    ResPoolOptions.Show();
+                    break;
+                default:
+                    break;
+            }
+
+            //AppGUI.HandleGUIComponentSelect(selectedComponent);
             //GUIApp.Spracuj();
+        }
+
+        public void HandleComponentOptionsConfirmSignal(IGUIOptions optionsGUI)
+        {
+            switch (optionsGUI.OptionsType)
+            {
+                case GUIOptionsType.SOURCE:
+                    AppGUI.Controller.HandleGUIComponentOptionsConfirmation(_selectedComponent, optionsGUI);
+                    break;
+                case GUIOptionsType.RESPOOL:
+                    AppGUI.Controller.HandleGUIComponentOptionsConfirmation(_selectedComponent, optionsGUI);
+                    break;
+                default:
+                    break;
+            }
+            AppGUI.Controller.ResetRealTimeSimulation();
         }
 
         public void StartButtonClick()
