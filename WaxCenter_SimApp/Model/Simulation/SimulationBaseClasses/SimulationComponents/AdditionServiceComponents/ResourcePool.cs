@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.AdditionalServiceComponents;
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.AdditionServiceComponents
@@ -18,11 +19,13 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         private double _totalTimeOccupied;
         public double Utilization { get => _service.Simulation.CurrentTime == 0 ? 0 : _totalTimeOccupied / (MaxStaff * _service.Simulation.CurrentTime); }
         public ServiceStaff[] Staff { get => _staff; }
+        public ResourcePoolResults ReplicationResults { get; set;}
         public ResourcePool(ServiceComponent service, int maxStaff)
         {
             _service = service;
             _selectSeedGenerator = new Random();
             SetMaxStaff(maxStaff);
+            ReplicationResults = new ResourcePoolResults(this);
         }
 
         public void SetMaxStaff(int maxStaff)
@@ -36,6 +39,8 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
             }
             _availableStaff = new List<ServiceStaff>(MaxStaff);
             SetSelectSeed();
+            if (ReplicationResults != null)
+                ReplicationResults.Rebuild();
         }
 
         public ServiceStaff GetFreeStaff()

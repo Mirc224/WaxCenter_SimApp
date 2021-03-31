@@ -108,7 +108,9 @@
     <Compile Include="Model\Simulation\SimulationBaseClasses\Events\ServiceStartEvent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Results\BaseResults.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Results\ReplicationsResults.cs" />
-    <Compile Include="Model\Simulation\SimulationBaseClasses\Results\ServiceResults.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Results\ResourcePoolResults.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Results\ResultGroup.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Results\StatResults.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Settings\BaseEventSimulationSettings.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Settings\ReplicationsSettings.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\AdditionServiceComponents\ResourcePool.cs" />

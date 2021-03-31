@@ -18,9 +18,9 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
         /*
          * Tu patria vsetko dalsie co je v simulacii. Generatory generator nasad, statisticke vyhodnotenia, atribut stavu, ci je obsadene alebo neobsadene.
          */
-        public DiscreteStatistic NewsPaperWaitingTime { get; private set; } = new DiscreteStatistic();
-        public ContinuousStatistic NewsPaperQLength { get; private set; } = new ContinuousStatistic();
-        public ContinuousStatistic DelaySize { get; private set; } = new ContinuousStatistic();
+        public DiscreteStatistic NewsPaperWaitingTime { get; private set; } = new DiscreteStatistic("asd");
+        public ContinuousStatistic NewsPaperQLength { get; private set; } = new ContinuousStatistic("asd");
+        public ContinuousStatistic DelaySize { get; private set; } = new ContinuousStatistic("asd");
         public SourceComponent<Customer> CustomerSource { get; private set; }
         public ServiceComponent NewsPaperService { get; private set; }
         public DelayComponent ReadDelay { get; private set; }
@@ -166,11 +166,6 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
         protected override void PlanFirstEvent()
         {
             CustomerSource.Start();
-        }
-
-        protected override void UpdateReplicationResults()
-        {
-            throw new NotImplementedException();
         }
     }
 }

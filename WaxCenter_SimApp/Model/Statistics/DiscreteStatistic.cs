@@ -8,6 +8,11 @@ namespace WaxCenter_SimApp.Model.Statistics
 {
     public class DiscreteStatistic : BaseStatistic
     {
+        public DiscreteStatistic(string description) 
+            : base(description)
+        {
+        }
+
         override public double Mean { get => Numerator / Denominator; }
         public void Add(double value)
         {

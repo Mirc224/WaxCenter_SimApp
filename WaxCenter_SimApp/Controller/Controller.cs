@@ -95,7 +95,7 @@ namespace WaxCenter_SimApp.Controller
         {
             _simulation = simulation;
             _replicationsSettings = new ReplicationsSettings();
-            _replicationsSettings.NumberOfReplications = 15000;
+            _replicationsSettings.NumberOfReplications = 1000;
             _replicationsResults = new ReplicationsResults();
             /*_replicationsResults.CurrentReplications = 0;
             _replicationsResults.ObservedValues = new double[7];*/
@@ -119,13 +119,23 @@ namespace WaxCenter_SimApp.Controller
 
         private void UpdateGUIAfterReplication()
         {
-            string[] outputTitle = new string[] { "Mean admin QL: ", "Mean admin WT: ", "Mean examination QL: ", "Mean examination WT: ",
+            /*string[] outputTitle = new string[] { "Mean admin QL: ", "Mean admin WT: ", "Mean examination QL: ", "Mean examination WT: ",
                                                   "Mean vaccination QL: ", "Mean vaccination WT: ", "Mean waiting room capacity used: ",
                                                   "Admin utilization: ", "Examination utilization: ", "Vaccination utilization: "};
 
             for(int i = 0; i < _simulation.ReplicationResults.ObservedValues.Length; ++i)
             {
                 Console.WriteLine(outputTitle[i] + (_simulation.ReplicationResults.ObservedValues[i]/ _simulation.ReplicationResults.CurrentReplications));
+            }*/
+            foreach(var group in _simulation.ReplicationResults.ResultGroups)
+            {
+                foreach(var stat in group.GroupResults)
+                {
+                    for(int i = 0; i < stat.Values.Length; ++i)
+                    {
+                        Console.WriteLine(stat.Names[i] + ": " + (stat.Values[i]/_simulation.ReplicationResults.CurrentReplications));
+                    }
+                }
             }
 
         }

@@ -85,7 +85,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.AdminStats.Location = new System.Drawing.Point(3, 85);
             this.AdminStats.MinimumSize = new System.Drawing.Size(204, 181);
             this.AdminStats.Name = "AdminStats";
-            this.AdminStats.Size = new System.Drawing.Size(204, 181);
+            this.AdminStats.Size = new System.Drawing.Size(204, 260);
             this.AdminStats.TabIndex = 3;
             this.AdminStats.TitleText = "Administration";
             // 
@@ -95,7 +95,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ExaminationStats.Location = new System.Drawing.Point(213, 85);
             this.ExaminationStats.MinimumSize = new System.Drawing.Size(204, 181);
             this.ExaminationStats.Name = "ExaminationStats";
-            this.ExaminationStats.Size = new System.Drawing.Size(204, 181);
+            this.ExaminationStats.Size = new System.Drawing.Size(204, 260);
             this.ExaminationStats.TabIndex = 4;
             this.ExaminationStats.TitleText = "Examination";
             // 
@@ -105,7 +105,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.VaccinationStats.Location = new System.Drawing.Point(423, 85);
             this.VaccinationStats.MinimumSize = new System.Drawing.Size(204, 181);
             this.VaccinationStats.Name = "VaccinationStats";
-            this.VaccinationStats.Size = new System.Drawing.Size(204, 181);
+            this.VaccinationStats.Size = new System.Drawing.Size(204, 260);
             this.VaccinationStats.TabIndex = 5;
             this.VaccinationStats.TitleText = "Vaccination";
             // 

@@ -11,6 +11,11 @@ namespace WaxCenter_SimApp.Model.Statistics
         public double PreviousState { get; private set; }
         public double PreviousValue { get; private set; }
         override public double Mean { get => Denominator != 0 ? Numerator / Denominator : 0; }
+
+        public ContinuousStatistic(string description)
+            : base(description)
+        {
+        }
         public void Add(double value, double time)
         {
             double weight = (time - PreviousState);

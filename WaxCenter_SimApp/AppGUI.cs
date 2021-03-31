@@ -29,7 +29,13 @@ namespace WaxCenter_SimApp
             SourceOptions.AppGUI = this;
 
             _controller = new Controller.Controller(this, SimulationControlScreen, SimulationOptions);
+            HideAllScreens();
             HideAllComponentOptions();
+        }
+
+        private void HideAllScreens()
+        {
+            SimulationControlScreen.Hide();
         }
 
         private void Form1_Load(object sender, EventArgs e)

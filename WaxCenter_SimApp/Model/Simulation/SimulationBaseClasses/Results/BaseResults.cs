@@ -10,6 +10,9 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results
     {
         protected string[] _statsNames;
         protected double[] _statsValues;
+        
+        public string[] Names { get=>_statsNames; }
+        public double[] Values { get=>_statsValues; }
 
         public virtual void Reset()
         {

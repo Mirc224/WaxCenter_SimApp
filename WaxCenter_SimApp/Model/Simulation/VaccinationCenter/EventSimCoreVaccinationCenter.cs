@@ -28,19 +28,19 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
 
         // Statistiky
         // Administracia
-        public ContinuousStatistic StatAdminQLength { get; private set; } = new ContinuousStatistic();
-        public DiscreteStatistic StatAdminWaitingTime { get; private set; } = new DiscreteStatistic();
+        public ContinuousStatistic StatAdminQLength { get; private set; } = new ContinuousStatistic("Admin QLength");
+        public DiscreteStatistic StatAdminWaitingTime { get; private set; } = new DiscreteStatistic("Admin WTime");
 
         // Vysetrenie
-        public ContinuousStatistic StatExaminationQLength { get; private set; } = new ContinuousStatistic();
-        public DiscreteStatistic StatExaminationWaitingTime { get; private set; } = new DiscreteStatistic();
+        public ContinuousStatistic StatExaminationQLength { get; private set; } = new ContinuousStatistic("Examination QLength");
+        public DiscreteStatistic StatExaminationWaitingTime { get; private set; } = new DiscreteStatistic("Examination WTime");
 
         // Vakcinacia
-        public ContinuousStatistic StatVaccinationQLength { get; private set; } = new ContinuousStatistic();
-        public DiscreteStatistic StatVaccinationWaitingTime { get; private set; } = new DiscreteStatistic();
+        public ContinuousStatistic StatVaccinationQLength { get; private set; } = new ContinuousStatistic("Vaccination QLength");
+        public DiscreteStatistic StatVaccinationWaitingTime { get; private set; } = new DiscreteStatistic("Vaccination WTime");
 
         // Cakaren
-        public ContinuousStatistic StatWaitingRoomCapacity { get; private set; } = new ContinuousStatistic();
+        public ContinuousStatistic StatWaitingRoomCapacity { get; private set; } = new ContinuousStatistic("Waiting room capacity");
 
         public EventSimCoreVaccinationCenter(Controller.Controller controller, double maxTime = 0)
             : base(controller, maxTime)
@@ -81,7 +81,24 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             int noStatistics = SimulationComponentsManager.ServiceComponents.Length + SimulationComponentsManager.Statistics.Length;
             ReplicationResults = new ReplicationsResults();
             ReplicationResults.CurrentReplications = 0;
-            ReplicationResults.ObservedValues = new double[noStatistics];
+
+            ResultGroup adminStatGroup = new ResultGroup(new BaseResults[] {StatAdminQLength.ReplicationResults, 
+                                                                            StatAdminWaitingTime.ReplicationResults,
+                                                                            AdminService.ResourcePool.ReplicationResults});
+
+
+            ResultGroup examinationStatGroup = new ResultGroup(new BaseResults[] {StatExaminationQLength.ReplicationResults,
+                                                                                  StatAdminWaitingTime.ReplicationResults,
+                                                                                  ExaminationService.ResourcePool.ReplicationResults});
+
+            ResultGroup vaccinationStatGroup = new ResultGroup(new BaseResults[] {StatVaccinationQLength.ReplicationResults,
+                                                                                  StatVaccinationWaitingTime.ReplicationResults,
+                                                                                  VaccinationService.ResourcePool.ReplicationResults});
+
+            ResultGroup delayStatGroup = new ResultGroup(new BaseResults[] {StatWaitingRoomCapacity.ReplicationResults});
+
+            ReplicationResults.ResultGroups = new ResultGroup[] { adminStatGroup, examinationStatGroup, vaccinationStatGroup, delayStatGroup };
+
             //ContinueAfterMaxTime = true;
             ContinueAfterMaxTime = false;
             MaxTime = 540 * 60;
@@ -179,23 +196,6 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         protected override void PlanFirstEvent()
         {
             PatientSource.Start();
-        }
-
-        protected override void UpdateReplicationResults()
-        {
-            int noStats = SimulationComponentsManager.Statistics.Length;
-            int noServices = SimulationComponentsManager.ServiceComponents.Length;
-            ++ReplicationResults.CurrentReplications;
-            for(int i = 0; i < noStats; ++i)
-            {
-                ReplicationResults.ObservedValues[i] += SimulationComponentsManager.Statistics[i].Mean;
-            }
-
-            for (int i = noStats; i < noStats + noServices; ++i)
-            {
-                ReplicationResults.ObservedValues[i] += SimulationComponentsManager.ServiceComponents[i - noStats].ResourcePool.Utilization;
-            }
-
         }
     }
 }

@@ -100,7 +100,12 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
             if (ReplicationResults != null)
                 ReplicationResults.Reset();
         }
-        protected abstract void UpdateReplicationResults();
+        protected void UpdateReplicationResults()
+        {
+            ++ReplicationResults.CurrentReplications;
+            ReplicationResults.AfterReplicationUpdate();
+        }
+
         public abstract void BeforeReplicationInit();
         public void ResetSimulation()
         {
