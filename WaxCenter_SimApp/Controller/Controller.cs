@@ -38,13 +38,13 @@ namespace WaxCenter_SimApp.Controller
         private ReplicationControl _replicationSimControl;
 
         private ReplicationsSettings _replicationsSettings;
-        private ReplicationsResults _replicationsResults;
+        //private ReplicationsResults _replicationsResults;
 
         private int[] _speedList = new int[] { 1, 2, 5, 10, 25, 50, 100, 1000 };
         //public GUIDataValuesVacCenter GUIData { get; private set; }
         public EventSimulationCore.SimulationStatus SimulationStatus { get => _simulation.Status; private set => _simulation.Status = value; }
         //private SimulationControl _realTimeSimulation;
-        public bool PauseClicked { get; set; } = false;
+        //public bool PauseClicked { get; set; } = false;
 
         public bool RealTimeCancellation { get => _realTimeSimWorker.CancellationPending; }
 
@@ -91,11 +91,16 @@ namespace WaxCenter_SimApp.Controller
             _realSimControl.GUISimComponentManager.GSimSource.SourceModelComponent = _simulation.SimulationComponentsManager.Source;
             _realSimControl.GUISimComponentManager.GSimSink.SinkModelComponent = _simulation.SimulationComponentsManager.Sink;
 
+            TimeSpan t = TimeSpan.FromSeconds(_simulation.StartTimeInSeconds);
+            var startTime = t.ToString(@"hh\:mm\:ss");
+
+            _realSimControl.SetClockValue(startTime);
+
             _realSimControl.UpdateValues();
 
             _replicationSimControl = replicationSim;
             _replicationSimControl.SetReplicationResults(_simulation.ReplicationResults);
-
+            
             _replicationsSettings = new ReplicationsSettings();
             _replicationsSettings.NumberOfReplications = 1000;
         }
@@ -104,12 +109,35 @@ namespace WaxCenter_SimApp.Controller
         {
             _simulation = simulation;
             _replicationsSettings = new ReplicationsSettings();
-            _replicationsSettings.NumberOfReplications = 10000;
             //_replicationsResults = new ReplicationsResults();
             /*_replicationsResults.CurrentReplications = 0;
             _replicationsResults.ObservedValues = new double[7];*/
         }
 
+        public void Test()
+        {
+            /*Random tmp = new Random();
+            int cislo = tmp.Next(50);
+            Console.WriteLine(cislo);*/
+            _replicationsSettings.NumberOfReplications = 10000;
+            _simulation.BeforeSimulation();
+            for (int i = _simulation.ReplicationResults.CurrentReplications; i < _replicationsSettings.NumberOfReplications; ++i)
+            {
+                _simulation.BeforeReplication();
+                _simulation.DoReplication();
+                _simulation.AfterReplication();
+            }
+            foreach (var group in _simulation.ReplicationResults.ResultGroups)
+            {
+                foreach (var stat in group.GroupResults)
+                {
+                    for (int i = 0; i < stat.Values.Length; ++i)
+                    {
+                        Console.WriteLine(stat.Names[i] + ": " + (stat.Values[i] / _simulation.ReplicationResults.CurrentReplications));
+                    }
+                }
+            }
+        }
 
         public bool RunReplicationsWithGUIUpdate(BackgroundWorker replicationWorek)
         {
@@ -158,18 +186,26 @@ namespace WaxCenter_SimApp.Controller
             if(SimulationStatus != EventSimulationCore.SimulationStatus.PAUSED)
             {
                 _simulation.BeforeSimulation();
-                _simulation.BeforeReplicationInit();
+                _simulation.BeforeReplication();
                 _realTimeSimWorker.ReportProgress((int)UpdateDataType.SIMULATION_DATA);
-                _realTimeSimWorker.ReportProgress((int)UpdateDataType.CLOCK_DATA, new ClockUpdateData(_simulation.CurrentTime));
+                _realTimeSimWorker.ReportProgress((int)UpdateDataType.CLOCK_DATA, new ClockUpdateData(_simulation.ClockTimeInSeconds));
             }
             //_simulation.DoReplication();
             if (_simulation.RunRealTimeSimulation() != EventSimulationCore.SimulationStatus.FINISHED)
             {
-                if (PauseClicked)
+                if (_realSimControl.PauseClicked)
                     SimulationStatus = EventSimulationCore.SimulationStatus.PAUSED;
                 else
+                {
+                    _simulation.AfterReplication();
+                    _realTimeSimWorker.ReportProgress((int)UpdateDataType.SIMULATION_DATA);
                     SimulationStatus = EventSimulationCore.SimulationStatus.CANCELED;
+                }
                 return false;
+            }
+            else
+            {
+                _simulation.AfterReplication();
             }
 
             return true;
@@ -181,12 +217,9 @@ namespace WaxCenter_SimApp.Controller
             return true;
         }
 
-        public void ClockUpdate(double currentTime)
+        public void ClockUpdate()
         {
-            //this._realTimeSimulation.SetClockValue($"{(int)currentTime}:{(int)((currentTime % 1) * 1000)}");
-            //_realTimeSimulation.Clokc
-            //_realTimeSimWorker.ReportProgress(0, 0);
-            _realTimeSimWorker.ReportProgress((int)UpdateDataType.CLOCK_DATA, new ClockUpdateData(currentTime));
+            _realTimeSimWorker.ReportProgress((int)UpdateDataType.CLOCK_DATA, new ClockUpdateData(_simulation.ClockTimeInSeconds));
         }
 
         public void SetSimulationSpeed(int speedIndex)
@@ -196,20 +229,16 @@ namespace WaxCenter_SimApp.Controller
 
         public void ResetRealTimeSimulation()
         {
-            PauseClicked = false;
             _simulation.ResetSimulation();
             _realSimControl.UpdateValues();
-            _realSimControl.SetClockValue("0");
+            TimeSpan t = TimeSpan.FromSeconds(_simulation.StartTimeInSeconds);
+            var startTime = t.ToString(@"hh\:mm\:ss");
+            _realSimControl.SetClockValue(startTime);
         }
 
         public void CancelRealTimeSimulation()
         {
             SimulationStatus = EventSimulationCore.SimulationStatus.CANCELED;
-        }
-
-        public void InitializeSimulation()
-        {
-            _simulation.BeforeReplicationInit();
         }
 
         public void AfterRealTimeSimulationStopped()

@@ -50,6 +50,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.StatVaccinationWaitingTime = new WaxCenter_SimApp.GUIComponents.SimComponents.SimStats();
             this.ServiceExamination = new WaxCenter_SimApp.GUIComponents.SimComponents.SimService();
             this.ServiceAdministracia = new WaxCenter_SimApp.GUIComponents.SimComponents.SimService();
+            this.RealTimeSimulationWorker = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // SimulationTitleLabel
@@ -314,6 +315,14 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ServiceAdministracia.TabIndex = 1;
             this.ServiceAdministracia.TitleText = "Administrácia";
             // 
+            // RealTimeSimulationWorker
+            // 
+            this.RealTimeSimulationWorker.WorkerReportsProgress = true;
+            this.RealTimeSimulationWorker.WorkerSupportsCancellation = true;
+            this.RealTimeSimulationWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.RealTimeSimulationWorker_DoWork);
+            this.RealTimeSimulationWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RealTimeSimulationWorker_ProgressChanged);
+            this.RealTimeSimulationWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RealTimeSimulationWorker_RunWorkerCompleted);
+            // 
             // SimulationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -369,5 +378,6 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         private OptionsComponents.SimResPoolOptions ResPoolOptions;
         private System.Windows.Forms.Label OptionsLabel;
         private OptionsComponents.SimSourceOptions SourceOptions;
+        private System.ComponentModel.BackgroundWorker RealTimeSimulationWorker;
     }
 }

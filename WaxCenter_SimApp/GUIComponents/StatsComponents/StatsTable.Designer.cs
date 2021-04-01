@@ -93,7 +93,7 @@ namespace WaxCenter_SimApp.GUIComponents.StatsComponents
             this.Controls.Add(this.StatTitleLabel);
             this.MinimumSize = new System.Drawing.Size(292, 224);
             this.Name = "StatsTable";
-            this.Size = new System.Drawing.Size(275, 196);
+            this.Size = new System.Drawing.Size(345, 246);
             ((System.ComponentModel.ISupportInitialize)(this.StatGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

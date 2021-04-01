@@ -105,7 +105,7 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
                     CurrentTime += RunClock(nextEventTime - CurrentTime);
                     if (nextEventTime < CurrentTime)
                         CurrentTime = nextEventTime;
-                    Controller.ClockUpdate(CurrentTime);
+                    Controller.ClockUpdate();
                     if(CurrentTime > MaxTime)
                     {
                         Status = SimulationStatus.FINISHED;
@@ -126,7 +126,7 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
             Status = SimulationStatus.FINISHED;
             return Status;
         }
-        override
+
         public void BeforeReplicationInit()
         {
             MaxTime = 900000;
@@ -166,6 +166,11 @@ namespace WaxCenter_SimApp.Model.Simulation.TrafikaSimulation
         protected override void PlanFirstEvent()
         {
             CustomerSource.Start();
+        }
+
+        protected override void FinishContinuousStatistics()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -39,6 +39,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.VaccinationStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
             this.ExaminationStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
             this.AdminStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
+            this.ReplicationsWorker = new System.ComponentModel.BackgroundWorker();
             this.ReplicationsTopPanel.SuspendLayout();
             this.ReplicationsOptionsPanel.SuspendLayout();
             this.SuspendLayout();
@@ -183,5 +184,6 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         private StatsComponents.StatsTable WaitingRoomStats;
         private System.Windows.Forms.Button RunReplicationButton;
         private System.Windows.Forms.Button StopButton;
+        private System.ComponentModel.BackgroundWorker ReplicationsWorker;
     }
 }

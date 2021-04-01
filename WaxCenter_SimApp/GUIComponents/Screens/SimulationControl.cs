@@ -7,10 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WaxCenter_SimApp.Controller;
 using WaxCenter_SimApp.GUIComponents.OptionsComponents;
 using WaxCenter_SimApp.GUIComponents.SimComponents;
 using WaxCenter_SimApp.GUIComponents.SimComponents.GUISimComponentsWrapper;
 using WaxCenter_SimApp.Model.Simulation.GUIData;
+using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.SimulationComponentsWrapper;
 
 namespace WaxCenter_SimApp.GUIComponents.Screens
@@ -18,9 +20,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
     public partial class SimulationControl : UserControl
     {
         public AppGUI AppGUI { get; set; }
+        public bool PauseClicked { get; private set; }
         private ISimComponent _selectedComponent;
-
-        //public SimulationComponentsManager ComponentsManager { get; set; }
         public GUISimulationComponentsManager GUISimComponentManager { get; private set; } = new GUISimulationComponentsManager();
         public SimulationControl()
         {
@@ -91,7 +92,49 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 
         public void StartButtonClick()
         {
-            AppGUI.StartPauseRealTimeSimulation();
+            StartPauseRealTimeSimulation();
+        }
+
+        public void StartPauseRealTimeSimulation()
+        {
+            if (!RealTimeSimulationWorker.IsBusy)
+            {
+                if (AppGUI.Controller.SimulationStatus == EventSimulationCore.SimulationStatus.FINISHED || AppGUI.Controller.SimulationStatus == EventSimulationCore.SimulationStatus.CANCELED)
+                {
+                    StartSimulation();
+                }
+                else
+                    ContinueSimulation();
+            }
+            else
+            {
+                PauseSimulation();
+            }
+
+        }
+
+        private void ContinueSimulation()
+        {
+            DisableButtons();
+            RealTimeSimulationWorker.RunWorkerAsync();
+        }
+
+        public void ChangeSimulationSpeed(int speedIndex)
+        {
+            AppGUI.Controller.SetSimulationSpeed(speedIndex);
+        }
+
+        private void StartSimulation()
+        {
+            PauseClicked = false;
+            AppGUI.Controller.ResetRealTimeSimulation();
+            RealTimeSimulationWorker.RunWorkerAsync();
+        }
+        private void PauseSimulation()
+        {
+            PauseClicked = true;
+            DisableButtons();
+            RealTimeSimulationWorker.CancelAsync();
         }
 
         public void SetClockValue(string text)
@@ -101,7 +144,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 
         public void SimulationSpeedChange(int speedIndex)
         {
-            AppGUI.ChangeSimulationSpeed(speedIndex);
+            ChangeSimulationSpeed(speedIndex);
         }
 
         public void SetStartPauseButtonText(string text)
@@ -136,7 +179,19 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         }
         public void SimulationStopSignal()
         {
-            AppGUI.RealTimeSimulationStopSignal();
+            RealTimeSimulationStopSignal();
+        }
+
+        public void RealTimeSimulationStopSignal()
+        {
+            if (RealTimeSimulationWorker.IsBusy)
+            {
+                this.RealTimeSimulationWorker.CancelAsync();
+            }
+            else
+            {
+                AfterRealTimeSimulationStopped();
+            }
         }
 
         public void DisableButtons()
@@ -165,5 +220,68 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             GUISimComponentManager.GSimSink.UpdateAccordingToState();
         }
 
+        private void RealTimeSimulationWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (AppGUI.Controller.SimulationStatus == EventSimulationCore.SimulationStatus.PAUSED)
+            {
+                RealTimeSimulationWorker.ReportProgress((int)UpdateDataType.SIMULATION_CONTINUE);
+            }
+            else
+            {
+                RealTimeSimulationWorker.ReportProgress((int)UpdateDataType.SIMULATION_START);
+            }
+            if (!AppGUI.Controller.RunRealTimeSimulation(RealTimeSimulationWorker))
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void RealTimeSimulationWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            switch ((UpdateDataType)e.ProgressPercentage)
+            {
+                case UpdateDataType.SIMULATION_START:
+                    this.SetStartSimulationSettings();
+                    break;
+                case UpdateDataType.SIMULATION_CONTINUE:
+                    this.SetContinueSimulationSettings();
+                    break;
+                case UpdateDataType.CLOCK_DATA:
+                    var data = (ClockUpdateData)e.UserState;
+                    this.SetClockValue(data.CurrentTime);
+                    break;
+                case UpdateDataType.SIMULATION_DATA:
+                    this.UpdateValues();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void RealTimeSimulationWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (AppGUI.Controller.SimulationStatus != EventSimulationCore.SimulationStatus.FINISHED)
+            {
+                if (AppGUI.Controller.SimulationStatus == EventSimulationCore.SimulationStatus.PAUSED)
+                {
+                    PauseClicked = false;
+                    SetPauseSimulationSettings();
+                }
+                else
+                {
+                    AfterRealTimeSimulationStopped();
+                }
+            }
+            else
+            {
+                SetToDefault();
+            }
+        }
+
+        private void AfterRealTimeSimulationStopped()
+        {
+            AppGUI.Controller.AfterRealTimeSimulationStopped();
+            SetToDefault();
+        }
     }
 }

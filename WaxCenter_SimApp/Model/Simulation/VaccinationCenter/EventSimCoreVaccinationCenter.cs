@@ -42,6 +42,11 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         // Cakaren
         public ContinuousStatistic StatWaitingRoomCapacity { get; private set; } = new ContinuousStatistic("Waiting room capacity");
 
+        private Random _sourceArrivalGenerator;
+        private Random _notCommingGenerator;
+
+        private int _numberOfNotComing;
+
         public EventSimCoreVaccinationCenter(Controller.Controller controller, double maxTime = 0)
             : base(controller, maxTime)
         {
@@ -88,7 +93,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
 
 
             ResultGroup examinationStatGroup = new ResultGroup(new BaseResults[] {StatExaminationQLength.ReplicationResults,
-                                                                                  StatAdminWaitingTime.ReplicationResults,
+                                                                                  StatExaminationWaitingTime.ReplicationResults,
                                                                                   ExaminationService.ResourcePool.ReplicationResults});
 
             ResultGroup vaccinationStatGroup = new ResultGroup(new BaseResults[] {StatVaccinationQLength.ReplicationResults,
@@ -102,6 +107,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             //ContinueAfterMaxTime = true;
             ContinueAfterMaxTime = false;
             MaxTime = 540 * 60;
+            StartTimeInSeconds = 28800;
             SetSeed();
         }
 
@@ -122,12 +128,11 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         }
 
         override
-        public void BeforeReplicationInit()
+        public void BeforeReplication()
         {
-            CurrentTime = 0;
-            EventCalendar.Reset();
             Patient.ResetGlobalID();
             base.BeforeReplication();
+            _numberOfNotComing = _notCommingGenerator.Next(5, 25);
         }
 
         private int AdminOnEnter(DelayComponent self, Agent agent)
@@ -189,13 +194,39 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         }
         private double SourceGeneratorFunction()
         {
+            int multiplier = 1;
             //return ((EndTime/60.0)/NumberOfGeneratedAgents)*60;
-            return SourceInterval;
+            while(true)
+            {
+                if (_sourceArrivalGenerator.NextDouble() < ((double)_numberOfNotComing / PatientGenerated))
+                    ++multiplier;
+                else
+                    break;
+            }
+
+            return multiplier * SourceInterval;
+        }
+
+        override
+        protected void SeedIt()
+        {
+            _sourceArrivalGenerator = new Random(SeedGenerator.Next());
+            _notCommingGenerator = new Random(SeedGenerator.Next());
+            base.SeedIt();
         }
 
         protected override void PlanFirstEvent()
         {
             PatientSource.Start();
+        }
+
+        protected override void FinishContinuousStatistics()
+        {
+            double usedTime = ContinueAfterMaxTime ? CurrentTime : SimulationSettings.MaxTime;
+            StatAdminQLength.Add(AdminService.QueueSize, CurrentTime);
+            StatExaminationQLength.Add(ExaminationService.QueueSize, usedTime);
+            StatVaccinationQLength.Add(VaccinationService.QueueSize, usedTime);
+            StatWaitingRoomCapacity.Add(VaccinationService.QueueSize, usedTime);
         }
     }
 }

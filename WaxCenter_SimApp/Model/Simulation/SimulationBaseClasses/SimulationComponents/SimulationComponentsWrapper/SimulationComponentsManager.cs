@@ -39,7 +39,10 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 
             if (ServiceComponents != null)
                 for (int i = 0; i < ServiceComponents.Length; ++i)
+                {
                     ServiceComponents[i].Generator.SetSeed(seedGenerator.Next());
+                    ServiceComponents[i].ResourcePool.SetSeed(seedGenerator.Next());
+                }
 
             if (DelayComponents != null)
                 for (int i = 0; i < DelayComponents.Length; ++i)

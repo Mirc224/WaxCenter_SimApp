@@ -32,12 +32,11 @@ namespace WaxCenter_SimApp
             this.MainMenuPanel = new System.Windows.Forms.Panel();
             this.ShowReplicationButton = new System.Windows.Forms.Button();
             this.ShowSimulationButton = new System.Windows.Forms.Button();
-            this.RealTimeSimulationWorker = new System.ComponentModel.BackgroundWorker();
             this.ReplicationsWorker = new System.ComponentModel.BackgroundWorker();
             this.BaseSettingsPanel = new System.Windows.Forms.Panel();
+            this.SimulationOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimulationOptions();
             this.ContentPanel = new System.Windows.Forms.Panel();
             this.ReplicationControlScreen = new WaxCenter_SimApp.GUIComponents.Screens.ReplicationControl();
-            this.SimulationOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimulationOptions();
             this.SimulationControlScreen = new WaxCenter_SimApp.GUIComponents.Screens.SimulationControl();
             this.MainMenuPanel.SuspendLayout();
             this.BaseSettingsPanel.SuspendLayout();
@@ -74,14 +73,6 @@ namespace WaxCenter_SimApp
             this.ShowSimulationButton.UseVisualStyleBackColor = true;
             this.ShowSimulationButton.Click += new System.EventHandler(this.ShowSimulationButton_Click);
             // 
-            // RealTimeSimulationWorker
-            // 
-            this.RealTimeSimulationWorker.WorkerReportsProgress = true;
-            this.RealTimeSimulationWorker.WorkerSupportsCancellation = true;
-            this.RealTimeSimulationWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.RealTimeSimulationWorker_DoWork);
-            this.RealTimeSimulationWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.RealTimeSimulationWorker_ProgressChanged);
-            this.RealTimeSimulationWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.RealTimeSimulationWorker_RunWorkerCompleted);
-            // 
             // ReplicationsWorker
             // 
             this.ReplicationsWorker.WorkerReportsProgress = true;
@@ -96,6 +87,18 @@ namespace WaxCenter_SimApp
             this.BaseSettingsPanel.Name = "BaseSettingsPanel";
             this.BaseSettingsPanel.Size = new System.Drawing.Size(1835, 186);
             this.BaseSettingsPanel.TabIndex = 1;
+            // 
+            // SimulationOptions
+            // 
+            this.SimulationOptions.AppGUI = null;
+            this.SimulationOptions.AutoSize = true;
+            this.SimulationOptions.Location = new System.Drawing.Point(6, 0);
+            this.SimulationOptions.MaxTimeInputText = "";
+            this.SimulationOptions.MinimumSize = new System.Drawing.Size(529, 130);
+            this.SimulationOptions.Name = "SimulationOptions";
+            this.SimulationOptions.SeedInputText = "";
+            this.SimulationOptions.Size = new System.Drawing.Size(564, 183);
+            this.SimulationOptions.TabIndex = 0;
             // 
             // ContentPanel
             // 
@@ -116,18 +119,6 @@ namespace WaxCenter_SimApp
             this.ReplicationControlScreen.Name = "ReplicationControlScreen";
             this.ReplicationControlScreen.Size = new System.Drawing.Size(1832, 818);
             this.ReplicationControlScreen.TabIndex = 2;
-            // 
-            // SimulationOptions
-            // 
-            this.SimulationOptions.AppGUI = null;
-            this.SimulationOptions.AutoSize = true;
-            this.SimulationOptions.Location = new System.Drawing.Point(6, 0);
-            this.SimulationOptions.MaxTimeInputText = "";
-            this.SimulationOptions.MinimumSize = new System.Drawing.Size(529, 130);
-            this.SimulationOptions.Name = "SimulationOptions";
-            this.SimulationOptions.SeedInputText = "";
-            this.SimulationOptions.Size = new System.Drawing.Size(564, 183);
-            this.SimulationOptions.TabIndex = 0;
             // 
             // SimulationControlScreen
             // 
@@ -164,7 +155,6 @@ namespace WaxCenter_SimApp
         private System.Windows.Forms.Panel MainMenuPanel;
         private System.Windows.Forms.Button ShowReplicationButton;
         private System.Windows.Forms.Button ShowSimulationButton;
-        private System.ComponentModel.BackgroundWorker RealTimeSimulationWorker;
         private System.ComponentModel.BackgroundWorker ReplicationsWorker;
         private SimulationControl SimulationControlScreen;
         private System.Windows.Forms.Panel BaseSettingsPanel;
