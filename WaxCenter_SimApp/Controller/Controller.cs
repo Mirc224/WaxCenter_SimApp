@@ -50,6 +50,9 @@ namespace WaxCenter_SimApp.Controller
         private BackgroundWorker _replicationsWorker;
         private ReplicationControl _replicationSimControl;
 
+        private BackgroundWorker _experimentWorker;
+        private StaffExperimentalControl _experimentSimControl;
+
         private ReplicationsSimulationSettings _replicationsSettings;
         private ReplicationsUpdateData _replicationsUpdateData = new ReplicationsUpdateData();
         //private ReplicationsResults _replicationsResults;
@@ -65,7 +68,8 @@ namespace WaxCenter_SimApp.Controller
 
         public bool RealTimeCancellation { get => _realTimeSimWorker.CancellationPending; }
 
-        public Controller(AppGUI appGUI, SimulationControl realTimeSim, ReplicationControl replicationSim, SimulationOptions simOptions)
+        public Controller(AppGUI appGUI, SimulationControl realTimeSim, ReplicationControl replicationSim, 
+                          StaffExperimentalControl experimentalSim, SimulationOptions simOptions)
         {
             _applicationGUI = appGUI;
             _simulation = new EventSimCoreVaccinationCenter(this);
@@ -115,7 +119,10 @@ namespace WaxCenter_SimApp.Controller
 
             _replicationSimControl = replicationSim;
             _replicationSimControl.SetReplicationResults(_simulation.ReplicationResults);
-            
+
+            _experimentSimControl = experimentalSim;
+            _experimentSimControl.ReplicationResults = _simulation.ReplicationResults;
+
             _replicationsSettings = new ReplicationsSimulationSettings();
             _replicationsSettings.NumberOfReplications = 1000;
         }
@@ -152,6 +159,36 @@ namespace WaxCenter_SimApp.Controller
                     }
                 }
             }
+        }
+        
+
+        public bool RunExperimentalSimulation()
+        {
+
+            for(int admin = 1; admin < 10; ++admin)
+            {
+                for(int nurse = 1; nurse < 10; ++nurse)
+                {
+                    for(int doctor = 1; doctor < 10; ++doctor)
+                    {
+                        _simulation.AdminService.MaxStaff = admin;
+                        _simulation.ExaminationService.MaxStaff = doctor;
+                        _simulation.VaccinationService.MaxStaff = nurse;
+                        _simulation.ReplicationResults.Rebuild();
+                        _simulation.BeforeSimulation();
+                        for (int i = 0; i < 10; ++i)
+                        {
+                            _simulation.BeforeReplication();
+                            _simulation.DoReplication();
+                            _simulation.AfterReplication();
+                        }
+                        _experimentSimControl.UpdateValues();
+                    }
+                }
+
+            }
+            
+            return true;
         }
 
         public bool RunReplicationsWithGUIUpdate(BackgroundWorker replicationWorek)

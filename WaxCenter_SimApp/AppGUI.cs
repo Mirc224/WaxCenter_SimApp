@@ -25,9 +25,13 @@ namespace WaxCenter_SimApp
             InitializeComponent();
             SimulationControlScreen.AppGUI = this;
             ReplicationControlScreen.AppGUI = this;
+            ExperimentControlScreen.AppGUI = this;
             SimulationOptions.AppGUI = this;
 
-            Controller = new Controller.Controller(this, SimulationControlScreen, ReplicationControlScreen, SimulationOptions);
+            Controller = new Controller.Controller(this, SimulationControlScreen, ReplicationControlScreen,
+                                                   ExperimentControlScreen, SimulationOptions);
+            ExperimentControlScreen.Initialize();
+
             HideAllScreens();
             SimulationControlScreen.Show();
         }
@@ -36,6 +40,7 @@ namespace WaxCenter_SimApp
         {
             SimulationControlScreen.Hide();
             ReplicationControlScreen.Hide();
+            ExperimentControlScreen.Hide();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -77,6 +82,12 @@ namespace WaxCenter_SimApp
         public void SignalBaseOptionsConfirm()
         {
             Controller.TryApplyBaseSimulationSettings();
+        }
+
+        private void ExperimentsButton_Click(object sender, EventArgs e)
+        {
+            HideAllScreens();
+            ExperimentControlScreen.Show();
         }
     }
 }

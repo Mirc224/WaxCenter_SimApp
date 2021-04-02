@@ -9,20 +9,20 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results
 {
     public class StatResults : BaseResults
     {
-        private BaseStatistic _statistic;
+        public BaseStatistic Statistic { get; private set; }
         private string _description;
-
+        public double Mean { get => _statsValues[0]; }
         public StatResults(BaseStatistic statistic, string description)
         {
-            _statistic = statistic;
+            Statistic = statistic;
             _description = description;
             Rebuild();
         }
         public override void AfterReplicationUpdate()
         {
-            _statsValues[0] += _statistic.Mean;
-            _statsValues[1] += _statistic.Max;
-            _statsValues[2] += _statistic.Min;
+            _statsValues[0] += Statistic.Mean;
+            _statsValues[1] += Statistic.Max;
+            _statsValues[2] += Statistic.Min;
         }
 
         public override void Rebuild()

@@ -90,21 +90,37 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             ResultGroup adminStatGroup = new ResultGroup(new BaseResults[] {StatAdminQLength.ReplicationResults, 
                                                                             StatAdminWaitingTime.ReplicationResults,
                                                                             AdminService.ResourcePool.ReplicationResults});
-
+            adminStatGroup["QLengthStat"] = StatAdminQLength.ReplicationResults;
+            adminStatGroup["WTimeStat"] = StatAdminWaitingTime.ReplicationResults;
+            adminStatGroup["ResPool"] = AdminService.ResourcePool.ReplicationResults;
 
             ResultGroup examinationStatGroup = new ResultGroup(new BaseResults[] {StatExaminationQLength.ReplicationResults,
                                                                                   StatExaminationWaitingTime.ReplicationResults,
                                                                                   ExaminationService.ResourcePool.ReplicationResults});
 
+            examinationStatGroup["QLengthStat"] = StatExaminationQLength.ReplicationResults;
+            examinationStatGroup["WTimeStat"] = StatExaminationWaitingTime.ReplicationResults;
+            examinationStatGroup["ResPool"] = ExaminationService.ResourcePool.ReplicationResults;
+
             ResultGroup vaccinationStatGroup = new ResultGroup(new BaseResults[] {StatVaccinationQLength.ReplicationResults,
                                                                                   StatVaccinationWaitingTime.ReplicationResults,
                                                                                   VaccinationService.ResourcePool.ReplicationResults});
 
+            vaccinationStatGroup["QLengthStat"] = StatVaccinationQLength.ReplicationResults;
+            vaccinationStatGroup["WTimeStat"] = StatVaccinationWaitingTime.ReplicationResults;
+            vaccinationStatGroup["ResPool"] = VaccinationService.ResourcePool.ReplicationResults;
+
             ResultGroup delayStatGroup = new ResultGroup(new BaseResults[] {StatWaitingRoomCapacity.ReplicationResults});
+
+            delayStatGroup["StatCapacity"] = StatWaitingRoomCapacity.ReplicationResults;
 
             ReplicationResults.ResultGroups = new ResultGroup[] { adminStatGroup, examinationStatGroup, vaccinationStatGroup, delayStatGroup };
 
-            //ContinueAfterMaxTime = true;
+            ReplicationResults["AdminGroup"] = adminStatGroup;
+            ReplicationResults["ExaminationGroup"] = examinationStatGroup;
+            ReplicationResults["VaccinationGroup"] = vaccinationStatGroup;
+            ReplicationResults["DelayGroup"] = delayStatGroup;
+
             ContinueAfterMaxTime = true;
             MaxTime = 540 * 60;
             StartTimeInSeconds = 28800;

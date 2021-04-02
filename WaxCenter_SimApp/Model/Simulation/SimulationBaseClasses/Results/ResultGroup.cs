@@ -10,6 +10,8 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results
     {
         public BaseResults[] GroupResults { get; set; }
         public ReplicationsResults ReplicationsResult { get; set; }
+        private Dictionary<string, BaseResults> _dictionaryResults = new Dictionary<string, BaseResults>();
+        public BaseResults this[string key] { get => _dictionaryResults[key]; set => _dictionaryResults[key] = value; }
 
         public ResultGroup(BaseResults[] results)
         {

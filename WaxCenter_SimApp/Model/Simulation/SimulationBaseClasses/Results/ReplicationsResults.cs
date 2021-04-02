@@ -11,6 +11,10 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results
         public int CurrentReplications { get; set; } = 0;
         public double MeanOvertime { get => CurrentReplications == 0 ? 0 : OverTime / CurrentReplications; }
         public double OverTime { get; set; } = 0;
+
+        private Dictionary<string, ResultGroup> _dicionaryGroup = new Dictionary<string, ResultGroup>();
+
+        public ResultGroup this[string key] { get => _dicionaryGroup[key]; set => _dicionaryGroup[key] = value; }
         public ResultGroup[] ResultGroups { 
             get=> _resultGroups; 
             set
