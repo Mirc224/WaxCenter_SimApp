@@ -88,6 +88,7 @@ namespace WaxCenter_SimApp
         {
             HideAllScreens();
             ExperimentControlScreen.Show();
+            Controller.SwitchToExperimentalScreen();
         }
     }
 }

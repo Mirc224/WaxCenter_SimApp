@@ -27,6 +27,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         {
             InitializeComponent();
             _statsTables = new StatsTable[] { AdminStats, ExaminationStats, VaccinationStats, WaitingRoomStats};
+            SetToDefault();
         }
         public void SetReplicationResults(ReplicationsResults replicationResults)
         {
@@ -134,16 +135,16 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 
         private void ReplicationsWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            var dataType = (ReplicationsUpdateType)e.ProgressPercentage;
+            var dataType = (ProgressUpdateType)e.ProgressPercentage;
             ReplicationsUpdateData data;
             switch (dataType)
             {
-                case ReplicationsUpdateType.SIMULATION_START:
+                case ProgressUpdateType.SIMULATION_START:
                     data = (ReplicationsUpdateData)e.UserState;
                     ProgressBar.Value = data.Progress;
                     RebuildStatTables();
                     break;
-                case ReplicationsUpdateType.SIMULATION_DATA:
+                case ProgressUpdateType.SIMULATION_DATA:
                     data = (ReplicationsUpdateData)e.UserState;
                     ProgressBar.Value = data.Progress;
                     ValueUpdate();

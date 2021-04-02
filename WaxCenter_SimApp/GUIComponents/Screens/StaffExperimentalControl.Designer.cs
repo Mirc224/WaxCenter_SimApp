@@ -32,6 +32,19 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.OptionsLabel = new System.Windows.Forms.Label();
             this.ScreenTitleLabel = new System.Windows.Forms.Label();
             this.ExperimentResultsGridView = new System.Windows.Forms.DataGridView();
+            this.NumOfAdmin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AdminUtilization = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AvgAdminQL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AvgAdminWTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NumOfDoctors = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DoctorUtilization = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MeanExamQLenth = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MeanExamWTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NumOfNurse = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NurseUtilization = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MeanVaccQLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MeanVaccWTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MeanWRoomCapacity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.PatientsInput = new System.Windows.Forms.TextBox();
             this.ArrivalInput = new System.Windows.Forms.TextBox();
@@ -49,19 +62,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.StartPauseButton = new System.Windows.Forms.Button();
             this.StopButton = new System.Windows.Forms.Button();
             this.DependenceGraph = new OxyPlot.WindowsForms.PlotView();
-            this.NumOfAdmin = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AdminUtilization = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AvgAdminQL = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AvgAdminWTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NumOfDoctors = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DoctorUtilization = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MeanExamQLenth = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MeanExamWTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NumOfNurse = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NurseUtilization = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MeanVaccQLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MeanVaccWTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MeanWRoomCapacity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExperimentalWorker = new System.ComponentModel.BackgroundWorker();
+            this.ProgressBar = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.ExperimentResultsGridView)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -110,6 +112,110 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ExperimentResultsGridView.RowTemplate.Height = 24;
             this.ExperimentResultsGridView.Size = new System.Drawing.Size(1628, 271);
             this.ExperimentResultsGridView.TabIndex = 2;
+            // 
+            // NumOfAdmin
+            // 
+            this.NumOfAdmin.HeaderText = "N. of administrators";
+            this.NumOfAdmin.MinimumWidth = 6;
+            this.NumOfAdmin.Name = "NumOfAdmin";
+            this.NumOfAdmin.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.NumOfAdmin.Width = 125;
+            // 
+            // AdminUtilization
+            // 
+            this.AdminUtilization.HeaderText = "Admin utilization";
+            this.AdminUtilization.MinimumWidth = 6;
+            this.AdminUtilization.Name = "AdminUtilization";
+            this.AdminUtilization.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.AdminUtilization.Width = 125;
+            // 
+            // AvgAdminQL
+            // 
+            this.AvgAdminQL.HeaderText = "Mean admin. QLength";
+            this.AvgAdminQL.MinimumWidth = 6;
+            this.AvgAdminQL.Name = "AvgAdminQL";
+            this.AvgAdminQL.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.AvgAdminQL.Width = 125;
+            // 
+            // AvgAdminWTime
+            // 
+            this.AvgAdminWTime.HeaderText = "Mean admin. WTime";
+            this.AvgAdminWTime.MinimumWidth = 6;
+            this.AvgAdminWTime.Name = "AvgAdminWTime";
+            this.AvgAdminWTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.AvgAdminWTime.Width = 125;
+            // 
+            // NumOfDoctors
+            // 
+            this.NumOfDoctors.HeaderText = "N. of doctors";
+            this.NumOfDoctors.MinimumWidth = 6;
+            this.NumOfDoctors.Name = "NumOfDoctors";
+            this.NumOfDoctors.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.NumOfDoctors.Width = 125;
+            // 
+            // DoctorUtilization
+            // 
+            this.DoctorUtilization.HeaderText = "Doctors utilization";
+            this.DoctorUtilization.MinimumWidth = 6;
+            this.DoctorUtilization.Name = "DoctorUtilization";
+            this.DoctorUtilization.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.DoctorUtilization.Width = 125;
+            // 
+            // MeanExamQLenth
+            // 
+            this.MeanExamQLenth.HeaderText = "Mean exam. QLength";
+            this.MeanExamQLenth.MinimumWidth = 6;
+            this.MeanExamQLenth.Name = "MeanExamQLenth";
+            this.MeanExamQLenth.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.MeanExamQLenth.Width = 125;
+            // 
+            // MeanExamWTime
+            // 
+            this.MeanExamWTime.HeaderText = "Mean exam. WTime";
+            this.MeanExamWTime.MinimumWidth = 6;
+            this.MeanExamWTime.Name = "MeanExamWTime";
+            this.MeanExamWTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.MeanExamWTime.Width = 125;
+            // 
+            // NumOfNurse
+            // 
+            this.NumOfNurse.HeaderText = "N. of nurses";
+            this.NumOfNurse.MinimumWidth = 6;
+            this.NumOfNurse.Name = "NumOfNurse";
+            this.NumOfNurse.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.NumOfNurse.Width = 125;
+            // 
+            // NurseUtilization
+            // 
+            this.NurseUtilization.HeaderText = "Nurse utilization";
+            this.NurseUtilization.MinimumWidth = 6;
+            this.NurseUtilization.Name = "NurseUtilization";
+            this.NurseUtilization.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.NurseUtilization.Width = 125;
+            // 
+            // MeanVaccQLength
+            // 
+            this.MeanVaccQLength.HeaderText = "Mean vacc. QLength";
+            this.MeanVaccQLength.MinimumWidth = 6;
+            this.MeanVaccQLength.Name = "MeanVaccQLength";
+            this.MeanVaccQLength.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.MeanVaccQLength.Width = 125;
+            // 
+            // MeanVaccWTime
+            // 
+            this.MeanVaccWTime.HeaderText = "Mean vacc. WTime";
+            this.MeanVaccWTime.MinimumWidth = 6;
+            this.MeanVaccWTime.Name = "MeanVaccWTime";
+            this.MeanVaccWTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.MeanVaccWTime.Width = 125;
+            // 
+            // MeanWRoomCapacity
+            // 
+            this.MeanWRoomCapacity.HeaderText = "Mean w. room occupation";
+            this.MeanWRoomCapacity.MinimumWidth = 6;
+            this.MeanWRoomCapacity.Name = "MeanWRoomCapacity";
+            this.MeanWRoomCapacity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.MeanWRoomCapacity.Width = 125;
             // 
             // tableLayoutPanel1
             // 
@@ -293,6 +399,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ConfirmButton.TabIndex = 4;
             this.ConfirmButton.Text = "Confirm";
             this.ConfirmButton.UseVisualStyleBackColor = true;
+            this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButton_Click);
             // 
             // StartPauseButton
             // 
@@ -312,6 +419,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.StopButton.TabIndex = 6;
             this.StopButton.Text = "Stop";
             this.StopButton.UseVisualStyleBackColor = true;
+            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
             // 
             // DependenceGraph
             // 
@@ -325,114 +433,26 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.DependenceGraph.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.DependenceGraph.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
-            // NumOfAdmin
+            // ExperimentalWorker
             // 
-            this.NumOfAdmin.HeaderText = "N. of administrators";
-            this.NumOfAdmin.MinimumWidth = 6;
-            this.NumOfAdmin.Name = "NumOfAdmin";
-            this.NumOfAdmin.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.NumOfAdmin.Width = 125;
+            this.ExperimentalWorker.WorkerReportsProgress = true;
+            this.ExperimentalWorker.WorkerSupportsCancellation = true;
+            this.ExperimentalWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.ExperimentalWorker_DoWork);
+            this.ExperimentalWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ExperimentalWorker_ProgressChanged);
+            this.ExperimentalWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.ExperimentalWorker_RunWorkerCompleted);
             // 
-            // AdminUtilization
+            // ProgressBar
             // 
-            this.AdminUtilization.HeaderText = "Admin utilization";
-            this.AdminUtilization.MinimumWidth = 6;
-            this.AdminUtilization.Name = "AdminUtilization";
-            this.AdminUtilization.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.AdminUtilization.Width = 125;
-            // 
-            // AvgAdminQL
-            // 
-            this.AvgAdminQL.HeaderText = "Mean admin. QLength";
-            this.AvgAdminQL.MinimumWidth = 6;
-            this.AvgAdminQL.Name = "AvgAdminQL";
-            this.AvgAdminQL.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.AvgAdminQL.Width = 125;
-            // 
-            // AvgAdminWTime
-            // 
-            this.AvgAdminWTime.HeaderText = "Mean admin. WTime";
-            this.AvgAdminWTime.MinimumWidth = 6;
-            this.AvgAdminWTime.Name = "AvgAdminWTime";
-            this.AvgAdminWTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.AvgAdminWTime.Width = 125;
-            // 
-            // NumOfDoctors
-            // 
-            this.NumOfDoctors.HeaderText = "N. of doctors";
-            this.NumOfDoctors.MinimumWidth = 6;
-            this.NumOfDoctors.Name = "NumOfDoctors";
-            this.NumOfDoctors.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.NumOfDoctors.Width = 125;
-            // 
-            // DoctorUtilization
-            // 
-            this.DoctorUtilization.HeaderText = "Doctors utilization";
-            this.DoctorUtilization.MinimumWidth = 6;
-            this.DoctorUtilization.Name = "DoctorUtilization";
-            this.DoctorUtilization.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.DoctorUtilization.Width = 125;
-            // 
-            // MeanExamQLenth
-            // 
-            this.MeanExamQLenth.HeaderText = "Mean exam. QLength";
-            this.MeanExamQLenth.MinimumWidth = 6;
-            this.MeanExamQLenth.Name = "MeanExamQLenth";
-            this.MeanExamQLenth.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.MeanExamQLenth.Width = 125;
-            // 
-            // MeanExamWTime
-            // 
-            this.MeanExamWTime.HeaderText = "Mean exam. WTime";
-            this.MeanExamWTime.MinimumWidth = 6;
-            this.MeanExamWTime.Name = "MeanExamWTime";
-            this.MeanExamWTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.MeanExamWTime.Width = 125;
-            // 
-            // NumOfNurse
-            // 
-            this.NumOfNurse.HeaderText = "N. of nurses";
-            this.NumOfNurse.MinimumWidth = 6;
-            this.NumOfNurse.Name = "NumOfNurse";
-            this.NumOfNurse.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.NumOfNurse.Width = 125;
-            // 
-            // NurseUtilization
-            // 
-            this.NurseUtilization.HeaderText = "Nurse utilization";
-            this.NurseUtilization.MinimumWidth = 6;
-            this.NurseUtilization.Name = "NurseUtilization";
-            this.NurseUtilization.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.NurseUtilization.Width = 125;
-            // 
-            // MeanVaccQLength
-            // 
-            this.MeanVaccQLength.HeaderText = "Mean vacc. QLength";
-            this.MeanVaccQLength.MinimumWidth = 6;
-            this.MeanVaccQLength.Name = "MeanVaccQLength";
-            this.MeanVaccQLength.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.MeanVaccQLength.Width = 125;
-            // 
-            // MeanVaccWTime
-            // 
-            this.MeanVaccWTime.HeaderText = "Mean vacc. WTime";
-            this.MeanVaccWTime.MinimumWidth = 6;
-            this.MeanVaccWTime.Name = "MeanVaccWTime";
-            this.MeanVaccWTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.MeanVaccWTime.Width = 125;
-            // 
-            // MeanWRoomCapacity
-            // 
-            this.MeanWRoomCapacity.HeaderText = "Mean w. room occupation";
-            this.MeanWRoomCapacity.MinimumWidth = 6;
-            this.MeanWRoomCapacity.Name = "MeanWRoomCapacity";
-            this.MeanWRoomCapacity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.MeanWRoomCapacity.Width = 125;
+            this.ProgressBar.Location = new System.Drawing.Point(16, 685);
+            this.ProgressBar.Name = "ProgressBar";
+            this.ProgressBar.Size = new System.Drawing.Size(1605, 46);
+            this.ProgressBar.TabIndex = 8;
             // 
             // StaffExperimentalControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.ProgressBar);
             this.Controls.Add(this.DependenceGraph);
             this.Controls.Add(this.StopButton);
             this.Controls.Add(this.StartPauseButton);
@@ -442,7 +462,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.Controls.Add(this.ScreenTitleLabel);
             this.Controls.Add(this.OptionsLabel);
             this.Name = "StaffExperimentalControl";
-            this.Size = new System.Drawing.Size(1787, 666);
+            this.Size = new System.Drawing.Size(1787, 746);
             ((System.ComponentModel.ISupportInitialize)(this.ExperimentResultsGridView)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -486,6 +506,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         private System.Windows.Forms.DataGridViewTextBoxColumn MeanVaccQLength;
         private System.Windows.Forms.DataGridViewTextBoxColumn MeanVaccWTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn MeanWRoomCapacity;
+        private System.ComponentModel.BackgroundWorker ExperimentalWorker;
+        private System.Windows.Forms.ProgressBar ProgressBar;
 
         public string AdminInputText { get=>AdminInput.Text; set=>AdminInput.Text = value; }
         public string DoctorInputText { get=>DoctorInput.Text; set=>DoctorInput.Text = value; }

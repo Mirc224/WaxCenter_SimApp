@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WaxCenter_SimApp.GUIComponents.OptionsComponents;
 using WaxCenter_SimApp.GUIComponents.Screens;
@@ -31,12 +32,18 @@ namespace WaxCenter_SimApp.Controller
         public int Progress { get; set; }
     }
 
-    public enum ReplicationsUpdateType
+    public struct ExperimentalUpdateData
+    {
+        public int Progress { get; set; }
+    }
+
+    public enum ProgressUpdateType
     {
         SIMULATION_START,
         SIMULATION_CONTINUE,
         SIMULATION_STOP,
-        SIMULATION_DATA
+        SIMULATION_DATA,
+        SIMULATION_PROGRESS
     }
     public class Controller
     {
@@ -47,23 +54,29 @@ namespace WaxCenter_SimApp.Controller
         private BackgroundWorker _realTimeSimWorker;
         private SimulationControl _realSimControl;
 
-        private BackgroundWorker _replicationsWorker;
+        //private BackgroundWorker _replicationsWorker;
         private ReplicationControl _replicationSimControl;
-
-        private BackgroundWorker _experimentWorker;
-        private StaffExperimentalControl _experimentSimControl;
-
         private ReplicationsSimulationSettings _replicationsSettings;
         private ReplicationsUpdateData _replicationsUpdateData = new ReplicationsUpdateData();
-        //private ReplicationsResults _replicationsResults;
+        public SimulationStatus ReplicationsSimulationStatus
+        {
+            get => _replicationsSettings.ReplicationSimulationStatus;
+            private set => _replicationsSettings.ReplicationSimulationStatus = value;
+        }
+
+        //private BackgroundWorker _experimentWorker;
+        private StaffExperimentalControl _experimentSimControl;
+        private ExperimentalSimulationSettings _experimentalSettings;
+        private ExperimentalUpdateData _experimentalUpdateData = new ExperimentalUpdateData();
+        public SimulationStatus ExperimentalSimulationStatus
+        {
+            get => _experimentalSettings.ExperimentalSimulationStatus;
+            private set => _experimentalSettings.ExperimentalSimulationStatus = value;
+        }
 
         private int[] _speedList = new int[] { 1, 2, 5, 10, 25, 50, 100, 1000, 5000, 10000, 100000, 100000000, 500000000 };
         //public GUIDataValuesVacCenter GUIData { get; private set; }
         public SimulationStatus RealTimeSimulationStatus { get => _simulation.Status; private set => _simulation.Status = value; }
-        public SimulationStatus ReplicationsSimulationStatus { 
-            get => _replicationsSettings.ReplicationSimulationStatus; 
-            private set => _replicationsSettings.ReplicationSimulationStatus = value; 
-        }
         
 
         public bool RealTimeCancellation { get => _realTimeSimWorker.CancellationPending; }
@@ -125,6 +138,8 @@ namespace WaxCenter_SimApp.Controller
 
             _replicationsSettings = new ReplicationsSimulationSettings();
             _replicationsSettings.NumberOfReplications = 1000;
+
+            _experimentalSettings = new ExperimentalSimulationSettings();
         }
 
         public Controller(EventSimCoreVaccinationCenter simulation)
@@ -162,45 +177,79 @@ namespace WaxCenter_SimApp.Controller
         }
         
 
-        public bool RunExperimentalSimulation()
+        public bool RunExperimentalSimulation(BackgroundWorker experimentalWorker)
         {
 
-            for(int admin = 1; admin < 10; ++admin)
+            if (ExperimentalSimulationStatus != SimulationStatus.PAUSED)
             {
-                for(int nurse = 1; nurse < 10; ++nurse)
+                _simulation.BeforeSimulation();
+                _simulation.ResetSimulation();
+                _simulation.ReplicationResults.Reset();
+                _experimentalUpdateData.Progress = 0;
+                _experimentalSettings.CurrentExperimentalReplications = 0;
+                _experimentalSettings.CurrentReplication = 0;
+                _experimentalSettings.ResetActual();
+                _experimentalSettings.CalculateMaxReplications();
+                experimentalWorker.ReportProgress((int)ProgressUpdateType.SIMULATION_START, _experimentalUpdateData);
+            }
+            for (_experimentalSettings.ActualAdmin = _experimentalSettings.MinAdmin;
+                _experimentalSettings.ActualAdmin <= _experimentalSettings.MaxAdmin;
+                ++_experimentalSettings.ActualAdmin)
+            {
+                for( _experimentalSettings.ActualNurse = _experimentalSettings.MinNurse;
+                    _experimentalSettings.ActualNurse <= _experimentalSettings.MaxNurse;
+                    ++_experimentalSettings.ActualNurse)
                 {
-                    for(int doctor = 1; doctor < 10; ++doctor)
+                    for (_experimentalSettings.ActualDoctor = _experimentalSettings.MinDoctor; 
+                        _experimentalSettings.ActualDoctor <= _experimentalSettings.MaxDoctor;
+                        ++_experimentalSettings.ActualDoctor)
                     {
-                        _simulation.AdminService.MaxStaff = admin;
-                        _simulation.ExaminationService.MaxStaff = doctor;
-                        _simulation.VaccinationService.MaxStaff = nurse;
+                        _simulation.AdminService.MaxStaff = _experimentalSettings.ActualAdmin;
+                        _simulation.ExaminationService.MaxStaff = _experimentalSettings.ActualDoctor;
+                        _simulation.VaccinationService.MaxStaff = _experimentalSettings.ActualNurse;
                         _simulation.ReplicationResults.Rebuild();
                         _simulation.BeforeSimulation();
-                        for (int i = 0; i < 10; ++i)
+                        for (; _experimentalSettings.CurrentExperimentalReplications < _experimentalSettings.RepPerExperiment;
+                            ++_experimentalSettings.CurrentExperimentalReplications)
                         {
                             _simulation.BeforeReplication();
                             _simulation.DoReplication();
                             _simulation.AfterReplication();
+                            ++_experimentalSettings.CurrentReplication;
+                            if (_experimentalSettings.CurrentReplication % 100 == 0)
+                            {
+                                _experimentalUpdateData.Progress = (int)(((double)_experimentalSettings.CurrentReplication / _experimentalSettings.MaxReplications) * 100);
+                                experimentalWorker.ReportProgress((int)ProgressUpdateType.SIMULATION_PROGRESS, _experimentalUpdateData);
+                            }
                         }
-                        _experimentSimControl.UpdateValues();
+                        _experimentalSettings.CurrentExperimentalReplications = 0;
+                        UpdateGUIAfterExperiment(experimentalWorker);
                     }
                 }
 
             }
+            ExperimentalSimulationStatus = SimulationStatus.FINISHED;
             
             return true;
         }
 
-        public bool RunReplicationsWithGUIUpdate(BackgroundWorker replicationWorek)
+        private void UpdateGUIAfterExperiment(BackgroundWorker experimentalWorker)
         {
-            _replicationsWorker = replicationWorek;
+            _experimentalUpdateData.Progress = (int)(((double)_experimentalSettings.CurrentReplication / _experimentalSettings.MaxReplications) * 100);
+            //experimentalWorker.ReportProgress((int)ProgressUpdateType.SIMULATION_PROGRESS, _experimentalUpdateData);
+            experimentalWorker.ReportProgress((int)ProgressUpdateType.SIMULATION_DATA, _experimentalUpdateData);
+            Thread.Sleep(1);
+        }
+
+        public bool RunReplicationsWithGUIUpdate(BackgroundWorker replicationsWorker)
+        {
             if(ReplicationsSimulationStatus != SimulationStatus.PAUSED)
             {
                 _simulation.BeforeSimulation();
                 _simulation.ResetSimulation();
                 _simulation.ReplicationResults.Reset();
                 _replicationsUpdateData.Progress = 0;
-                _replicationsWorker.ReportProgress((int)ReplicationsUpdateType.SIMULATION_START, _replicationsUpdateData);
+                replicationsWorker.ReportProgress((int)ProgressUpdateType.SIMULATION_START, _replicationsUpdateData);
             }
             
             for(int i = _simulation.ReplicationResults.CurrentReplications; i < _replicationsSettings.NumberOfReplications; ++i)
@@ -209,10 +258,10 @@ namespace WaxCenter_SimApp.Controller
                 _simulation.DoReplication();
                 _simulation.AfterReplication();
                 if (_simulation.ReplicationResults.CurrentReplications % _replicationsSettings.DataUpdateInterval == 0)
-                    UpdateGUIAfterReplication();
-                if(_replicationsWorker.CancellationPending)
+                    UpdateGUIAfterReplication(replicationsWorker);
+                if(replicationsWorker.CancellationPending)
                 {
-                    UpdateGUIAfterReplication();
+                    UpdateGUIAfterReplication(replicationsWorker);
                     if (_simulation.ReplicationResults.CurrentReplications != _replicationsSettings.NumberOfReplications)
                     {
                         if(_replicationSimControl.PauseClicked)
@@ -232,16 +281,16 @@ namespace WaxCenter_SimApp.Controller
                     }
                 }
             }
-            UpdateGUIAfterReplication();
+            UpdateGUIAfterReplication(replicationsWorker);
             //for(int i = )
             ReplicationsSimulationStatus = SimulationStatus.FINISHED;
             return true;
         }
 
-        private void UpdateGUIAfterReplication()
+        private void UpdateGUIAfterReplication(BackgroundWorker replicationsWorker)
         {
             _replicationsUpdateData.Progress = (int)((((double)_simulation.ReplicationResults.CurrentReplications) / _replicationsSettings.NumberOfReplications) * 100);
-            _replicationsWorker.ReportProgress((int)ReplicationsUpdateType.SIMULATION_DATA, _replicationsUpdateData);
+            replicationsWorker.ReportProgress((int)ProgressUpdateType.SIMULATION_DATA, _replicationsUpdateData);
         }
 
         public bool RunRealTimeSimulation(BackgroundWorker simulationWorker)
@@ -307,12 +356,24 @@ namespace WaxCenter_SimApp.Controller
             _replicationSimControl.RebuildStatTables();
         }
 
+        public void ResetExperimentalSimulation()
+        {
+            _simulation.ResetSimulation();
+            _simulation.ReplicationResults.Reset();
+            _experimentSimControl.Reset();
+        }
+
         public void AfterRealTimeSimulationStopped()
         {
             RealTimeSimulationStatus = SimulationStatus.CANCELED;
         }
 
         public void AfterReplicationsSimulationStopped()
+        {
+            ReplicationsSimulationStatus = SimulationStatus.CANCELED;
+        }
+
+        public void AfterExperimentalSimulationStopped()
         {
             ReplicationsSimulationStatus = SimulationStatus.CANCELED;
         }
@@ -462,16 +523,6 @@ namespace WaxCenter_SimApp.Controller
 
         }
 
-        public void SwitchToReplicationScreen()
-        {
-            PrefillReplicationsOptions();
-        }
-
-        public void SwitchToSimulationScreen()
-        {
-            PrefillReplicationsOptions();
-        }
-
         public void TryParseAndApplyReplicationsOptions()
         {
             bool error = false;
@@ -504,7 +555,11 @@ namespace WaxCenter_SimApp.Controller
             else
             {
                 if (replications < 1)
+                {
                     _replicationSimControl.ReplicationsInputText = "Number must be positive";
+                    error = true;
+                }
+                    
             }
 
             if (!Int32.TryParse(_replicationSimControl.AdminInputText, out adminStaff))
@@ -528,7 +583,10 @@ namespace WaxCenter_SimApp.Controller
             else
             {
                 if (doctorStaff < 1)
+                {
                     _replicationSimControl.DoctorInputText = "Number must be positive";
+                    error = true;
+                }
             }
 
             if (!Int32.TryParse(_replicationSimControl.NurseInputText, out nurseStaff))
@@ -539,7 +597,11 @@ namespace WaxCenter_SimApp.Controller
             else
             {
                 if (nurseStaff < 1)
-                    _replicationSimControl.NurseInputText= "Number must be positive";
+                {
+                    _replicationSimControl.NurseInputText = "Number must be positive";
+                    error = true;
+                }
+                    
             }
 
             if (!double.TryParse(_replicationSimControl.IntervalInputText, out arrivalInterval))
@@ -550,7 +612,10 @@ namespace WaxCenter_SimApp.Controller
             else
             {
                 if (arrivalInterval < 1)
+                {
                     _replicationSimControl.IntervalInputText = "Number must be positive";
+                    error = true;
+                }
             }
 
             if (!Int32.TryParse(_replicationSimControl.PatientInputText, out numOfPatients))
@@ -561,7 +626,11 @@ namespace WaxCenter_SimApp.Controller
             else
             {
                 if (numOfPatients < 1)
+                {
                     _replicationSimControl.PatientInputText = "Number must be positive";
+                    error = true;
+                }
+                    
             }
 
             if(!error)
@@ -577,6 +646,162 @@ namespace WaxCenter_SimApp.Controller
             }
         }
 
+        public void TryParseAndApplyExperimentalOptions()
+        {
+            bool error = false;
+            int replications = 0;
+            int adminStaffMin = 0;
+            int adminStaffMax = 0;
+            int doctorStaffMin = 0;
+            int doctorStaffMax = 0;
+            int nurseStaffMin = 0;
+            int nurseStaffMax = 0;
+            double arrivalInterval = 0;
+            int numOfPatients = 0;
+
+            string[] minMaxValues;
+
+            minMaxValues = _experimentSimControl.AdminInputText.Split('-');
+            if (minMaxValues.Length == 2 &&
+                Int32.TryParse(minMaxValues[0], 
+                out adminStaffMin) &&
+                Int32.TryParse(minMaxValues[1],
+                out adminStaffMax))
+            {
+                if (adminStaffMax < 1 || adminStaffMin < 1)
+                {
+                    _experimentSimControl.AdminInputText = "Number must be positive";
+                    error = true;
+                }
+                else if (adminStaffMin > adminStaffMax)
+                {
+                    _experimentSimControl.AdminInputText = "Wrong bounds";
+                    error = true;
+                }
+            }
+            else
+            {
+                error = true;
+                _experimentSimControl.AdminInputText = "Invalid number";
+            }
+
+            minMaxValues = _experimentSimControl.DoctorInputText.Split('-');
+
+            if (minMaxValues.Length == 2 &&
+                Int32.TryParse(minMaxValues[0],
+                out doctorStaffMin) &&
+                Int32.TryParse(minMaxValues[1],
+                out doctorStaffMax))
+            {
+                if (doctorStaffMin < 1 || doctorStaffMax < 1)
+                {
+                    _experimentSimControl.DoctorInputText = "Number must be positive";
+                    error = true;
+                }
+                else if (doctorStaffMin > doctorStaffMax)
+                {
+                    _experimentSimControl.DoctorInputText = "Wrong bounds";
+                    error = true;
+                }
+            }
+            else
+            {
+                error = true;
+                _experimentSimControl.DoctorInputText = "Invalid number";
+
+            }
+
+            minMaxValues = _experimentSimControl.NurseInputText.Split('-');
+
+            if (minMaxValues.Length == 2 &&
+                Int32.TryParse(minMaxValues[0],
+                out nurseStaffMin) &&
+                Int32.TryParse(minMaxValues[1],
+                out nurseStaffMax))
+            {
+                if (nurseStaffMin < 1 || nurseStaffMax < 1)
+                {
+                    _experimentSimControl.NurseInputText = "Number must be positive";
+                    error = true;
+                }
+                else if (nurseStaffMin > nurseStaffMax)
+                {
+                    _experimentSimControl.NurseInputText = "Wrong bounds";
+                    error = true;
+                }
+               
+            }
+            else
+            {
+                error = true;
+                _experimentSimControl.NurseInputText = "Invalid number";
+            }
+
+            if (!Int32.TryParse(_experimentSimControl.ReplicationsInput, out replications))
+            {
+                error = true;
+                _experimentSimControl.ReplicationsInput = "Invalid number";
+            }
+            else
+            {
+                if (replications < 1)
+                    _experimentSimControl.ReplicationsInput = "Number must be positive";
+            }
+
+            if (!Int32.TryParse(_experimentSimControl.PatientsInputText, out numOfPatients))
+            {
+                error = true;
+                _experimentSimControl.PatientsInputText = "Invalid number";
+            }
+            else
+            {
+                if (numOfPatients < 1)
+                    _experimentSimControl.PatientsInputText = "Number must be positive";
+            }
+
+            if (!double.TryParse(_experimentSimControl.ArrivalInputText, out arrivalInterval))
+            {
+                error = true;
+                _experimentSimControl.ArrivalInputText = "Invalid number";
+            }
+            else
+            {
+                if (arrivalInterval <= 0)
+                    _experimentSimControl.ArrivalInputText = "Number must be positive";
+            }
+
+
+            if (!error)
+            {
+                _experimentalSettings.MaxAdmin = adminStaffMax;
+                _experimentalSettings.MinAdmin = adminStaffMin;
+                _experimentalSettings.MaxDoctor = doctorStaffMax;
+                _experimentalSettings.MinDoctor = doctorStaffMin;
+                _experimentalSettings.MaxNurse = nurseStaffMax;
+                _experimentalSettings.MinNurse = nurseStaffMin;
+                _experimentalSettings.RepPerExperiment = replications;
+                _simulation.PatientGenerated = numOfPatients;
+                _simulation.SourceInterval = arrivalInterval;
+                SimulationOptionsChanged();
+            }
+        }
+
+        public void SwitchToReplicationScreen()
+        {
+            PrefillReplicationsOptions();
+        }
+
+        public void SwitchToSimulationScreen()
+        {
+            _realSimControl.UpdateValues();
+        }
+
+        public void SwitchToExperimentalScreen()
+        {
+            SetExperimentalSettingsAcordingToActual();
+            PrefilExperimentalOptions();
+        }
+
         private void ReplicationsOptionsChanged()
         {
             SimulationOptionsChanged();
@@ -590,7 +815,7 @@ namespace WaxCenter_SimApp.Controller
             _simulation.ResetSimulation();
         }
 
-        public void PrefillReplicationsOptions()
+        private void PrefillReplicationsOptions()
         {
             _replicationSimControl.UpdateIntervalInputText = _replicationsSettings.DataUpdateInterval.ToString();
             _replicationSimControl.ReplicationsInputText = _replicationsSettings.NumberOfReplications.ToString();
@@ -599,6 +824,35 @@ namespace WaxCenter_SimApp.Controller
             _replicationSimControl.NurseInputText = _simulation.VaccinationService.ResourcePool.MaxStaff.ToString();
             _replicationSimControl.PatientInputText = _simulation.PatientGenerated.ToString();
             _replicationSimControl.IntervalInputText = _simulation.SourceInterval.ToString();
+        }
+
+
+        private void SetExperimentalSettingsAcordingToActual()
+        {
+            _experimentalSettings.ActualAdmin = _simulation.AdminService.ResourcePool.MaxStaff;
+            _experimentalSettings.MinAdmin = _experimentalSettings.ActualAdmin;
+            _experimentalSettings.MaxAdmin = _experimentalSettings.ActualAdmin;
+
+            _experimentalSettings.ActualDoctor = _simulation.ExaminationService.ResourcePool.MaxStaff;
+            _experimentalSettings.MinDoctor = _experimentalSettings.ActualDoctor;
+            _experimentalSettings.MaxDoctor = _experimentalSettings.ActualDoctor;
+
+            _experimentalSettings.ActualNurse = _simulation.VaccinationService.ResourcePool.MaxStaff;
+            _experimentalSettings.MinNurse = _experimentalSettings.ActualNurse;
+            _experimentalSettings.MaxNurse = _experimentalSettings.ActualNurse;
+
+            _experimentalSettings.ArrivalInterval = _simulation.SourceInterval;
+            _experimentalSettings.NumberOfPatients = _simulation.PatientGenerated;
+        }
+
+        private void PrefilExperimentalOptions()
+        {
+            _experimentSimControl.AdminInputText = _experimentalSettings.AdminPrefillText;
+            _experimentSimControl.DoctorInputText = _experimentalSettings.DoctorPrefillText;
+            _experimentSimControl.NurseInputText = _experimentalSettings.NursePrefillText;
+            _experimentSimControl.ReplicationsInput = _experimentalSettings.RepPerExperiment.ToString();
+            _experimentSimControl.ArrivalInputText = _experimentalSettings.ArrivalInterval.ToString();
+            _experimentSimControl.PatientsInputText = _experimentalSettings.NumberOfPatients.ToString();
         }
 
     }
