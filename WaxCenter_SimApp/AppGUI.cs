@@ -56,6 +56,7 @@ namespace WaxCenter_SimApp
         {
             HideAllScreens();
             ReplicationControlScreen.Show();
+            Controller.SwitchToReplicationScreen();
         }
 
         public void ChangeSimulationSpeed(int speedIndex)
@@ -63,23 +64,6 @@ namespace WaxCenter_SimApp
             Controller.SetSimulationSpeed(speedIndex);
         }
 
-        public void SignalRunPauseReplications()
-        {
-            if (!ReplicationsWorker.IsBusy)
-            {
-                ReplicationsWorker.RunWorkerAsync();
-                /*if (_controller.SimulationStatus == EventSimulationCore.SimulationStatus.FINISHED || _controller.SimulationStatus == EventSimulationCore.SimulationStatus.CANCELED)
-                {
-                    //StartSimulation();
-                }
-                else
-                    //ContinueSimulation();*/
-            }
-            else
-            {
-                //PauseSimulation();
-            }
-        }
         public void RunReplications()
         {
 
@@ -87,21 +71,12 @@ namespace WaxCenter_SimApp
 
         private void SetRealTimeToDefault()
         {
-            SimulationControlScreen.SetToDefault(); 
+            SimulationControlScreen.SetToDefault();
         }
 
         public void SignalBaseOptionsConfirm()
         {
             Controller.TryApplyBaseSimulationSettings();
-        }
-        private void ReplicationsWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Controller.RunReplicationsWithGUIUpdate(ReplicationsWorker);
-        }
-
-        private void ReplicationsWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-
         }
     }
 }

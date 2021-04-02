@@ -37,5 +37,10 @@ namespace WaxCenter_SimApp.GUIComponents.Clock
         {
             SimulationControl.SimulationStopSignal();
         }
+
+        public void SetSpeedSlider(int numOfSpeeds)
+        {
+            SpeedSlider.Maximum = numOfSpeeds;
+        }
     }
 }

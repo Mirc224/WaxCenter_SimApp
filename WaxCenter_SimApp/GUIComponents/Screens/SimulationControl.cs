@@ -99,7 +99,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         {
             if (!RealTimeSimulationWorker.IsBusy)
             {
-                if (AppGUI.Controller.SimulationStatus == EventSimulationCore.SimulationStatus.FINISHED || AppGUI.Controller.SimulationStatus == EventSimulationCore.SimulationStatus.CANCELED)
+                if (AppGUI.Controller.RealTimeSimulationStatus == SimulationStatus.FINISHED ||
+                    AppGUI.Controller.RealTimeSimulationStatus == SimulationStatus.CANCELED)
                 {
                     StartSimulation();
                 }
@@ -222,13 +223,13 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 
         private void RealTimeSimulationWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (AppGUI.Controller.SimulationStatus == EventSimulationCore.SimulationStatus.PAUSED)
+            if (AppGUI.Controller.RealTimeSimulationStatus == SimulationStatus.PAUSED)
             {
-                RealTimeSimulationWorker.ReportProgress((int)UpdateDataType.SIMULATION_CONTINUE);
+                RealTimeSimulationWorker.ReportProgress((int)RealTimeUpdateDataType.SIMULATION_CONTINUE);
             }
             else
             {
-                RealTimeSimulationWorker.ReportProgress((int)UpdateDataType.SIMULATION_START);
+                RealTimeSimulationWorker.ReportProgress((int)RealTimeUpdateDataType.SIMULATION_START);
             }
             if (!AppGUI.Controller.RunRealTimeSimulation(RealTimeSimulationWorker))
             {
@@ -238,19 +239,19 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 
         private void RealTimeSimulationWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            switch ((UpdateDataType)e.ProgressPercentage)
+            switch ((RealTimeUpdateDataType)e.ProgressPercentage)
             {
-                case UpdateDataType.SIMULATION_START:
+                case RealTimeUpdateDataType.SIMULATION_START:
                     this.SetStartSimulationSettings();
                     break;
-                case UpdateDataType.SIMULATION_CONTINUE:
+                case RealTimeUpdateDataType.SIMULATION_CONTINUE:
                     this.SetContinueSimulationSettings();
                     break;
-                case UpdateDataType.CLOCK_DATA:
+                case RealTimeUpdateDataType.CLOCK_DATA:
                     var data = (ClockUpdateData)e.UserState;
                     this.SetClockValue(data.CurrentTime);
                     break;
-                case UpdateDataType.SIMULATION_DATA:
+                case RealTimeUpdateDataType.SIMULATION_DATA:
                     this.UpdateValues();
                     break;
                 default:
@@ -260,9 +261,9 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 
         private void RealTimeSimulationWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (AppGUI.Controller.SimulationStatus != EventSimulationCore.SimulationStatus.FINISHED)
+            if (AppGUI.Controller.RealTimeSimulationStatus != SimulationStatus.FINISHED)
             {
-                if (AppGUI.Controller.SimulationStatus == EventSimulationCore.SimulationStatus.PAUSED)
+                if (AppGUI.Controller.RealTimeSimulationStatus == SimulationStatus.PAUSED)
                 {
                     PauseClicked = false;
                     SetPauseSimulationSettings();
@@ -282,6 +283,11 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         {
             AppGUI.Controller.AfterRealTimeSimulationStopped();
             SetToDefault();
+        }
+
+        public void SetClockTicks(int ticks)
+        {
+            SimulationClock.SetSpeedSlider(ticks);
         }
     }
 }

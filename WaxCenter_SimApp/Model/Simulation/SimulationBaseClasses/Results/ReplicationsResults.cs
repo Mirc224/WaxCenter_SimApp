@@ -34,6 +34,17 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results
             }
         }
 
+        public void Rebuild()
+        {
+            if (ResultGroups != null)
+            {
+                foreach (var resultGroup in ResultGroups)
+                {
+                    resultGroup.Rebuild();
+                }
+            }
+        }
+
         public void Reset()
         {
             CurrentReplications = 0;

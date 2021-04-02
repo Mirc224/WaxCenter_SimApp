@@ -112,7 +112,7 @@
     <Compile Include="Model\Simulation\SimulationBaseClasses\Results\ResultGroup.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Results\StatResults.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\Settings\BaseEventSimulationSettings.cs" />
-    <Compile Include="Model\Simulation\SimulationBaseClasses\Settings\ReplicationsSettings.cs" />
+    <Compile Include="Model\Simulation\SimulationBaseClasses\Settings\ReplicationsSimulationSettings.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\AdditionServiceComponents\ResourcePool.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\BaseComponent.cs" />
     <Compile Include="Model\Simulation\SimulationBaseClasses\SimulationComponents\BaseSourceComponent.cs" />
@@ -132,6 +132,7 @@
     <Compile Include="Model\Simulation\VaccinationCenter\EventSimCoreVaccinationCenter.cs" />
     <Compile Include="Model\Simulation\VaccinationCenter\Patient.cs" />
     <Compile Include="Model\Statistics\BaseStatistic.cs" />
+    <Compile Include="Model\Statistics\ConfidenceIntervalStat.cs" />
     <Compile Include="Model\Statistics\ContinuousStatistic.cs" />
     <Compile Include="Model\Statistics\DiscreteStatistic.cs" />
     <Compile Include="Program.cs" />

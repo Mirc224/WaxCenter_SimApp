@@ -12,6 +12,14 @@ using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponen
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
 {
+    public enum SimulationStatus
+    {
+        FINISHED,
+        CANCELED,
+        PAUSED,
+        RUNNING,
+        INTERRUPTED
+    }
     public struct ClockUpdateData
     {
         public string CurrentTime;
@@ -29,14 +37,6 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
             MINUTES = 60,
             HOURS = 3600
         }
-        public enum SimulationStatus
-        {
-            FINISHED,
-            CANCELED,
-            PAUSED,
-            RUNNING,
-            INTERRUPTED
-        }
 
         public double StartTimeInSeconds { get; set; } = 0; 
         public SimulationStatus Status { get; set; } = SimulationStatus.FINISHED;
@@ -50,7 +50,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
         public int Speed { get => SimulationSettings.Speed; set => SimulationSettings.Speed = value; }
         public double MaxTime { get => SimulationSettings.MaxTime *(int)SimulationSettings.Units ; set => SimulationSettings.MaxTime = value; }
         private double _realMaxTimeInSec { get => SimulationSettings.MaxTime; }
-        public bool ContinueAfterMaxTime { get; set; } = false;
+        public bool ContinueAfterMaxTime { get=> SimulationSettings.ContinueAfterMaxTime; set => SimulationSettings.ContinueAfterMaxTime = value; }
         public double ClockTimeInSeconds { get => CurrentTime + StartTimeInSeconds; }
 
         public int Seed { 
@@ -100,7 +100,6 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
                 SetSeed();
             else
                 SetSeed(SimulationSettings.LastUsedSeed);
-
             if (ReplicationResults != null)
                 ReplicationResults.Reset();
         }
@@ -118,7 +117,6 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
             EventCalendar.Reset();
             ResetComponents();
             ResetStatistics();
-            ResetGenerators();
         }
 
         protected void ResetSeeds()
@@ -202,9 +200,11 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
                     CurrentTime += RunClock(nextEventTime - CurrentTime);
                     if (nextEventTime < CurrentTime)
                         CurrentTime = nextEventTime;
+
                     Controller.ClockUpdate();
                     if (CurrentTime > _realMaxTimeInSec && !ContinueAfterMaxTime)
                     {
+                        Console.WriteLine(EventCalendar.Count);
                         Status = SimulationStatus.FINISHED;
                         return Status;
                     }
@@ -220,6 +220,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
                 currentEvent.Execute();
                 Controller.AfterEventUpdate();
             }
+            Console.WriteLine(EventCalendar.Count);
             Status = SimulationStatus.FINISHED;
             return Status;
         }
@@ -234,6 +235,13 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
                 return timeDifference;
             return 1 * ((double)SimulationSettings.Units);*/
             int actualSpeed = Speed;
+            if(Speed > 1000)
+            {
+                if (Speed == 500000000)
+                    return 500000000;
+                Thread.Sleep(1);
+                return actualSpeed / 10;
+            }
             int time = timeDifference - 1 >= 0 ? 1000 / actualSpeed : (int)((timeDifference * 1000) / actualSpeed);
             Thread.Sleep(time);
             if (timeDifference < 1)

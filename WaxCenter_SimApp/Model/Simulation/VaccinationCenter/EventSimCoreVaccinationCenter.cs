@@ -105,7 +105,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             ReplicationResults.ResultGroups = new ResultGroup[] { adminStatGroup, examinationStatGroup, vaccinationStatGroup, delayStatGroup };
 
             //ContinueAfterMaxTime = true;
-            ContinueAfterMaxTime = false;
+            ContinueAfterMaxTime = true;
             MaxTime = 540 * 60;
             StartTimeInSeconds = 28800;
             SetSeed();

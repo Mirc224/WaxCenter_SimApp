@@ -32,7 +32,6 @@ namespace WaxCenter_SimApp
             this.MainMenuPanel = new System.Windows.Forms.Panel();
             this.ShowReplicationButton = new System.Windows.Forms.Button();
             this.ShowSimulationButton = new System.Windows.Forms.Button();
-            this.ReplicationsWorker = new System.ComponentModel.BackgroundWorker();
             this.BaseSettingsPanel = new System.Windows.Forms.Panel();
             this.SimulationOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimulationOptions();
             this.ContentPanel = new System.Windows.Forms.Panel();
@@ -72,12 +71,6 @@ namespace WaxCenter_SimApp
             this.ShowSimulationButton.Text = "Simulation";
             this.ShowSimulationButton.UseVisualStyleBackColor = true;
             this.ShowSimulationButton.Click += new System.EventHandler(this.ShowSimulationButton_Click);
-            // 
-            // ReplicationsWorker
-            // 
-            this.ReplicationsWorker.WorkerReportsProgress = true;
-            this.ReplicationsWorker.WorkerSupportsCancellation = true;
-            this.ReplicationsWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.ReplicationsWorker_DoWork);
             // 
             // BaseSettingsPanel
             // 
@@ -155,7 +148,6 @@ namespace WaxCenter_SimApp
         private System.Windows.Forms.Panel MainMenuPanel;
         private System.Windows.Forms.Button ShowReplicationButton;
         private System.Windows.Forms.Button ShowSimulationButton;
-        private System.ComponentModel.BackgroundWorker ReplicationsWorker;
         private SimulationControl SimulationControlScreen;
         private System.Windows.Forms.Panel BaseSettingsPanel;
         private GUIComponents.OptionsComponents.SimulationOptions SimulationOptions;

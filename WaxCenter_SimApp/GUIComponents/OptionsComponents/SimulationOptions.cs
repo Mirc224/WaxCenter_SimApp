@@ -28,8 +28,8 @@ namespace WaxCenter_SimApp.GUIComponents.OptionsComponents
         public void PreFillSettings(BaseEventSimulationSettings settings) 
         {
             MaxTimeInput.Text = settings.MaxTime.ToString();
-            AfterMaxTimeCheck.Checked = !settings.ContinueAfterMaxTime;
-            AutoSeedCheckBox.Checked = !settings.AutoSeed;
+            AfterMaxTimeCheck.Checked = settings.ContinueAfterMaxTime;
+            AutoSeedCheckBox.Checked = settings.AutoSeed;
             SeedInput.Text = settings.LastUsedSeed.ToString();
             if (settings.AutoSeed)
                 SeedInput.Enabled = false;

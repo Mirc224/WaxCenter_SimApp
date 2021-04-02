@@ -69,7 +69,7 @@ namespace WaxCenter_SimApp.GUIComponents.Clock
             // SpeedSlider
             // 
             this.SpeedSlider.Location = new System.Drawing.Point(45, 57);
-            this.SpeedSlider.Maximum = 7;
+            this.SpeedSlider.Maximum = 9;
             this.SpeedSlider.Name = "SpeedSlider";
             this.SpeedSlider.Size = new System.Drawing.Size(182, 56);
             this.SpeedSlider.TabIndex = 3;
