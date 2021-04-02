@@ -9,7 +9,8 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results
     public class ReplicationsResults
     {
         public int CurrentReplications { get; set; } = 0;
-        //public double[] ObservedValues { get; set; }
+        public double MeanOvertime { get => CurrentReplications == 0 ? 0 : OverTime / CurrentReplications; }
+        public double OverTime { get; set; } = 0;
         public ResultGroup[] ResultGroups { 
             get=> _resultGroups; 
             set
@@ -48,6 +49,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results
         public void Reset()
         {
             CurrentReplications = 0;
+            OverTime = 0;
             
             if(ResultGroups != null)
             {

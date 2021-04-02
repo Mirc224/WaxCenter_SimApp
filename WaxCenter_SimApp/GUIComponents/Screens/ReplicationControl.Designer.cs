@@ -57,6 +57,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.VaccinationStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
             this.ExaminationStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
             this.AdminStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
+            this.AverageOvertimeLabel = new System.Windows.Forms.Label();
+            this.CapacityConfidenceLabel = new System.Windows.Forms.Label();
             this.ReplicationsTopPanel.SuspendLayout();
             this.ReplicationsOptionsPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -387,11 +389,33 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.AdminStats.TabIndex = 3;
             this.AdminStats.TitleText = "Administration";
             // 
+            // AverageOvertimeLabel
+            // 
+            this.AverageOvertimeLabel.AutoSize = true;
+            this.AverageOvertimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.AverageOvertimeLabel.Location = new System.Drawing.Point(15, 433);
+            this.AverageOvertimeLabel.Name = "AverageOvertimeLabel";
+            this.AverageOvertimeLabel.Size = new System.Drawing.Size(180, 24);
+            this.AverageOvertimeLabel.TabIndex = 10;
+            this.AverageOvertimeLabel.Text = "Average overtime:";
+            // 
+            // CapacityConfidenceLabel
+            // 
+            this.CapacityConfidenceLabel.AutoSize = true;
+            this.CapacityConfidenceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.CapacityConfidenceLabel.Location = new System.Drawing.Point(15, 484);
+            this.CapacityConfidenceLabel.Name = "CapacityConfidenceLabel";
+            this.CapacityConfidenceLabel.Size = new System.Drawing.Size(269, 30);
+            this.CapacityConfidenceLabel.TabIndex = 11;
+            this.CapacityConfidenceLabel.Text = "WRoom conf. interval:";
+            // 
             // ReplicationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.CapacityConfidenceLabel);
+            this.Controls.Add(this.AverageOvertimeLabel);
             this.Controls.Add(this.ProgressBar);
             this.Controls.Add(this.StopButton);
             this.Controls.Add(this.StartPauseButton);
@@ -410,6 +434,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -443,6 +468,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         private System.Windows.Forms.Label NoPatientsLabel;
         private System.Windows.Forms.TextBox IntervalInput;
         private System.Windows.Forms.TextBox UpdateIntervalInput;
+        private System.Windows.Forms.Label AverageOvertimeLabel;
+        private System.Windows.Forms.Label CapacityConfidenceLabel;
 
         public string ReplicationsInputText { get => ReplicationsInput.Text; set => ReplicationsInput.Text = value; }
         public string AdminInputText { get => AdminInput.Text; set => AdminInput.Text = value; }
@@ -451,6 +478,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         public string PatientInputText { get => PatientInput.Text; set => PatientInput.Text = value; }
         public string IntervalInputText { get => IntervalInput.Text; set => IntervalInput.Text = value; }
         public string UpdateIntervalInputText { get => UpdateIntervalInput.Text; set => UpdateIntervalInput.Text = value; }
-
+        public string AvgOvertimeLabel { set => AverageOvertimeLabel.Text = value; }
+        public string ConfIntervalLabel { set => CapacityConfidenceLabel.Text = value; }
     }
 }

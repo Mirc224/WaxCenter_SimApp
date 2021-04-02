@@ -544,7 +544,7 @@ namespace WaxCenter_SimApp.Controller
         {
             SimulationOptionsChanged();
             _replicationSimControl.RebuildStatTables();
-            _replicationSimControl.UpdateStatTables();
+            _replicationSimControl.ValueUpdate();
         }
 
         private void SimulationOptionsChanged()

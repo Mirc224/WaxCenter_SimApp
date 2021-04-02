@@ -44,7 +44,12 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
                 stat.CreateRows();
         }
 
-        public void UpdateStatTables()
+        public void ValueUpdate()
+        {
+            AvgOvertimeLabel = $"Average overtime: { _replicationsResults.MeanOvertime}";
+            UpdateStatTables();
+        }
+        private void UpdateStatTables()
         {
             foreach (var stat in _statsTables)
                 stat.UpdateValues();
@@ -141,7 +146,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
                 case ReplicationsUpdateType.SIMULATION_DATA:
                     data = (ReplicationsUpdateData)e.UserState;
                     ProgressBar.Value = data.Progress;
-                    UpdateStatTables();
+                    ValueUpdate();
                     break;
                 default:
                     break;

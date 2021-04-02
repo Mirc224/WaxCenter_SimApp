@@ -79,6 +79,12 @@
     <Compile Include="GUIComponents\OptionsComponents\SimulationOptions.Designer.cs">
       <DependentUpon>SimulationOptions.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUIComponents\Screens\StaffExperimentalControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUIComponents\Screens\StaffExperimentalControl.Designer.cs">
+      <DependentUpon>StaffExperimentalControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUIComponents\SimComponents\GUISimComponentsWrapper\GUISimulationComponentsManager.cs" />
     <Compile Include="GUIComponents\SimComponents\ISimComponent.cs" />
     <Compile Include="GUIComponents\StatsComponents\StatsTable.cs">
@@ -205,6 +211,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUIComponents\OptionsComponents\SimulationOptions.resx">
       <DependentUpon>SimulationOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUIComponents\Screens\StaffExperimentalControl.resx">
+      <DependentUpon>StaffExperimentalControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUIComponents\StatsComponents\StatsTable.resx">
       <DependentUpon>StatsTable.cs</DependentUpon>
