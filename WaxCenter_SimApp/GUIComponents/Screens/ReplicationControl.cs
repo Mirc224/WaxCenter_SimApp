@@ -21,8 +21,10 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         private ReplicationsResults _replicationsResults;
 
         private StatsTable[] _statsTables;
+        private StatResults _delayStats;
 
         public bool PauseClicked { get; set; }
+        public bool ValueProcessed { get; set; }
         public ReplicationControl()
         {
             InitializeComponent();
@@ -37,6 +39,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
                 _statsTables[i].ResultGroup = _replicationsResults.ResultGroups[i];
                 _statsTables[i].CreateRows();
             }
+            _delayStats = (StatResults)_replicationsResults["DelayGroup"]["StatCapacity"];
         }
 
         public void RebuildStatTables()
@@ -45,9 +48,20 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
                 stat.CreateRows();
         }
 
-        public void ValueUpdate()
+        public void ValueUpdate(ReplicationsUpdateData data)
         {
-            AvgOvertimeLabel = $"Average overtime: { _replicationsResults.MeanOvertime}";
+            double delayMean = _delayStats.Mean;
+            double admissibleError = _delayStats.AddmissibleErrorEst;
+            double repllicationMeanOvertime = _replicationsResults.MeanOvertime;
+            ValueProcessed = true;
+            data.WaitHandle.Set();
+
+            double lowerBound = delayMean - admissibleError;
+            double upperBound = delayMean + admissibleError;
+
+            ProgressBar.Value = data.Progress;
+            AvgOvertimeLabel = $"Average overtime:" + string.Format("{0:0.####}",repllicationMeanOvertime/60);
+            ConfIntervalLabel = $"Capacity conf. interval: <{string.Format("{0:0.#####}", lowerBound)}, {string.Format("{0:0.#####}", lowerBound)}>";
             UpdateStatTables();
         }
         private void UpdateStatTables()
@@ -146,8 +160,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
                     break;
                 case ProgressUpdateType.SIMULATION_DATA:
                     data = (ReplicationsUpdateData)e.UserState;
-                    ProgressBar.Value = data.Progress;
-                    ValueUpdate();
+                    ValueUpdate(data);
                     break;
                 default:
                     break;
@@ -208,8 +221,10 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         internal void Reset()
         {
             RebuildStatTables();
-            ValueUpdate();
-            //AverageOvertimeLabel.Text;
+            UpdateStatTables();
+            ProgressBar.Value = 0;
+            AvgOvertimeLabel = $"Average overtime: { 0 }";
+            ConfIntervalLabel = $"Capacity conf. interval: <-,->";
         }
     }
 }

@@ -47,20 +47,20 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 
             int adminMaxStaff = adminResPool.ResourcePool.MaxStaff;
             double adminUtilization = adminResPool.Utilization / ReplicationResults.CurrentReplications;
-            double adminQLength = ((StatResults)adminStatGroup["QLengthStat"]).Mean / ReplicationResults.CurrentReplications;
-            double adminWTime = ((StatResults)adminStatGroup["WTimeStat"]).Mean / ReplicationResults.CurrentReplications;
+            double adminQLength = ((StatResults)adminStatGroup["QLengthStat"]).MeanSum / ReplicationResults.CurrentReplications;
+            double adminWTime = ((StatResults)adminStatGroup["WTimeStat"]).MeanSum / ReplicationResults.CurrentReplications;
 
             int examMaxStaff = examResPool.ResourcePool.MaxStaff;
             double doctorUtilization = examResPool.Utilization / ReplicationResults.CurrentReplications;
-            double doctorQLength = ((StatResults)examinationStatGroup["QLengthStat"]).Mean / ReplicationResults.CurrentReplications;
-            double doctorWTime = ((StatResults)examinationStatGroup["WTimeStat"]).Mean / ReplicationResults.CurrentReplications;
+            double doctorQLength = ((StatResults)examinationStatGroup["QLengthStat"]).MeanSum / ReplicationResults.CurrentReplications;
+            double doctorWTime = ((StatResults)examinationStatGroup["WTimeStat"]).MeanSum / ReplicationResults.CurrentReplications;
 
             int vaccMaxStaff = vaccResPool.ResourcePool.MaxStaff;
             double nurseUtilization = vaccResPool.Utilization / ReplicationResults.CurrentReplications; ;
-            double nurseQLength = ((StatResults)vaccinationStatGroup["QLengthStat"]).Mean / ReplicationResults.CurrentReplications;
-            double nurseWTime = ((StatResults)vaccinationStatGroup["WTimeStat"]).Mean / ReplicationResults.CurrentReplications;
+            double nurseQLength = ((StatResults)vaccinationStatGroup["QLengthStat"]).MeanSum / ReplicationResults.CurrentReplications;
+            double nurseWTime = ((StatResults)vaccinationStatGroup["WTimeStat"]).MeanSum / ReplicationResults.CurrentReplications;
 
-            double wRoomCapacity = ((StatResults)delayStatGroup["StatCapacity"]).Mean / ReplicationResults.CurrentReplications;
+            double wRoomCapacity = ((StatResults)delayStatGroup["StatCapacity"]).MeanSum / ReplicationResults.CurrentReplications;
 
             _currentLineSeries.Points.Add(new OxyPlot.DataPoint(examMaxStaff, doctorQLength));
             ValuesProcessed = true;
@@ -95,6 +95,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 
         public void Reset()
         {
+            ProgressBar.Value = 0;
             ExperimentResultsGridView.Rows.Clear();
             RedrawGraph();
         }

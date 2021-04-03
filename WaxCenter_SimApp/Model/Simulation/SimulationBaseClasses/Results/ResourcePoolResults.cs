@@ -33,10 +33,10 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results
 
         public override void AfterReplicationUpdate()
         {
-            _statsValues[0] += ResourcePool.Utilization;
+            _statsValues[0] += ResourcePool.Utilization * 100;
             for (int i = 1; i < ResourcePool.MaxStaff + 1; ++i)
             {
-                _statsValues[i] += ResourcePool.Staff[i - 1].Utilization;
+                _statsValues[i] += ResourcePool.Staff[i - 1].Utilization * 100;
             }
         }
     }

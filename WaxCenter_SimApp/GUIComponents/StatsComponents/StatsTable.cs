@@ -30,7 +30,7 @@ namespace WaxCenter_SimApp.GUIComponents.StatsComponents
                     {
                         StatGridView.Rows.Add(new string[] { Result.Names[i], 
                             (ResultGroup.ReplicationsResult.CurrentReplications == 0 ? 
-                            0 :  Result.Values[i]/ResultGroup.ReplicationsResult.CurrentReplications).ToString() });
+                            "0" : string.Format("{0:0.####}", Result.Values[i]/ResultGroup.ReplicationsResult.CurrentReplications))});
                     }
                 }
             }
@@ -47,7 +47,7 @@ namespace WaxCenter_SimApp.GUIComponents.StatsComponents
                     {
                         var dataRow = StatGridView.Rows[index++];
                         dataRow.Cells[1].Value = (ResultGroup.ReplicationsResult.CurrentReplications == 0 ?
-                                                  0 : Result.Values[i] / ResultGroup.ReplicationsResult.CurrentReplications).ToString();
+                                                  "0" : string.Format("{0:0.####}", Result.Values[i] / ResultGroup.ReplicationsResult.CurrentReplications));
                     }
                 }
             }

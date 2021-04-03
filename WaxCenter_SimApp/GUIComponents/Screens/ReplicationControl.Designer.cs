@@ -53,12 +53,12 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.StopButton = new System.Windows.Forms.Button();
             this.ReplicationsWorker = new System.ComponentModel.BackgroundWorker();
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
+            this.AverageOvertimeLabel = new System.Windows.Forms.Label();
+            this.CapacityConfidenceLabel = new System.Windows.Forms.Label();
             this.WaitingRoomStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
             this.VaccinationStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
             this.ExaminationStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
             this.AdminStats = new WaxCenter_SimApp.GUIComponents.StatsComponents.StatsTable();
-            this.AverageOvertimeLabel = new System.Windows.Forms.Label();
-            this.CapacityConfidenceLabel = new System.Windows.Forms.Label();
             this.ReplicationsTopPanel.SuspendLayout();
             this.ReplicationsOptionsPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -308,7 +308,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // 
             // StartPauseButton
             // 
-            this.StartPauseButton.Location = new System.Drawing.Point(10, 586);
+            this.StartPauseButton.Location = new System.Drawing.Point(3, 726);
             this.StartPauseButton.Name = "StartPauseButton";
             this.StartPauseButton.Size = new System.Drawing.Size(119, 40);
             this.StartPauseButton.TabIndex = 7;
@@ -318,7 +318,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // 
             // StopButton
             // 
-            this.StopButton.Location = new System.Drawing.Point(10, 632);
+            this.StopButton.Location = new System.Drawing.Point(3, 772);
             this.StopButton.Name = "StopButton";
             this.StopButton.Size = new System.Drawing.Size(119, 42);
             this.StopButton.TabIndex = 8;
@@ -336,10 +336,30 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // 
             // ProgressBar
             // 
-            this.ProgressBar.Location = new System.Drawing.Point(239, 775);
+            this.ProgressBar.Location = new System.Drawing.Point(161, 778);
             this.ProgressBar.Name = "ProgressBar";
-            this.ProgressBar.Size = new System.Drawing.Size(1059, 36);
+            this.ProgressBar.Size = new System.Drawing.Size(1222, 36);
             this.ProgressBar.TabIndex = 9;
+            // 
+            // AverageOvertimeLabel
+            // 
+            this.AverageOvertimeLabel.AutoSize = true;
+            this.AverageOvertimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.AverageOvertimeLabel.Location = new System.Drawing.Point(169, 740);
+            this.AverageOvertimeLabel.Name = "AverageOvertimeLabel";
+            this.AverageOvertimeLabel.Size = new System.Drawing.Size(180, 24);
+            this.AverageOvertimeLabel.TabIndex = 10;
+            this.AverageOvertimeLabel.Text = "Average overtime:";
+            // 
+            // CapacityConfidenceLabel
+            // 
+            this.CapacityConfidenceLabel.AutoSize = true;
+            this.CapacityConfidenceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.CapacityConfidenceLabel.Location = new System.Drawing.Point(836, 740);
+            this.CapacityConfidenceLabel.Name = "CapacityConfidenceLabel";
+            this.CapacityConfidenceLabel.Size = new System.Drawing.Size(215, 24);
+            this.CapacityConfidenceLabel.TabIndex = 11;
+            this.CapacityConfidenceLabel.Text = "WRoom conf. interval:";
             // 
             // WaitingRoomStats
             // 
@@ -349,7 +369,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.WaitingRoomStats.MinimumSize = new System.Drawing.Size(204, 181);
             this.WaitingRoomStats.Name = "WaitingRoomStats";
             this.WaitingRoomStats.ResultGroup = null;
-            this.WaitingRoomStats.Size = new System.Drawing.Size(347, 318);
+            this.WaitingRoomStats.Size = new System.Drawing.Size(347, 671);
             this.WaitingRoomStats.TabIndex = 6;
             this.WaitingRoomStats.TitleText = "Waiting room";
             // 
@@ -361,7 +381,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.VaccinationStats.MinimumSize = new System.Drawing.Size(204, 181);
             this.VaccinationStats.Name = "VaccinationStats";
             this.VaccinationStats.ResultGroup = null;
-            this.VaccinationStats.Size = new System.Drawing.Size(345, 318);
+            this.VaccinationStats.Size = new System.Drawing.Size(345, 671);
             this.VaccinationStats.TabIndex = 5;
             this.VaccinationStats.TitleText = "Vaccination";
             // 
@@ -373,7 +393,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ExaminationStats.MinimumSize = new System.Drawing.Size(204, 181);
             this.ExaminationStats.Name = "ExaminationStats";
             this.ExaminationStats.ResultGroup = null;
-            this.ExaminationStats.Size = new System.Drawing.Size(345, 318);
+            this.ExaminationStats.Size = new System.Drawing.Size(345, 671);
             this.ExaminationStats.TabIndex = 4;
             this.ExaminationStats.TitleText = "Examination";
             // 
@@ -385,29 +405,9 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.AdminStats.MinimumSize = new System.Drawing.Size(204, 181);
             this.AdminStats.Name = "AdminStats";
             this.AdminStats.ResultGroup = null;
-            this.AdminStats.Size = new System.Drawing.Size(346, 318);
+            this.AdminStats.Size = new System.Drawing.Size(346, 671);
             this.AdminStats.TabIndex = 3;
             this.AdminStats.TitleText = "Administration";
-            // 
-            // AverageOvertimeLabel
-            // 
-            this.AverageOvertimeLabel.AutoSize = true;
-            this.AverageOvertimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.AverageOvertimeLabel.Location = new System.Drawing.Point(15, 433);
-            this.AverageOvertimeLabel.Name = "AverageOvertimeLabel";
-            this.AverageOvertimeLabel.Size = new System.Drawing.Size(180, 24);
-            this.AverageOvertimeLabel.TabIndex = 10;
-            this.AverageOvertimeLabel.Text = "Average overtime:";
-            // 
-            // CapacityConfidenceLabel
-            // 
-            this.CapacityConfidenceLabel.AutoSize = true;
-            this.CapacityConfidenceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.CapacityConfidenceLabel.Location = new System.Drawing.Point(15, 484);
-            this.CapacityConfidenceLabel.Name = "CapacityConfidenceLabel";
-            this.CapacityConfidenceLabel.Size = new System.Drawing.Size(269, 30);
-            this.CapacityConfidenceLabel.TabIndex = 11;
-            this.CapacityConfidenceLabel.Text = "WRoom conf. interval:";
             // 
             // ReplicationControl
             // 

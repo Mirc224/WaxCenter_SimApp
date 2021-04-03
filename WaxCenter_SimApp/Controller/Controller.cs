@@ -30,11 +30,13 @@ namespace WaxCenter_SimApp.Controller
     public struct ReplicationsUpdateData
     {
         public int Progress { get; set; }
+        public AutoResetEvent WaitHandle { get; set; }
     }
 
     public struct ExperimentalUpdateData
     {
         public int Progress { get; set; }
+        public AutoResetEvent WaitHandle { get; set; }
     }
 
     public enum ProgressUpdateType
@@ -54,7 +56,6 @@ namespace WaxCenter_SimApp.Controller
         private BackgroundWorker _realTimeSimWorker;
         private SimulationControl _realSimControl;
 
-        //private BackgroundWorker _replicationsWorker;
         private ReplicationControl _replicationSimControl;
         private ReplicationsSimulationSettings _replicationsSettings;
         private ReplicationsUpdateData _replicationsUpdateData = new ReplicationsUpdateData();
@@ -153,9 +154,6 @@ namespace WaxCenter_SimApp.Controller
 
         public void Test()
         {
-            /*Random tmp = new Random();
-            int cislo = tmp.Next(50);
-            Console.WriteLine(cislo);*/
             _replicationsSettings.NumberOfReplications = 10000;
             _simulation.BeforeSimulation();
             for (int i = _simulation.ReplicationResults.CurrentReplications; i < _replicationsSettings.NumberOfReplications; ++i)
@@ -298,15 +296,23 @@ namespace WaxCenter_SimApp.Controller
                 }
             }
             UpdateGUIAfterReplication(replicationsWorker);
-            //for(int i = )
             ReplicationsSimulationStatus = SimulationStatus.FINISHED;
             return true;
         }
 
         private void UpdateGUIAfterReplication(BackgroundWorker replicationsWorker)
         {
+            AutoResetEvent waitHandle = new AutoResetEvent(false);
+            _replicationSimControl.ValueProcessed = false;
+            _replicationsUpdateData.WaitHandle = waitHandle;
+
             _replicationsUpdateData.Progress = (int)((((double)_simulation.ReplicationResults.CurrentReplications) / _replicationsSettings.NumberOfReplications) * 100);
             replicationsWorker.ReportProgress((int)ProgressUpdateType.SIMULATION_DATA, _replicationsUpdateData);
+
+            if(!_replicationSimControl.ValueProcessed)
+            {
+                waitHandle.WaitOne();
+            }
         }
 
         public bool RunRealTimeSimulation(BackgroundWorker simulationWorker)
@@ -811,8 +817,7 @@ namespace WaxCenter_SimApp.Controller
 
         public void SwitchToSimulationScreen()
         {
-            _simulation.ResetSimulation();
-            _realSimControl.Reset();
+            ResetRealTimeSimulation();
         }
 
         public void SwitchToExperimentalScreen()
@@ -826,7 +831,7 @@ namespace WaxCenter_SimApp.Controller
         {
             SimulationOptionsChanged();
             _replicationSimControl.RebuildStatTables();
-            _replicationSimControl.ValueUpdate();
+            _replicationSimControl.Reset();
         }
 
         private void SimulationOptionsChanged()

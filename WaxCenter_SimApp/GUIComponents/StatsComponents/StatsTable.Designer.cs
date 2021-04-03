@@ -64,7 +64,7 @@ namespace WaxCenter_SimApp.GUIComponents.StatsComponents
             this.StatGridView.ShowCellToolTips = false;
             this.StatGridView.ShowEditingIcon = false;
             this.StatGridView.ShowRowErrors = false;
-            this.StatGridView.Size = new System.Drawing.Size(338, 285);
+            this.StatGridView.Size = new System.Drawing.Size(338, 638);
             this.StatGridView.TabIndex = 2;
             // 
             // Statistic
@@ -95,7 +95,7 @@ namespace WaxCenter_SimApp.GUIComponents.StatsComponents
             this.Controls.Add(this.StatTitleLabel);
             this.MinimumSize = new System.Drawing.Size(292, 224);
             this.Name = "StatsTable";
-            this.Size = new System.Drawing.Size(344, 323);
+            this.Size = new System.Drawing.Size(344, 669);
             ((System.ComponentModel.ISupportInitialize)(this.StatGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

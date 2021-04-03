@@ -207,7 +207,6 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
                     Controller.ClockUpdate();
                     if (CurrentTime > _realMaxTimeInSec && !ContinueAfterMaxTime)
                     {
-                        Console.WriteLine(EventCalendar.Count);
                         Status = SimulationStatus.FINISHED;
                         return Status;
                     }
@@ -223,20 +222,13 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
                 currentEvent.Execute();
                 Controller.AfterEventUpdate();
             }
-            Console.WriteLine(EventCalendar.Count);
             Status = SimulationStatus.FINISHED;
             return Status;
         }
 
         public double RunClock(double timeDifference)
         {
-            /*int actualSpeed = Speed;
-            double tmpTimeDifference = timeDifference / ((double)SimulationSettings.Units);
-            int time = tmpTimeDifference - 1 >= 0 ? 1000 / actualSpeed : (int)((tmpTimeDifference * 1000) / actualSpeed);
-            Thread.Sleep(time);
-            if (tmpTimeDifference < 1)
-                return timeDifference;
-            return 1 * ((double)SimulationSettings.Units);*/
+
             int actualSpeed = Speed;
             if(Speed > 1000)
             {
