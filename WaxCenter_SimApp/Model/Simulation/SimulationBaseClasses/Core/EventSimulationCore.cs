@@ -106,7 +106,9 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
         protected void UpdateReplicationResults()
         {
             ++ReplicationResults.CurrentReplications;
-            ReplicationResults.OverTime += CurrentTime - _realMaxTimeInSec;
+            if(ContinueAfterMaxTime)
+                ReplicationResults.OverTime += CurrentTime - _realMaxTimeInSec;
+
             ReplicationResults.AfterReplicationUpdate();
         }
 

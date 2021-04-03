@@ -179,7 +179,8 @@ namespace WaxCenter_SimApp.Controller
 
         public bool RunExperimentalSimulation(BackgroundWorker experimentalWorker)
         {
-
+            AutoResetEvent waitHandle;
+            _experimentSimControl.ValuesProcessed = true;
             if (ExperimentalSimulationStatus != SimulationStatus.PAUSED)
             {
                 _simulation.BeforeSimulation();
@@ -204,6 +205,8 @@ namespace WaxCenter_SimApp.Controller
                         _experimentalSettings.ActualDoctor <= _experimentalSettings.MaxDoctor;
                         ++_experimentalSettings.ActualDoctor)
                     {
+                        waitHandle = new AutoResetEvent(false);
+                        _experimentSimControl.WaitHandle = waitHandle;
                         _simulation.AdminService.MaxStaff = _experimentalSettings.ActualAdmin;
                         _simulation.ExaminationService.MaxStaff = _experimentalSettings.ActualDoctor;
                         _simulation.VaccinationService.MaxStaff = _experimentalSettings.ActualNurse;
@@ -221,15 +224,25 @@ namespace WaxCenter_SimApp.Controller
                                 _experimentalUpdateData.Progress = (int)(((double)_experimentalSettings.CurrentReplication / _experimentalSettings.MaxReplications) * 100);
                                 experimentalWorker.ReportProgress((int)ProgressUpdateType.SIMULATION_PROGRESS, _experimentalUpdateData);
                             }
+                            if (experimentalWorker.CancellationPending)
+                            {
+                                ExperimentalSimulationStatus = SimulationStatus.CANCELED;
+                                return false;
+                            }
                         }
                         _experimentalSettings.CurrentExperimentalReplications = 0;
+                        _experimentSimControl.ValuesProcessed = false;
                         UpdateGUIAfterExperiment(experimentalWorker);
+
+                        if(!_experimentSimControl.ValuesProcessed)
+                        {
+                            waitHandle.WaitOne();
+                        }
                     }
                 }
 
             }
             ExperimentalSimulationStatus = SimulationStatus.FINISHED;
-            
             return true;
         }
 
@@ -238,7 +251,7 @@ namespace WaxCenter_SimApp.Controller
             _experimentalUpdateData.Progress = (int)(((double)_experimentalSettings.CurrentReplication / _experimentalSettings.MaxReplications) * 100);
             //experimentalWorker.ReportProgress((int)ProgressUpdateType.SIMULATION_PROGRESS, _experimentalUpdateData);
             experimentalWorker.ReportProgress((int)ProgressUpdateType.SIMULATION_DATA, _experimentalUpdateData);
-            Thread.Sleep(1);
+            //Thread.Sleep(1);
         }
 
         public bool RunReplicationsWithGUIUpdate(BackgroundWorker replicationsWorker)

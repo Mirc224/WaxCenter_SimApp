@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaxCenter_SimApp.Controller;
@@ -15,8 +16,10 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 {
     public partial class StaffExperimentalControl : UserControl
     {
+        public AutoResetEvent WaitHandle { get; set; }
         public AppGUI AppGUI { get; set; }
         public ReplicationsResults ReplicationResults { get; set; }
+        public bool ValuesProcessed { get; set; } = true;
         public StaffExperimentalControl()
         {
             InitializeComponent();
@@ -40,7 +43,41 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             var examResPool = (ResourcePoolResults)examinationStatGroup["ResPool"];
             var vaccResPool = (ResourcePoolResults)vaccinationStatGroup["ResPool"];
 
-            ExperimentResultsGridView.Rows.Add(new string[] { adminResPool.ResourcePool.MaxStaff.ToString(),
+            int adminMaxStaff = adminResPool.ResourcePool.MaxStaff;
+            double adminUtilization = adminResPool.Utilization / ReplicationResults.CurrentReplications;
+            double adminQLength = ((StatResults)adminStatGroup["QLengthStat"]).Mean / ReplicationResults.CurrentReplications;
+            double adminWTime = ((StatResults)adminStatGroup["WTimeStat"]).Mean / ReplicationResults.CurrentReplications;
+
+            int examMaxStaff = examResPool.ResourcePool.MaxStaff;
+            double doctorUtilization = examResPool.Utilization / ReplicationResults.CurrentReplications;
+            double doctorQLength = ((StatResults)examinationStatGroup["QLengthStat"]).Mean / ReplicationResults.CurrentReplications;
+            double doctorWTime = ((StatResults)examinationStatGroup["WTimeStat"]).Mean / ReplicationResults.CurrentReplications;
+
+            int vaccMaxStaff = vaccResPool.ResourcePool.MaxStaff;
+            double nurseUtilization = vaccResPool.Utilization / ReplicationResults.CurrentReplications; ;
+            double nurseQLength = ((StatResults)vaccinationStatGroup["QLengthStat"]).Mean / ReplicationResults.CurrentReplications;
+            double nurseWTime = ((StatResults)vaccinationStatGroup["WTimeStat"]).Mean / ReplicationResults.CurrentReplications;
+
+            double wRoomCapacity = ((StatResults)delayStatGroup["StatCapacity"]).Mean / ReplicationResults.CurrentReplications;
+            ValuesProcessed = true;
+            WaitHandle.Set();
+
+            ExperimentResultsGridView.Rows.Add(new string[] { adminMaxStaff.ToString(),
+                                                              adminUtilization.ToString(),
+                                                              adminQLength.ToString(),
+                                                              adminWTime.ToString(),
+                                                              examMaxStaff.ToString(),
+                                                              doctorUtilization.ToString(),
+                                                              doctorQLength.ToString(),
+                                                              doctorWTime.ToString(),
+                                                              vaccMaxStaff.ToString(),
+                                                              nurseUtilization.ToString(),
+                                                              nurseQLength.ToString(),
+                                                              nurseWTime.ToString(),
+                                                              wRoomCapacity.ToString()
+                                                              });
+
+            /*ExperimentResultsGridView.Rows.Add(new string[] { adminResPool.ResourcePool.MaxStaff.ToString(),
                                                               (adminResPool.Utilization / ReplicationResults.CurrentReplications).ToString(),
                                                               (((StatResults)adminStatGroup["QLengthStat"]).Mean/ReplicationResults.CurrentReplications).ToString(),
                                                               (((StatResults)adminStatGroup["WTimeStat"]).Mean/ReplicationResults.CurrentReplications).ToString(),
@@ -53,7 +90,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
                                                               (((StatResults)vaccinationStatGroup["QLengthStat"]).Mean/ReplicationResults.CurrentReplications).ToString(),
                                                               (((StatResults)vaccinationStatGroup["WTimeStat"]).Mean/ReplicationResults.CurrentReplications).ToString(),
                                                               (((StatResults)delayStatGroup["StatCapacity"]).Mean/ReplicationResults.CurrentReplications).ToString()
-                                                              });
+                                                              });*/
+            //ValuesProcessed = false;
         }
 
         public void Reset()

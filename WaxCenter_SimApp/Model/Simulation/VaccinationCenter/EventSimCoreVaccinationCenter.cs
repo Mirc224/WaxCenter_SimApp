@@ -164,7 +164,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         {
             var patient = (Patient)agent;
             StatAdminQLength.Add(self.QueueSize, CurrentTime);
-            StatAdminWaitingTime.Add(CurrentTime - patient.AdminEnterTime);
+            StatAdminWaitingTime.Add((CurrentTime - patient.AdminEnterTime) / 60);
             return 0;
         }
 
@@ -180,7 +180,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         {
             var patient = (Patient)agent;
             StatExaminationQLength.Add(self.QueueSize, CurrentTime);
-            StatExaminationWaitingTime.Add(CurrentTime - patient.ExaminationEnterTime);
+            StatExaminationWaitingTime.Add((CurrentTime - patient.ExaminationEnterTime) / 60);
             return 0;
         }
         private int VaccinationOnEnter(DelayComponent self, Agent agent)
@@ -195,7 +195,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         {
             var patient = (Patient)agent;
             StatVaccinationQLength.Add(self.QueueSize, CurrentTime);
-            StatVaccinationWaitingTime.Add(CurrentTime - patient.VaccinationEnterTime);
+            StatVaccinationWaitingTime.Add((CurrentTime - patient.VaccinationEnterTime) / 60);
             return 0;
         }
         private int WaitingRoomOnEnter(DelayComponent self, Agent agent)
