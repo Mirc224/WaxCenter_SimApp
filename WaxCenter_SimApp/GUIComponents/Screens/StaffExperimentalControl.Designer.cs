@@ -105,12 +105,12 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.MeanVaccQLength,
             this.MeanVaccWTime,
             this.MeanWRoomCapacity});
-            this.ExperimentResultsGridView.Location = new System.Drawing.Point(3, 392);
+            this.ExperimentResultsGridView.Location = new System.Drawing.Point(3, 407);
             this.ExperimentResultsGridView.Name = "ExperimentResultsGridView";
             this.ExperimentResultsGridView.RowHeadersVisible = false;
             this.ExperimentResultsGridView.RowHeadersWidth = 51;
             this.ExperimentResultsGridView.RowTemplate.Height = 24;
-            this.ExperimentResultsGridView.Size = new System.Drawing.Size(1628, 271);
+            this.ExperimentResultsGridView.Size = new System.Drawing.Size(1628, 349);
             this.ExperimentResultsGridView.TabIndex = 2;
             // 
             // NumOfAdmin
@@ -234,7 +234,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.tableLayoutPanel1.Controls.Add(this.DoctorLabel, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.AdminLabel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.AdminInput, 1, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(1405, 79);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(1493, 79);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 7;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -244,7 +244,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(372, 219);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(284, 239);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
             // PatientsInput
@@ -252,9 +252,9 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.PatientsInput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.PatientsInput.Location = new System.Drawing.Point(216, 155);
+            this.PatientsInput.Location = new System.Drawing.Point(166, 155);
             this.PatientsInput.Name = "PatientsInput";
-            this.PatientsInput.Size = new System.Drawing.Size(153, 22);
+            this.PatientsInput.Size = new System.Drawing.Size(115, 22);
             this.PatientsInput.TabIndex = 12;
             // 
             // ArrivalInput
@@ -262,9 +262,9 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ArrivalInput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ArrivalInput.Location = new System.Drawing.Point(216, 127);
+            this.ArrivalInput.Location = new System.Drawing.Point(166, 127);
             this.ArrivalInput.Name = "ArrivalInput";
-            this.ArrivalInput.Size = new System.Drawing.Size(153, 22);
+            this.ArrivalInput.Size = new System.Drawing.Size(115, 22);
             this.ArrivalInput.TabIndex = 11;
             // 
             // ReplicationPerCInput
@@ -272,9 +272,9 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ReplicationPerCInput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ReplicationPerCInput.Location = new System.Drawing.Point(216, 87);
+            this.ReplicationPerCInput.Location = new System.Drawing.Point(166, 87);
             this.ReplicationPerCInput.Name = "ReplicationPerCInput";
-            this.ReplicationPerCInput.Size = new System.Drawing.Size(153, 22);
+            this.ReplicationPerCInput.Size = new System.Drawing.Size(115, 22);
             this.ReplicationPerCInput.TabIndex = 10;
             // 
             // NurseInput
@@ -282,9 +282,9 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.NurseInput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.NurseInput.Location = new System.Drawing.Point(216, 59);
+            this.NurseInput.Location = new System.Drawing.Point(166, 59);
             this.NurseInput.Name = "NurseInput";
-            this.NurseInput.Size = new System.Drawing.Size(153, 22);
+            this.NurseInput.Size = new System.Drawing.Size(115, 22);
             this.NurseInput.TabIndex = 9;
             // 
             // DoctorInput
@@ -292,9 +292,9 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.DoctorInput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.DoctorInput.Location = new System.Drawing.Point(216, 31);
+            this.DoctorInput.Location = new System.Drawing.Point(166, 31);
             this.DoctorInput.Name = "DoctorInput";
-            this.DoctorInput.Size = new System.Drawing.Size(153, 22);
+            this.DoctorInput.Size = new System.Drawing.Size(115, 22);
             this.DoctorInput.TabIndex = 8;
             // 
             // ArrivalLabel
@@ -306,7 +306,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.ArrivalLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.ArrivalLabel.Location = new System.Drawing.Point(3, 124);
             this.ArrivalLabel.Name = "ArrivalLabel";
-            this.ArrivalLabel.Size = new System.Drawing.Size(207, 28);
+            this.ArrivalLabel.Size = new System.Drawing.Size(157, 28);
             this.ArrivalLabel.TabIndex = 6;
             this.ArrivalLabel.Text = "Arrival interval:";
             this.ArrivalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -320,7 +320,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.PatientsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.PatientsLabel.Location = new System.Drawing.Point(3, 152);
             this.PatientsLabel.Name = "PatientsLabel";
-            this.PatientsLabel.Size = new System.Drawing.Size(207, 28);
+            this.PatientsLabel.Size = new System.Drawing.Size(157, 28);
             this.PatientsLabel.TabIndex = 5;
             this.PatientsLabel.Text = "Patients entered:";
             this.PatientsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -334,7 +334,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.RepCombLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.RepCombLabel.Location = new System.Drawing.Point(3, 84);
             this.RepCombLabel.Name = "RepCombLabel";
-            this.RepCombLabel.Size = new System.Drawing.Size(207, 40);
+            this.RepCombLabel.Size = new System.Drawing.Size(157, 40);
             this.RepCombLabel.TabIndex = 4;
             this.RepCombLabel.Text = "Replications per combination:";
             this.RepCombLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -348,7 +348,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.NurseLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.NurseLabel.Location = new System.Drawing.Point(3, 56);
             this.NurseLabel.Name = "NurseLabel";
-            this.NurseLabel.Size = new System.Drawing.Size(207, 28);
+            this.NurseLabel.Size = new System.Drawing.Size(157, 28);
             this.NurseLabel.TabIndex = 4;
             this.NurseLabel.Text = "Nurses:";
             this.NurseLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -362,7 +362,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.DoctorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.DoctorLabel.Location = new System.Drawing.Point(3, 28);
             this.DoctorLabel.Name = "DoctorLabel";
-            this.DoctorLabel.Size = new System.Drawing.Size(207, 28);
+            this.DoctorLabel.Size = new System.Drawing.Size(157, 28);
             this.DoctorLabel.TabIndex = 1;
             this.DoctorLabel.Text = "Doctors:";
             this.DoctorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -376,7 +376,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.AdminLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.AdminLabel.Location = new System.Drawing.Point(3, 0);
             this.AdminLabel.Name = "AdminLabel";
-            this.AdminLabel.Size = new System.Drawing.Size(207, 28);
+            this.AdminLabel.Size = new System.Drawing.Size(157, 28);
             this.AdminLabel.TabIndex = 0;
             this.AdminLabel.Text = "Admin.:";
             this.AdminLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -386,14 +386,14 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.AdminInput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdminInput.Location = new System.Drawing.Point(216, 3);
+            this.AdminInput.Location = new System.Drawing.Point(166, 3);
             this.AdminInput.Name = "AdminInput";
-            this.AdminInput.Size = new System.Drawing.Size(153, 22);
+            this.AdminInput.Size = new System.Drawing.Size(115, 22);
             this.AdminInput.TabIndex = 7;
             // 
             // ConfirmButton
             // 
-            this.ConfirmButton.Location = new System.Drawing.Point(1539, 310);
+            this.ConfirmButton.Location = new System.Drawing.Point(1587, 324);
             this.ConfirmButton.Name = "ConfirmButton";
             this.ConfirmButton.Size = new System.Drawing.Size(115, 32);
             this.ConfirmButton.TabIndex = 4;
@@ -403,7 +403,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // 
             // StartPauseButton
             // 
-            this.StartPauseButton.Location = new System.Drawing.Point(12, 246);
+            this.StartPauseButton.Location = new System.Drawing.Point(12, 149);
             this.StartPauseButton.Name = "StartPauseButton";
             this.StartPauseButton.Size = new System.Drawing.Size(92, 39);
             this.StartPauseButton.TabIndex = 5;
@@ -413,7 +413,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // 
             // StopButton
             // 
-            this.StopButton.Location = new System.Drawing.Point(12, 303);
+            this.StopButton.Location = new System.Drawing.Point(12, 203);
             this.StopButton.Name = "StopButton";
             this.StopButton.Size = new System.Drawing.Size(92, 39);
             this.StopButton.TabIndex = 6;
@@ -423,10 +423,10 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // 
             // DependenceGraph
             // 
-            this.DependenceGraph.Location = new System.Drawing.Point(195, 79);
+            this.DependenceGraph.Location = new System.Drawing.Point(110, 51);
             this.DependenceGraph.Name = "DependenceGraph";
             this.DependenceGraph.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.DependenceGraph.Size = new System.Drawing.Size(1183, 291);
+            this.DependenceGraph.Size = new System.Drawing.Size(1377, 350);
             this.DependenceGraph.TabIndex = 7;
             this.DependenceGraph.Text = "DepndenceGraph";
             this.DependenceGraph.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -443,9 +443,9 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             // 
             // ProgressBar
             // 
-            this.ProgressBar.Location = new System.Drawing.Point(16, 685);
+            this.ProgressBar.Location = new System.Drawing.Point(0, 762);
             this.ProgressBar.Name = "ProgressBar";
-            this.ProgressBar.Size = new System.Drawing.Size(1605, 46);
+            this.ProgressBar.Size = new System.Drawing.Size(1631, 46);
             this.ProgressBar.TabIndex = 8;
             // 
             // StaffExperimentalControl
@@ -462,7 +462,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             this.Controls.Add(this.ScreenTitleLabel);
             this.Controls.Add(this.OptionsLabel);
             this.Name = "StaffExperimentalControl";
-            this.Size = new System.Drawing.Size(1787, 746);
+            this.Size = new System.Drawing.Size(1787, 824);
             ((System.ComponentModel.ISupportInitialize)(this.ExperimentResultsGridView)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

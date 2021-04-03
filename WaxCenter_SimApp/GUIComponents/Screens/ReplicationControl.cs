@@ -204,5 +204,12 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
                 AfterReplicationsSimulationStopped();
             }
         }
+
+        internal void Reset()
+        {
+            RebuildStatTables();
+            ValueUpdate();
+            //AverageOvertimeLabel.Text;
+        }
     }
 }

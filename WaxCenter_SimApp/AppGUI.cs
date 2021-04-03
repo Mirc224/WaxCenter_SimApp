@@ -23,6 +23,7 @@ namespace WaxCenter_SimApp
         public AppGUI()
         {
             InitializeComponent();
+            ExperimentControlScreen.Initialize();
             SimulationControlScreen.AppGUI = this;
             ReplicationControlScreen.AppGUI = this;
             ExperimentControlScreen.AppGUI = this;
@@ -30,7 +31,6 @@ namespace WaxCenter_SimApp
 
             Controller = new Controller.Controller(this, SimulationControlScreen, ReplicationControlScreen,
                                                    ExperimentControlScreen, SimulationOptions);
-            ExperimentControlScreen.Initialize();
 
             HideAllScreens();
             SimulationControlScreen.Show();
@@ -53,8 +53,7 @@ namespace WaxCenter_SimApp
         {
             HideAllScreens();
             SimulationControlScreen.Show();
-            //ReplicationControlScreen.Hide();
-
+            Controller.SwitchToSimulationScreen();
         }
 
         private void ShowReplicationButton_Click(object sender, EventArgs e)
@@ -63,20 +62,11 @@ namespace WaxCenter_SimApp
             ReplicationControlScreen.Show();
             Controller.SwitchToReplicationScreen();
         }
-
-        public void ChangeSimulationSpeed(int speedIndex)
+        private void ShowExperimentsButton_Click(object sender, EventArgs e)
         {
-            Controller.SetSimulationSpeed(speedIndex);
-        }
-
-        public void RunReplications()
-        {
-
-        }
-
-        private void SetRealTimeToDefault()
-        {
-            SimulationControlScreen.SetToDefault();
+            HideAllScreens();
+            ExperimentControlScreen.Show();
+            Controller.SwitchToExperimentalScreen();
         }
 
         public void SignalBaseOptionsConfirm()
@@ -84,11 +74,5 @@ namespace WaxCenter_SimApp
             Controller.TryApplyBaseSimulationSettings();
         }
 
-        private void ExperimentsButton_Click(object sender, EventArgs e)
-        {
-            HideAllScreens();
-            ExperimentControlScreen.Show();
-            Controller.SwitchToExperimentalScreen();
-        }
     }
 }

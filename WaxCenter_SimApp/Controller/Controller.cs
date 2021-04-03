@@ -179,6 +179,7 @@ namespace WaxCenter_SimApp.Controller
 
         public bool RunExperimentalSimulation(BackgroundWorker experimentalWorker)
         {
+            //_experimentSimControl.AddNewSeries($"Admin {_experimentalSettings.ActualAdmin} Nurses: {_experimentalSettings.ActualNurse}");
             AutoResetEvent waitHandle;
             _experimentSimControl.ValuesProcessed = true;
             if (ExperimentalSimulationStatus != SimulationStatus.PAUSED)
@@ -187,6 +188,7 @@ namespace WaxCenter_SimApp.Controller
                 _simulation.ResetSimulation();
                 _simulation.ReplicationResults.Reset();
                 _experimentalUpdateData.Progress = 0;
+                _experimentSimControl.ClearGraphSeries();
                 _experimentalSettings.CurrentExperimentalReplications = 0;
                 _experimentalSettings.CurrentReplication = 0;
                 _experimentalSettings.ResetActual();
@@ -201,6 +203,7 @@ namespace WaxCenter_SimApp.Controller
                     _experimentalSettings.ActualNurse <= _experimentalSettings.MaxNurse;
                     ++_experimentalSettings.ActualNurse)
                 {
+                    _experimentSimControl.AddNewSeries($"Admin: {_experimentalSettings.ActualAdmin} Nurses: {_experimentalSettings.ActualNurse}");
                     for (_experimentalSettings.ActualDoctor = _experimentalSettings.MinDoctor; 
                         _experimentalSettings.ActualDoctor <= _experimentalSettings.MaxDoctor;
                         ++_experimentalSettings.ActualDoctor)
@@ -316,7 +319,6 @@ namespace WaxCenter_SimApp.Controller
                 _realTimeSimWorker.ReportProgress((int)RealTimeUpdateDataType.SIMULATION_DATA);
                 _realTimeSimWorker.ReportProgress((int)RealTimeUpdateDataType.CLOCK_DATA, new ClockUpdateData(_simulation.ClockTimeInSeconds));
             }
-            //_simulation.DoReplication();
             if (_simulation.RunRealTimeSimulation() != SimulationStatus.FINISHED)
             {
                 if (_realSimControl.PauseClicked)
@@ -801,16 +803,21 @@ namespace WaxCenter_SimApp.Controller
 
         public void SwitchToReplicationScreen()
         {
+            _simulation.ResetSimulation();
+            _simulation.ReplicationResults.Reset();
+            _replicationSimControl.Reset();
             PrefillReplicationsOptions();
         }
 
         public void SwitchToSimulationScreen()
         {
-            _realSimControl.UpdateValues();
+            _simulation.ResetSimulation();
+            _realSimControl.Reset();
         }
 
         public void SwitchToExperimentalScreen()
         {
+            _simulation.ResetSimulation();
             SetExperimentalSettingsAcordingToActual();
             PrefilExperimentalOptions();
         }

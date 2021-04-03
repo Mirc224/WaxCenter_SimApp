@@ -104,7 +104,7 @@ namespace WaxCenter_SimApp
             this.ExperimentsButton.TabIndex = 2;
             this.ExperimentsButton.Text = "Experiments";
             this.ExperimentsButton.UseVisualStyleBackColor = true;
-            this.ExperimentsButton.Click += new System.EventHandler(this.ExperimentsButton_Click);
+            this.ExperimentsButton.Click += new System.EventHandler(this.ShowExperimentsButton_Click);
             // 
             // ExperimentControlScreen
             // 

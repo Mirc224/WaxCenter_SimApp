@@ -20,6 +20,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         public AppGUI AppGUI { get; set; }
         public ReplicationsResults ReplicationResults { get; set; }
         public bool ValuesProcessed { get; set; } = true;
+        public OxyPlot.Series.LineSeries _currentLineSeries;
         public StaffExperimentalControl()
         {
             InitializeComponent();
@@ -29,6 +30,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         public void Initialize()
         {
             DependenceGraph.Model = new OxyPlot.PlotModel { Title = "Mean examination queue length" };
+            DependenceGraph.Model.ResetAllAxes();
         }
 
         public void UpdateValues()
@@ -59,6 +61,8 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
             double nurseWTime = ((StatResults)vaccinationStatGroup["WTimeStat"]).Mean / ReplicationResults.CurrentReplications;
 
             double wRoomCapacity = ((StatResults)delayStatGroup["StatCapacity"]).Mean / ReplicationResults.CurrentReplications;
+
+            _currentLineSeries.Points.Add(new OxyPlot.DataPoint(examMaxStaff, doctorQLength));
             ValuesProcessed = true;
             WaitHandle.Set();
 
@@ -76,27 +80,29 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
                                                               nurseWTime.ToString(),
                                                               wRoomCapacity.ToString()
                                                               });
+            RedrawGraph();
+        }
 
-            /*ExperimentResultsGridView.Rows.Add(new string[] { adminResPool.ResourcePool.MaxStaff.ToString(),
-                                                              (adminResPool.Utilization / ReplicationResults.CurrentReplications).ToString(),
-                                                              (((StatResults)adminStatGroup["QLengthStat"]).Mean/ReplicationResults.CurrentReplications).ToString(),
-                                                              (((StatResults)adminStatGroup["WTimeStat"]).Mean/ReplicationResults.CurrentReplications).ToString(),
-                                                              examResPool.ResourcePool.MaxStaff.ToString(),
-                                                              (examResPool.Utilization / ReplicationResults.CurrentReplications).ToString(),
-                                                              (((StatResults)examinationStatGroup["QLengthStat"]).Mean/ReplicationResults.CurrentReplications).ToString(),
-                                                              (((StatResults)examinationStatGroup["WTimeStat"]).Mean/ReplicationResults.CurrentReplications).ToString(),
-                                                              vaccResPool.ResourcePool.MaxStaff.ToString(),
-                                                              (vaccResPool.Utilization / ReplicationResults.CurrentReplications).ToString(),
-                                                              (((StatResults)vaccinationStatGroup["QLengthStat"]).Mean/ReplicationResults.CurrentReplications).ToString(),
-                                                              (((StatResults)vaccinationStatGroup["WTimeStat"]).Mean/ReplicationResults.CurrentReplications).ToString(),
-                                                              (((StatResults)delayStatGroup["StatCapacity"]).Mean/ReplicationResults.CurrentReplications).ToString()
-                                                              });*/
-            //ValuesProcessed = false;
+        public void RedrawGraph()
+        {
+            DependenceGraph.InvalidatePlot(true);
+        }
+
+        public void ClearGraphSeries()
+        {
+            DependenceGraph.Model.Series.Clear();
         }
 
         public void Reset()
         {
             ExperimentResultsGridView.Rows.Clear();
+            RedrawGraph();
+        }
+
+        public void AddNewSeries(string title)
+        {
+            _currentLineSeries = new OxyPlot.Series.LineSeries { Title = title };
+            DependenceGraph.Model.Series.Add(_currentLineSeries);
         }
 
         private void StartPauseButton_Click(object sender, EventArgs e)

@@ -289,5 +289,10 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         {
             SimulationClock.SetSpeedSlider(ticks);
         }
+
+        internal void Reset()
+        {
+            UpdateValues();
+        }
     }
 }
