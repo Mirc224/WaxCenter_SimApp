@@ -30,14 +30,14 @@ namespace WaxCenter_SimApp
         private void InitializeComponent()
         {
             this.MainMenuPanel = new System.Windows.Forms.Panel();
+            this.ExperimentsButton = new System.Windows.Forms.Button();
             this.ShowReplicationButton = new System.Windows.Forms.Button();
             this.ShowSimulationButton = new System.Windows.Forms.Button();
             this.BaseSettingsPanel = new System.Windows.Forms.Panel();
+            this.SimulationOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimulationOptions();
             this.ContentPanel = new System.Windows.Forms.Panel();
-            this.ExperimentsButton = new System.Windows.Forms.Button();
             this.ExperimentControlScreen = new WaxCenter_SimApp.GUIComponents.Screens.StaffExperimentalControl();
             this.ReplicationControlScreen = new WaxCenter_SimApp.GUIComponents.Screens.ReplicationControl();
-            this.SimulationOptions = new WaxCenter_SimApp.GUIComponents.OptionsComponents.SimulationOptions();
             this.SimulationControlScreen = new WaxCenter_SimApp.GUIComponents.Screens.SimulationControl();
             this.MainMenuPanel.SuspendLayout();
             this.BaseSettingsPanel.SuspendLayout();
@@ -54,6 +54,16 @@ namespace WaxCenter_SimApp
             this.MainMenuPanel.Name = "MainMenuPanel";
             this.MainMenuPanel.Size = new System.Drawing.Size(155, 1019);
             this.MainMenuPanel.TabIndex = 0;
+            // 
+            // ExperimentsButton
+            // 
+            this.ExperimentsButton.Location = new System.Drawing.Point(27, 141);
+            this.ExperimentsButton.Name = "ExperimentsButton";
+            this.ExperimentsButton.Size = new System.Drawing.Size(105, 32);
+            this.ExperimentsButton.TabIndex = 2;
+            this.ExperimentsButton.Text = "Experiments";
+            this.ExperimentsButton.UseVisualStyleBackColor = true;
+            this.ExperimentsButton.Click += new System.EventHandler(this.ShowExperimentsButton_Click);
             // 
             // ShowReplicationButton
             // 
@@ -84,6 +94,18 @@ namespace WaxCenter_SimApp
             this.BaseSettingsPanel.Size = new System.Drawing.Size(1835, 186);
             this.BaseSettingsPanel.TabIndex = 1;
             // 
+            // SimulationOptions
+            // 
+            this.SimulationOptions.AppGUI = null;
+            this.SimulationOptions.AutoSize = true;
+            this.SimulationOptions.Location = new System.Drawing.Point(6, 0);
+            this.SimulationOptions.MaxTimeInputText = "";
+            this.SimulationOptions.MinimumSize = new System.Drawing.Size(529, 130);
+            this.SimulationOptions.Name = "SimulationOptions";
+            this.SimulationOptions.SeedInputText = "";
+            this.SimulationOptions.Size = new System.Drawing.Size(564, 183);
+            this.SimulationOptions.TabIndex = 0;
+            // 
             // ContentPanel
             // 
             this.ContentPanel.Controls.Add(this.ExperimentControlScreen);
@@ -96,28 +118,22 @@ namespace WaxCenter_SimApp
             this.ContentPanel.Size = new System.Drawing.Size(1835, 1019);
             this.ContentPanel.TabIndex = 3;
             // 
-            // ExperimentsButton
-            // 
-            this.ExperimentsButton.Location = new System.Drawing.Point(27, 141);
-            this.ExperimentsButton.Name = "ExperimentsButton";
-            this.ExperimentsButton.Size = new System.Drawing.Size(105, 32);
-            this.ExperimentsButton.TabIndex = 2;
-            this.ExperimentsButton.Text = "Experiments";
-            this.ExperimentsButton.UseVisualStyleBackColor = true;
-            this.ExperimentsButton.Click += new System.EventHandler(this.ShowExperimentsButton_Click);
-            // 
             // ExperimentControlScreen
             // 
             this.ExperimentControlScreen.AdminInputText = "";
+            this.ExperimentControlScreen.AppGUI = null;
             this.ExperimentControlScreen.ArrivalInputText = "";
             this.ExperimentControlScreen.DoctorInputText = "";
             this.ExperimentControlScreen.Location = new System.Drawing.Point(3, 192);
             this.ExperimentControlScreen.Name = "ExperimentControlScreen";
             this.ExperimentControlScreen.NurseInputText = "";
             this.ExperimentControlScreen.PatientsInputText = "";
+            this.ExperimentControlScreen.ReplicationResults = null;
             this.ExperimentControlScreen.ReplicationsInput = "";
             this.ExperimentControlScreen.Size = new System.Drawing.Size(1820, 815);
             this.ExperimentControlScreen.TabIndex = 3;
+            this.ExperimentControlScreen.ValuesProcessed = true;
+            this.ExperimentControlScreen.WaitHandle = null;
             // 
             // ReplicationControlScreen
             // 
@@ -135,18 +151,7 @@ namespace WaxCenter_SimApp
             this.ReplicationControlScreen.Size = new System.Drawing.Size(1832, 818);
             this.ReplicationControlScreen.TabIndex = 2;
             this.ReplicationControlScreen.UpdateIntervalInputText = "";
-            // 
-            // SimulationOptions
-            // 
-            this.SimulationOptions.AppGUI = null;
-            this.SimulationOptions.AutoSize = true;
-            this.SimulationOptions.Location = new System.Drawing.Point(6, 0);
-            this.SimulationOptions.MaxTimeInputText = "";
-            this.SimulationOptions.MinimumSize = new System.Drawing.Size(529, 130);
-            this.SimulationOptions.Name = "SimulationOptions";
-            this.SimulationOptions.SeedInputText = "";
-            this.SimulationOptions.Size = new System.Drawing.Size(564, 183);
-            this.SimulationOptions.TabIndex = 0;
+            this.ReplicationControlScreen.ValueProcessed = false;
             // 
             // SimulationControlScreen
             // 
@@ -167,7 +172,7 @@ namespace WaxCenter_SimApp
             this.Controls.Add(this.MainMenuPanel);
             this.Name = "AppGUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "VaccSim21";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MainMenuPanel.ResumeLayout(false);
             this.BaseSettingsPanel.ResumeLayout(false);

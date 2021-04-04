@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OxyPlot.Axes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -30,6 +31,17 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
         public void Initialize()
         {
             DependenceGraph.Model = new OxyPlot.PlotModel { Title = "Mean examination queue length" };
+            var linearAxis1 = new LinearAxis();
+            linearAxis1.MajorGridlineStyle = OxyPlot.LineStyle.Solid;
+            linearAxis1.MinorGridlineStyle = OxyPlot.LineStyle.Dot;
+            linearAxis1.Position = AxisPosition.Bottom;
+            DependenceGraph.Model.Axes.Add(linearAxis1);
+
+            var linearAxis2 = new LinearAxis();
+            linearAxis2.MajorGridlineStyle = OxyPlot.LineStyle.Solid;
+            linearAxis2.MinorGridlineStyle = OxyPlot.LineStyle.Dot;
+            DependenceGraph.Model.Axes.Add(linearAxis2);
+
             DependenceGraph.Model.ResetAllAxes();
         }
 
@@ -185,11 +197,6 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 
         private void SetStartSimulationSettings()
         {
-            SetContinueSimulationSettings();
-        }
-        private void SetContinueSimulationSettings()
-        {
-            StartPauseButton.Text = "Pause";
             EnableButtons();
         }
         private void EnableButtons()

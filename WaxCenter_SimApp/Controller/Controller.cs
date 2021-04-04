@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 using WaxCenter_SimApp.GUIComponents.OptionsComponents;
 using WaxCenter_SimApp.GUIComponents.Screens;
 using WaxCenter_SimApp.GUIComponents.SimComponents;
-using WaxCenter_SimApp.Model.Simulation.GUIData;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
-using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Settings;
-using WaxCenter_SimApp.Model.Simulation.TrafikaSimulation;
 using WaxCenter_SimApp.Model.Simulation.VaccinationCenter;
 
 namespace WaxCenter_SimApp.Controller

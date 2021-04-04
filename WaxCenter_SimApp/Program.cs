@@ -27,27 +27,16 @@ namespace WaxCenter_SimApp
             //Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
             //var gen = new TriangularDistribution(20, 100, 75);
             //var gen = new ExponentialDistribution(260);
-            /*using (var file = new StreamWriter("triangular.txt"))
-            {
-                for (int i = 0; i < 1000000; ++i)
-                {
-                    file.WriteLine(gen.Sample().ToString().Replace(",", "."));
-                }
-            }*/
+            /*            var gen = new UniformBoundedDistribution(5, 25);
+                        using (var file = new StreamWriter("uniform.txt"))
+                             {
+                                 for (int i = 0; i < 1000000; ++i)
+                                 {
+                                     file.WriteLine(gen.Sample().ToString().Replace(",", "."));
+                                 }
+                             }*/
 
-            /*            var evSimCore = new EventSimCoreNewsPapers();
-                        evSimCore.MaxTime = 2000;
-                        evSimCore.ResetSimulation();
-                        evSimCore.DoReplication();*/
-
-            /*            var gen = new ExponentialDistribution(5);
-                        var list = new List<double>();
-                        for (int i = 0; i < 100000; ++i)
-                        {
-                            list.Add(gen.Sample());
-                        }
-
-                        Console.WriteLine(list.Average());*/
+            //Console.WriteLine(list.Average());
             //var simulation = new EventSimCoreNewsPapers(null);
             /*            var simulation = new EventSimCoreVaccinationCenter(null);
                         //simulation.BeforeReplicationInit();

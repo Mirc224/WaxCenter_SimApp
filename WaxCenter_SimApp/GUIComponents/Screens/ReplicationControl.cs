@@ -61,7 +61,7 @@ namespace WaxCenter_SimApp.GUIComponents.Screens
 
             ProgressBar.Value = data.Progress;
             AvgOvertimeLabel = $"Average overtime:" + string.Format("{0:0.####}",repllicationMeanOvertime/60);
-            ConfIntervalLabel = $"Capacity conf. interval: <{string.Format("{0:0.#####}", lowerBound)}, {string.Format("{0:0.#####}", lowerBound)}>";
+            ConfIntervalLabel = $"Capacity conf. interval: <{string.Format("{0:0.#####}", lowerBound)}, {string.Format("{0:0.#####}", upperBound)}>";
             UpdateStatTables();
         }
         private void UpdateStatTables()

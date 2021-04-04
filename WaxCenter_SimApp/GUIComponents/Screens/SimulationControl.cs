@@ -11,7 +11,6 @@ using WaxCenter_SimApp.Controller;
 using WaxCenter_SimApp.GUIComponents.OptionsComponents;
 using WaxCenter_SimApp.GUIComponents.SimComponents;
 using WaxCenter_SimApp.GUIComponents.SimComponents.GUISimComponentsWrapper;
-using WaxCenter_SimApp.Model.Simulation.GUIData;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComponents.SimulationComponentsWrapper;
 

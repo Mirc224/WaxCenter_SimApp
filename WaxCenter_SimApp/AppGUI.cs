@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using WaxCenter_SimApp.Controller;
 using WaxCenter_SimApp.GUIComponents.OptionsComponents;
 using WaxCenter_SimApp.GUIComponents.SimComponents;
-using WaxCenter_SimApp.Model.Simulation.GUIData;
 using WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core;
 
 namespace WaxCenter_SimApp
