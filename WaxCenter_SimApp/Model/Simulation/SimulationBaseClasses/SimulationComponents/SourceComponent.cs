@@ -14,7 +14,9 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
     public class SourceComponent<T> : BaseSourceComponent
         where T: Agent
     {
-
+        /**
+         * Genericka trieda, reprezentujuca simulacny komponent zdroj. Umoznuje generovat instancie specifickej triedy, ktora je potomkom triedy agent.
+         */
         public SourceComponent(EventSimulationCore simulation, IDistribution distributionGenerator)
         {
             Simulation = simulation;

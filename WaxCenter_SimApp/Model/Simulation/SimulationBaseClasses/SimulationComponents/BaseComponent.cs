@@ -10,6 +10,9 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 {
     public abstract class BaseComponent
     {
+        /**
+         * Abstraktna trieda predka vsetkych komponento simulacie. Obsahuje refrenciu na prislusnu simulacia, referenciu na nasledujuci komponent a hlavicky zakladnych funkcii Enter a Reset.
+         */
         public EventSimulationCore Simulation { get; protected set; }
         public BaseComponent NextComponent { get; set; } = null;
         public abstract void Enter(Agent agent);

@@ -9,6 +9,9 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Settings
 {
     public class ReplicationsSimulationSettings
     {
+        /**
+         * Trieda obsahujuca data pre vykonavanie simulacneho behu s viacerymi replikaciami.
+         */
         public int NumberOfReplications { get; set; } = 0;
         public int DataUpdateInterval { get; set; } = 10;
         public SimulationStatus ReplicationSimulationStatus { get; set; } = SimulationStatus.FINISHED;

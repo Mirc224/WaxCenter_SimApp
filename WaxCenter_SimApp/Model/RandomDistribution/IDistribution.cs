@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WaxCenter_SimApp.Model.RandomDistribution
 {
-    /*
+    /**
      * Interface, ktory musi implementovat kazdy generator rozdelenia.
      */
     public interface IDistribution

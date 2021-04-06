@@ -9,6 +9,10 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 {
     public class StatisticStateData
     {
+        /**
+         * Trieda, ktora uzmoznuje ziskat aktualne informacie o komponente, ktory sa stara o zber statistiky. 
+         * Pouziva sa pri real time simulacii na reprezetaciu aktualneho stavu.
+         */
         public double StatMin { get => _statistic.Min; }
         public double StatMax { get => _statistic.Max; }
         public double StatMean { get => _statistic.Mean; }

@@ -8,6 +8,10 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 {
     public class SinkStateData
     {
+        /**
+         * Trieda, ktora uzmoznuje ziskat aktualne informacie o komponente sink. 
+         * Pouziva sa pri real time simulacii na reprezetaciu aktualneho stavu.
+         */
         public int SinkInput { get => _sink.AgentsSinked; }
         private SinkComponent _sink;
         public SinkStateData(SinkComponent sink)

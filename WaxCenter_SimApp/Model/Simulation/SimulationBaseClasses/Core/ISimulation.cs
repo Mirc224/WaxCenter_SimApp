@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
 {
-    /*
+    /**
      * Interface, ktory musi implementovat kazde simulacne jadro.
      */
     interface ISimulation

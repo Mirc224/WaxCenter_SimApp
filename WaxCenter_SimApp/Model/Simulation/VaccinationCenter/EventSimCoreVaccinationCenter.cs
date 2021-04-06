@@ -15,10 +15,17 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
 {
     public class EventSimCoreVaccinationCenter : EventSimulationCore
     {
-
+        /**
+         * Konkretna uloha udalostne orientovanej simulacie. Konkretne ide o ulohu vakcinacneho centra.
+         */
+        /** Udava interval v sekundach, v akom budu agenti vstupovat do modelu.*/
         public double SourceInterval { get; set; } = 60;
+        /** Udava kolko pacientov je za den ocakavanych. Pouziva sa pri vypocte pravdepodobnosti, ci sa agent na ockovanie dostavi alebo nie.*/
         public int PatientGenerated { get; set; } = 540;
-        // Komponenty
+        /** 
+         * Komponenty simulacie. Nachadza sa tu zdroj pacientov, obsluha predstavujuca registraciu, obsluha predstavujuca vysetrenie a obsluha predstavujuca ockovanie. Dalej je tu 
+         * este komponent delay, ktory reprezentuje cakarane a komponent sink.
+         */
         public SourceComponent<Patient> PatientSource { get; private set; }
         public ServiceComponent AdminService { get; private set; }
         public ServiceComponent ExaminationService { get; private set; }
@@ -28,6 +35,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
 
         // Statistiky
         // Administracia
+        /** Statistiky, ktore sa pocas priebehu simulacie zbieraju.*/
         public ContinuousStatistic StatAdminQLength { get; private set; } = new ContinuousStatistic("Admin QLength");
         public DiscreteStatistic StatAdminWaitingTime { get; private set; } = new DiscreteStatistic("Admin WTime");
 
@@ -42,6 +50,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         // Cakaren
         public ContinuousStatistic StatWaitingRoomCapacity { get; private set; } = new ContinuousStatistic("Waiting room capacity");
 
+        /** Generatory pcotu pacientov, ktori sa nedostavia a generator, ktori urci, ci sa dany pacient nedostavi alebo dostavi.*/
         private Random _sourceArrivalGenerator;
         private Random _notCommingGenerator;
 
@@ -58,16 +67,19 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             AdminService.OnEnterDelay = AdminOnEnterDelay;
             PatientSource.NextComponent = AdminService;
 
+            /** Nastavenie generatora a priradenie funkcii, ktore maju byt vykonane pri urcitych udalostiach v ramci komponentu.*/
             ExaminationService = new ServiceComponent(this, new ExponentialDistribution(260), 6);
             ExaminationService.OnEnter = ExaminationOnEnter;
             ExaminationService.OnEnterDelay = ExaminationOnEnterDelay;
             AdminService.NextComponent = ExaminationService;
 
+            /** Nastavenie generatora a priradenie funkcii, ktore maju byt vykonane pri urcitych udalostiach v ramci komponentu.*/
             VaccinationService = new ServiceComponent(this, new TriangularDistribution(20, 100, 75), 3);
             VaccinationService.OnEnter = VaccinationOnEnter;
             VaccinationService.OnEnterDelay = VaccinationOnEnterDelay;
             ExaminationService.NextComponent = VaccinationService;
 
+            /** Nastavenie generatora a priradenie funkcii, ktore maju byt vykonane pri urcitych udalostiach v ramci komponentu.*/
             WaitingRoomDelay = new DelayComponent(this, new DiscreteDistribution(new double[] { 0.95, 0.05 }, new double[] { 15 * 60, 30 * 60 }), int.MaxValue);
             WaitingRoomDelay.OnEnter = WaitingRoomOnEnter;
             WaitingRoomDelay.OnExit = WaitingRoomOnExit;
@@ -76,6 +88,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             PatientSink = new SinkComponent(this);
             WaitingRoomDelay.NextComponent = PatientSink;
 
+            /** Naplnenie manazera komponentov.*/
             SimulationComponentsManager.Source = PatientSource;
             SimulationComponentsManager.ServiceComponents = new ServiceComponent[] { AdminService, ExaminationService, VaccinationService };
             SimulationComponentsManager.DelayComponents = new DelayComponent[] { WaitingRoomDelay};
@@ -86,36 +99,37 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             int noStatistics = SimulationComponentsManager.ServiceComponents.Length + SimulationComponentsManager.Statistics.Length;
             ReplicationResults = new ReplicationsResults();
             ReplicationResults.CurrentReplications = 0;
-
+            /** Vytvorenie skupiny vysledkov pre administrativnu fazu.*/
             ResultGroup adminStatGroup = new ResultGroup(new BaseResults[] {StatAdminQLength.ReplicationResults, 
                                                                             StatAdminWaitingTime.ReplicationResults,
                                                                             AdminService.ResourcePool.ReplicationResults});
+            /** Ulozenie urcitych vysledkov pod klucove nazvy.*/
             adminStatGroup["QLengthStat"] = StatAdminQLength.ReplicationResults;
             adminStatGroup["WTimeStat"] = StatAdminWaitingTime.ReplicationResults;
             adminStatGroup["ResPool"] = AdminService.ResourcePool.ReplicationResults;
-
+            /** Vytvorenie skupiny vysledkov pre */
             ResultGroup examinationStatGroup = new ResultGroup(new BaseResults[] {StatExaminationQLength.ReplicationResults,
                                                                                   StatExaminationWaitingTime.ReplicationResults,
                                                                                   ExaminationService.ResourcePool.ReplicationResults});
-
+            /** Ulozenie urcitych vysledkov pod klucove nazvy.*/
             examinationStatGroup["QLengthStat"] = StatExaminationQLength.ReplicationResults;
             examinationStatGroup["WTimeStat"] = StatExaminationWaitingTime.ReplicationResults;
             examinationStatGroup["ResPool"] = ExaminationService.ResourcePool.ReplicationResults;
-
+            /** Vytvorenie skupiny vysledkov pre */
             ResultGroup vaccinationStatGroup = new ResultGroup(new BaseResults[] {StatVaccinationQLength.ReplicationResults,
                                                                                   StatVaccinationWaitingTime.ReplicationResults,
                                                                                   VaccinationService.ResourcePool.ReplicationResults});
-
+            /** Ulozenie urcitych vysledkov pod klucove nazvy.*/
             vaccinationStatGroup["QLengthStat"] = StatVaccinationQLength.ReplicationResults;
             vaccinationStatGroup["WTimeStat"] = StatVaccinationWaitingTime.ReplicationResults;
             vaccinationStatGroup["ResPool"] = VaccinationService.ResourcePool.ReplicationResults;
-
+            /** Vytvorenie skupiny vysledkov pre */
             ResultGroup delayStatGroup = new ResultGroup(new BaseResults[] {StatWaitingRoomCapacity.ReplicationResults});
 
             delayStatGroup["StatCapacity"] = StatWaitingRoomCapacity.ReplicationResults;
 
             ReplicationResults.ResultGroups = new ResultGroup[] { adminStatGroup, examinationStatGroup, vaccinationStatGroup, delayStatGroup };
-
+            /** Namapovanie urcitych vysledkov na kluce.*/
             ReplicationResults["AdminGroup"] = adminStatGroup;
             ReplicationResults["ExaminationGroup"] = examinationStatGroup;
             ReplicationResults["VaccinationGroup"] = vaccinationStatGroup;
@@ -141,6 +155,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             _numberOfNotComing = _notCommingGenerator.Next(5, 25);
         }
 
+        /** Metoda, ktora sa vykona pri vstupe pacienta do komponentu service predstavujuceho registraciu.*/
         private int AdminOnEnter(DelayComponent self, Agent agent)
         {
             var service = (ServiceComponent)self;
@@ -149,7 +164,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             StatAdminQLength.Add(service.QueueSize, CurrentTime);
             return 0;
         }
-
+        /** Metoda, ktora sa vykona pri zacati obsluhy pacienta v komponente service predsavjuci registraciu.*/
         private int AdminOnEnterDelay(ServiceComponent self, Agent agent)
         {
             var patient = (Patient)agent;
@@ -157,7 +172,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             StatAdminWaitingTime.Add((CurrentTime - patient.AdminEnterTime) / 60);
             return 0;
         }
-
+        /** Metoda, ktora sa vykona pri vstupe pacienta do komponentu service predstavujuceho vysetrenie.*/
         private int ExaminationOnEnter(DelayComponent self, Agent agent)
         {
             var service = (ServiceComponent)self;
@@ -166,6 +181,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             StatExaminationQLength.Add(service.QueueSize, CurrentTime);
             return 0;
         }
+        /** Metoda, ktora sa vykona pri zacati obsluhy pacienta v komponente service predsavjuci vysetrenie.*/
         private int ExaminationOnEnterDelay(ServiceComponent self, Agent agent)
         {
             var patient = (Patient)agent;
@@ -173,6 +189,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             StatExaminationWaitingTime.Add((CurrentTime - patient.ExaminationEnterTime) / 60);
             return 0;
         }
+        /** Metoda, ktora sa vykona pri vstupe pacienta do komponentu service predstavujuceho ockovanie.*/
         private int VaccinationOnEnter(DelayComponent self, Agent agent)
         {
             var service = (ServiceComponent)self;
@@ -181,6 +198,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             StatVaccinationQLength.Add(service.QueueSize, CurrentTime);
             return 0;
         }
+        /** Metoda, ktora sa vykona pri zacati obsluhy pacienta v komponente service predsavjuci ockovnie.*/
         private int VaccinationOnEnterDelay(ServiceComponent self, Agent agent)
         {
             var patient = (Patient)agent;
@@ -188,16 +206,19 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             StatVaccinationWaitingTime.Add((CurrentTime - patient.VaccinationEnterTime) / 60);
             return 0;
         }
+        /** Metoda, ktora sa vykona pri vstupe pacienta do cakarne.*/
         private int WaitingRoomOnEnter(DelayComponent self, Agent agent)
         {
             StatWaitingRoomCapacity.Add(self.CurrentlyUsed, CurrentTime);
             return 0;
         }
+        /** Metoda, ktora sa vykona pri odchode pacienta z cakarne.*/
         private int WaitingRoomOnExit(DelayComponent self, Agent agent)
         {
             StatWaitingRoomCapacity.Add(self.CurrentlyUsed, CurrentTime);
             return 0;
         }
+        /** Funkcia pre custom generator, ktora je pouzita v zdroji a generuje casy prichodu agentov podla urcitych pravidiel.*/
         private double SourceGeneratorFunction()
         {
             int multiplier = 1;
@@ -212,6 +233,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             return multiplier * SourceInterval;
         }
 
+        /** Nastavi seedy pre vsetky generatory, ktore su v priebehu simulacie vyuzivane.*/
         override
         protected void SeedIt()
         {
@@ -219,7 +241,7 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
             _notCommingGenerator = new Random(SeedGenerator.Next());
             base.SeedIt();
         }
-
+        /** Naplanuje prvu udalost.*/
         protected override void PlanFirstEvent()
         {
             PatientSource.Start();

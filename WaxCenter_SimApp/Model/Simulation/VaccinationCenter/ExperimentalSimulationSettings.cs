@@ -10,6 +10,9 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
 {
     class ExperimentalSimulationSettings
     {
+        /**
+         * Trieda obsahuje nastavenia pre experimentalnu simulaciu na ulohe vakcinacneho centra.
+         */
         public int RepPerExperiment { get; set; } = 10;
         public int CurrentExperimentalReplications { get; set; } = 0;
         public int MaxReplications { get => _maxReplications; }

@@ -33,7 +33,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
     }
     public abstract class EventSimulationCore : ISimulation
     {
-        /*
+        /**
          * Trieda, ktora predsavuje simulacne jadro udaloste orientovanej simulacie
          */
 
@@ -146,17 +146,6 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Core
             EventCalendar.Reset();
             ResetComponents();
             ResetStatistics();
-        }
-
-        protected void ResetSeeds()
-        {
-            // Resetovanie seedu vytvori novy generator. Tento sa vytvori bud s nahodnym seedom, ak je zvolena moznost autoseed alebo s nastavenym seedom. Po resete sa vsetkym komponentom simulacie priradi
-            // nova nahodna hodnota seedu pre ich pripadne generatory.
-            if (AutoSeed)
-                SeedGenerator = new Random();
-            else
-                SeedGenerator = new Random(Seed);
-            SeedIt();
         }
         protected virtual void ResetComponents()
         {

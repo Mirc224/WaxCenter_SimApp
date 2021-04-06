@@ -10,6 +10,7 @@ namespace WaxCenter_SimApp.Model.Statistics
 {
     public abstract class BaseStatistic
     {
+        /** Abstraktna trieda predstavujuca predka vsetkych statistik. Obsahuje citatela a menovatela, minimum, maximum a hlavicky zakladnych funkcii, ktore musi kazda statistika obsahovat.*/
         protected double Denominator { get; set; }
         protected double Numerator { get; set; }
         public double Min { get => _noRecords ? 0 : _min;}

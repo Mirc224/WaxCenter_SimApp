@@ -9,6 +9,10 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 {
     public class SimulationComponentsManager
     {
+        /**
+         * Trieda, ktora v sebe zahrna vsetky simulacne komponenty v danej simulacii. Umoznuje jednoducho vykonat reset na vsetkymi komponentami alebo im nastavit seed, v pripade
+         * ze sa jedna o komponent, v ktorom sa nachadza generator.
+         */
         public BaseSourceComponent Source { get; set; }
         public SinkComponent Sink { get; set; }
         public ServiceComponent[] ServiceComponents { get; set; }

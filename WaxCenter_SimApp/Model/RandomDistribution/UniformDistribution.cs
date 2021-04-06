@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WaxCenter_SimApp.Model.RandomDistribution
 {
-    /*
+    /**
      * Generator rovnomerneho spojiteho rozdelenia na urcitom intervale. Parametrami konstruktora su minimalna a maximalna hodnota, ktora ma byt vygenerovana.
      */
     class UniformBoundedDistribution : IDistribution

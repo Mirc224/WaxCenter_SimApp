@@ -11,6 +11,10 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 {
     public class SinkComponent : BaseComponent
     {
+        /**
+         * Trieda reprezentuje simulacny komponent sink. Je koncovym komponentom simulacie. Nema ziadneho naslednika. 
+         * Agent je poslany do metody Sink, v ktorej sa zvysi pocet agentov, ktori vystupili zo systemu.
+         */
         public int AgentsSinked { get; private set; } = 0;
         public SinkStateData StateData { get; private set; }
 

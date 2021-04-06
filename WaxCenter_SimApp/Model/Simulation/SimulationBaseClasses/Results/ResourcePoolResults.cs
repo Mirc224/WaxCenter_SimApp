@@ -10,6 +10,9 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results
 {
     public class ResourcePoolResults: BaseResults
     {
+        /**
+         * Trieda zaoberajuca sa zbieranim vysledkov ohladom ResourcePoolu. Obsahuje referenciu na ResourcePool ktoreho data sleduje.
+         */
         public ResourcePool ResourcePool { get; private set; }
         public double Utilization { get => _statsValues[0]; }
 
@@ -22,6 +25,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Results
         override
         public void Rebuild()
         {
+            // Vytvori nove polia v zavislosti od poctu obsluhujucich entit v resource poole. Nastavi zakladne nazvy.
             _statsNames = new string[1 + ResourcePool.MaxStaff];
             _statsValues = new double[1 + ResourcePool.MaxStaff];
             _statsNames[0] = "Utilization";

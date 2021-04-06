@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Agents
 {
-    /*
+    /**
      * Abstraktna trieda predstavujuca predchodcu pre vsetkych agentov udalostne orientovanej simulacie.
      */
     public abstract class Agent

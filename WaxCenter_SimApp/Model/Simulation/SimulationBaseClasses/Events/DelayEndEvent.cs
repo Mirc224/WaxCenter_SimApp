@@ -10,12 +10,16 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events
 {
     class DelayEndEvent : BaseDelayEvent
     {
+        /**
+         * Trieda predsavuje koncovu udalost na komponente urcitom komponente delay.
+         */
         public DelayEndEvent(DelayComponent delayComponent)
         {
             _delayComponent = delayComponent;
         }
         public override void Execute()
         {
+            // Pri vykonani je nad prislusnym komponentom zvolana metoda EndService, do ktorej je poslany agent, ktoreho sa udalost tyka.
             _delayComponent.EndService(Agent);
         }
     }

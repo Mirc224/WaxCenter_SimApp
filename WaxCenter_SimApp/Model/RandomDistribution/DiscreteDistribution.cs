@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WaxCenter_SimApp.Model.RandomDistribution
 {
-    /*
+    /**
      * Trieda generatora diskretneho rozdelenia. Parametrami pre vytvorenie su pravdepodobnosti a k nim prisluchajuce hodnoty.
      * Na urcenie hodnoty sa pouziva generator rovnomerneho rozdelenia
      */

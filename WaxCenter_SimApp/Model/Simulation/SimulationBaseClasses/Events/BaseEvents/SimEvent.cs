@@ -10,7 +10,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events.BaseEve
 {
     public abstract class SimEvent
     {
-        /*
+        /**
          * Abstraktna trieda, ktora predstavuje predka pre vsetky udalosti v simulacii. Obsahuje zakladne atributy, ktorymi su cas vyskytu, simulacia ku ktorej event prisluch 
          * a agent, s ktorym udalost pracuje. Taktiez obsahuje aj hlavicu metod, ktore musi implementovat kazda udalost.
          */

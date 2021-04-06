@@ -8,6 +8,7 @@ namespace WaxCenter_SimApp.Model.Statistics
 {
     public class DiscreteStatistic : BaseStatistic
     {
+        /** Potomok triedy base statistic. Umoznuje vypocet diskrenych statistik.*/
         public DiscreteStatistic(string description) 
             : base(description)
         {

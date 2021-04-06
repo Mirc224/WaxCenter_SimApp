@@ -8,10 +8,17 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 {
     public class ServiceStaff
     {
+        /**
+         * Predstavuje pracovnika resource poolu. Zaznamenava jeho zakladne statistiky a sucasny stav.
+         */
+        // Celkovy cas, ktory bol obsluhujuci pracovne vyrazeny.
         public double TimeOccupied { get; set; } = 0;
+        // Vrati vytazenie zamestnanca v zavislosti od aktualneho casu simulacie.
         public double Utilization { get => _service.Simulation.CurrentTime == 0 ? 0 : TimeOccupied / _service.Simulation.CurrentTime; }
+        // Pomocny atribut pre zaznemnavanie, dlzky travania aktualnej obsluhy.
         public double CurrentServiceDuration { get; set; } = 0;
         public bool Occupied { get; set; } = false;
+        // Referencia service komponent, ku ktoremu obsluhujuci prislucha
         private ServiceComponent _service;
 
         public ServiceStaff(ServiceComponent service)

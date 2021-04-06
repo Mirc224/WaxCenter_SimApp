@@ -8,6 +8,9 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 {
     public class DelayStateData
     {
+        /**
+         * Trieda, ktora obsahuje informacie o aktualnom stave komponentu delay.
+         */
         public int AgentsEntered { get => _delayComponent.AgentsEntered; }
         public int AgentsLeaved { get => _delayComponent.AgentsLeaved; }
         public int CurrentlyUsed { get => _delayComponent.CurrentlyUsed; }

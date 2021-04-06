@@ -11,6 +11,9 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events
 {
     public class ServiceEndEvent : BaseServiceEvent
     {
+        /**
+         * Trieda predstavuje koncovu udalost na komponente service.
+         */
         public ServiceEndEvent(ServiceComponent service, ServiceStaff staff)
         {
             _staff = staff;
@@ -18,6 +21,7 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events
         }
         public override void Execute()
         {
+            // V ramci jej vykonavania je uvolneny presonal, ktory obsluhu vykonaval a agent je zaslany do metody EndService, kde su vykonane dalsie procesy a je posunuty do dalsieho komponentu.
             _staff.ReturnToResourcePool();
             _service.EndService(Agent);
         }

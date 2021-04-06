@@ -14,6 +14,7 @@ using WaxCenter_SimApp.Model.Simulation.VaccinationCenter;
 
 namespace WaxCenter_SimApp.Controller
 {
+    /** Enum predstavuje typ dat, ktore boli zaslane ako parameter metody.*/
     public enum RealTimeUpdateDataType
     {
         SIMULATION_START,
@@ -24,18 +25,19 @@ namespace WaxCenter_SimApp.Controller
         SIMULATION_DATA
     }
 
+    /** Struktura obsahujuca informacie o progresse simulacie s viacerymi replikaciami a aj zamok, ktory je pouzity na medzi vlaknovu synchronizaciu.*/
     public struct ReplicationsUpdateData
     {
         public int Progress { get; set; }
         public AutoResetEvent WaitHandle { get; set; }
     }
-
+    /** Struktura obsahujuca data pre aktualizaciu progresu experimentalnej simulacie. */
     public struct ExperimentalUpdateData
     {
         public int Progress { get; set; }
         public AutoResetEvent WaitHandle { get; set; }
     }
-
+    /** Enum obsahuje mozne typy aktualizacii progresu, ktore maju byt vykonane.*/
     public enum ProgressUpdateType
     {
         SIMULATION_START,
@@ -46,36 +48,41 @@ namespace WaxCenter_SimApp.Controller
     }
     public class Controller
     {
+        /** Spojovaci clanok medzi logickou a grafickou castou programu.*/
         private AppGUI _applicationGUI;
         private EventSimCoreVaccinationCenter _simulation;
         private SimulationOptions _simOptions;
 
+        /** Odkaz na background workera a obrazovku pre real time simulaciu.*/
         private BackgroundWorker _realTimeSimWorker;
         private SimulationControl _realSimControl;
+        /** Getter a setter pre status real time simulacie.*/
+        public SimulationStatus RealTimeSimulationStatus { get => _simulation.Status; private set => _simulation.Status = value; }
 
+        /** Odkaz na background workera a obrazovku pre simulaciu s viacero replikaciami. */
         private ReplicationControl _replicationSimControl;
         private ReplicationsSimulationSettings _replicationsSettings;
         private ReplicationsUpdateData _replicationsUpdateData = new ReplicationsUpdateData();
+        
+        /** Aktualny status simulacie s viacerymi replikaciami.*/
         public SimulationStatus ReplicationsSimulationStatus
         {
             get => _replicationsSettings.ReplicationSimulationStatus;
             private set => _replicationsSettings.ReplicationSimulationStatus = value;
         }
 
-        //private BackgroundWorker _experimentWorker;
+        /** Odkaz na background workera a obrazovku pre vykonavanie experimentalnej simulacie. */
         private StaffExperimentalControl _experimentSimControl;
         private ExperimentalSimulationSettings _experimentalSettings;
         private ExperimentalUpdateData _experimentalUpdateData = new ExperimentalUpdateData();
+        /** Aktualny statu experimentalnej simulacie.*/
         public SimulationStatus ExperimentalSimulationStatus
         {
             get => _experimentalSettings.ExperimentalSimulationStatus;
             private set => _experimentalSettings.ExperimentalSimulationStatus = value;
         }
-
+        /** List moznych rychlosti real time simulacie. */
         private int[] _speedList = new int[] { 1, 2, 5, 10, 25, 50, 100, 1000, 5000, 10000, 100000, 100000000, 500000000 };
-        //public GUIDataValuesVacCenter GUIData { get; private set; }
-        public SimulationStatus RealTimeSimulationStatus { get => _simulation.Status; private set => _simulation.Status = value; }
-        
 
         public bool RealTimeCancellation { get => _realTimeSimWorker.CancellationPending; }
 
@@ -85,14 +92,13 @@ namespace WaxCenter_SimApp.Controller
             _applicationGUI = appGUI;
             _simulation = new EventSimCoreVaccinationCenter(this);
             _simulation.Controller = this;
-            //GUIData = new GUIDataValuesVacCenter(_simulation);
 
             _realSimControl = realTimeSim;
 
             _simOptions = simOptions;
             _simOptions.PreFillSettings(_simulation.SimulationSettings);
-            
-            for(int i = 0; i < _simulation.SimulationComponentsManager.ServiceComponents.Length; ++i)
+            /** Nastavenie ID pre Graficke komponenty simulacie a priradenie referencii na dane komponenty zodpovedajucim grafickym komponentom. */
+            for (int i = 0; i < _simulation.SimulationComponentsManager.ServiceComponents.Length; ++i)
             {
                 _realSimControl.GUISimComponentManager.GSimResourcePools[i].ID = i;
                 _realSimControl.GUISimComponentManager.GSimResourcePools[i].ServiceModelComponent = 
@@ -140,41 +146,9 @@ namespace WaxCenter_SimApp.Controller
             _experimentalSettings = new ExperimentalSimulationSettings();
         }
 
-        public Controller(EventSimCoreVaccinationCenter simulation)
-        {
-            _simulation = simulation;
-            _replicationsSettings = new ReplicationsSimulationSettings();
-            //_replicationsResults = new ReplicationsResults();
-            /*_replicationsResults.CurrentReplications = 0;
-            _replicationsResults.ObservedValues = new double[7];*/
-        }
-
-        public void Test()
-        {
-            _replicationsSettings.NumberOfReplications = 10000;
-            _simulation.BeforeSimulation();
-            for (int i = _simulation.ReplicationResults.CurrentReplications; i < _replicationsSettings.NumberOfReplications; ++i)
-            {
-                _simulation.BeforeReplication();
-                _simulation.DoReplication();
-                _simulation.AfterReplication();
-            }
-            foreach (var group in _simulation.ReplicationResults.ResultGroups)
-            {
-                foreach (var stat in group.GroupResults)
-                {
-                    for (int i = 0; i < stat.Values.Length; ++i)
-                    {
-                        Console.WriteLine(stat.Names[i] + ": " + (stat.Values[i] / _simulation.ReplicationResults.CurrentReplications));
-                    }
-                }
-            }
-        }
-        
-
         public bool RunExperimentalSimulation(BackgroundWorker experimentalWorker)
         {
-            //_experimentSimControl.AddNewSeries($"Admin {_experimentalSettings.ActualAdmin} Nurses: {_experimentalSettings.ActualNurse}");
+            /** Metoda v ktorej sa vykonava experimentalny beh simulacie. V ramci nej dochadza k testovaniu roznych kombinacii poctov personalu na jednotlivych stanovistiach. */
             AutoResetEvent waitHandle;
             _experimentSimControl.ValuesProcessed = true;
             if (ExperimentalSimulationStatus != SimulationStatus.PAUSED)
@@ -203,6 +177,7 @@ namespace WaxCenter_SimApp.Controller
                         _experimentalSettings.ActualDoctor <= _experimentalSettings.MaxDoctor;
                         ++_experimentalSettings.ActualDoctor)
                     {
+                        /** Nastavenie hodnot jednotlivych typov personalu pre nasledujuci beh replikacii. Vytvorenie */
                         waitHandle = new AutoResetEvent(false);
                         _experimentSimControl.WaitHandle = waitHandle;
                         _simulation.AdminService.MaxStaff = _experimentalSettings.ActualAdmin;
@@ -232,7 +207,8 @@ namespace WaxCenter_SimApp.Controller
                         _experimentSimControl.ValuesProcessed = false;
                         UpdateGUIAfterExperiment(experimentalWorker);
 
-                        if(!_experimentSimControl.ValuesProcessed)
+                        /** Synchronizacia vlakien.*/
+                        if (!_experimentSimControl.ValuesProcessed)
                         {
                             waitHandle.WaitOne();
                         }
@@ -246,14 +222,17 @@ namespace WaxCenter_SimApp.Controller
 
         private void UpdateGUIAfterExperiment(BackgroundWorker experimentalWorker)
         {
+            /** Metoda, ktora je zavolana po vykonani replikacii pre danu kombinaciu poctu personalu.*/
             _experimentalUpdateData.Progress = (int)(((double)_experimentalSettings.CurrentReplication / _experimentalSettings.MaxReplications) * 100);
-            //experimentalWorker.ReportProgress((int)ProgressUpdateType.SIMULATION_PROGRESS, _experimentalUpdateData);
             experimentalWorker.ReportProgress((int)ProgressUpdateType.SIMULATION_DATA, _experimentalUpdateData);
-            //Thread.Sleep(1);
         }
 
+        /**
+         * Metoda pre vykonavanie simulacneho behu s viacerymi replikaciami.
+         */
         public bool RunReplicationsWithGUIUpdate(BackgroundWorker replicationsWorker)
         {
+
             if(ReplicationsSimulationStatus != SimulationStatus.PAUSED)
             {
                 _simulation.BeforeSimulation();
@@ -297,6 +276,9 @@ namespace WaxCenter_SimApp.Controller
             return true;
         }
 
+        /**
+         * Metoda, ktora sa vykona po urcitom pocte vykonanych replikacii a zabezpeci odoslanie poziadavky pre prekreslenie grafickych komponentov tykajucich sa simulacneho behu s viacerymi replikaciami.
+         */
         private void UpdateGUIAfterReplication(BackgroundWorker replicationsWorker)
         {
             AutoResetEvent waitHandle = new AutoResetEvent(false);
@@ -312,6 +294,9 @@ namespace WaxCenter_SimApp.Controller
             }
         }
 
+        /**
+         * Metoda v ktorej bezi real time simulacia.
+         */
         public bool RunRealTimeSimulation(BackgroundWorker simulationWorker)
         {
             _realTimeSimWorker = simulationWorker;
@@ -342,12 +327,18 @@ namespace WaxCenter_SimApp.Controller
             return true;
         }
 
+        /**
+         * Metoda, ktora background workerovy nahlasi aby vykonl update real time simulacie.
+         */
         public bool AfterEventUpdate()
         {
             _realTimeSimWorker.ReportProgress((int)RealTimeUpdateDataType.SIMULATION_DATA);
             return true;
         }
 
+        /**
+         * Updatuje zobrazovany cas v real time simulacii.
+         */
         public void ClockUpdate()
         {
             _realTimeSimWorker.ReportProgress((int)RealTimeUpdateDataType.CLOCK_DATA, new ClockUpdateData(_simulation.ClockTimeInSeconds));
@@ -396,6 +387,9 @@ namespace WaxCenter_SimApp.Controller
             ReplicationsSimulationStatus = SimulationStatus.CANCELED;
         }
 
+        /**
+         * Metoda, v ktorej dochadaza k parsrovaniu a pripadnej aplikacii zadanych zakladnych nastaveni simulacie.
+         */
         public void TryApplyBaseSimulationSettings()
         {
             bool errorOccured = false;
@@ -429,6 +423,9 @@ namespace WaxCenter_SimApp.Controller
             }
         }
 
+        /**
+         * Metoda, v ktorej pri zvoleni grafickeho komponentu simulacie dochadza k predvyplneniu hodnot.
+         */
         public void HandleGUIComponentSelection(ISimComponent simComponent, IGUIOptions optionsComponent)
         {
             switch(simComponent.SimComponentType)
@@ -449,6 +446,9 @@ namespace WaxCenter_SimApp.Controller
             }
         }
 
+        /**
+         * Metoda, v ktorej sa vyberie metoda pre spracovanie nastaveni, ktore boli zadane pre resource pool alebo pre source.
+         */
         public void HandleGUIComponentOptionsConfirmation(ISimComponent simComponent, IGUIOptions optionsComponent)
         {
             switch (simComponent.SimComponentType)
@@ -473,6 +473,9 @@ namespace WaxCenter_SimApp.Controller
             _simulation.ResetSimulation();
         }
 
+        /**
+         * Metoda, v ktorej dochadaza k parsrovaniu a pripadnej aplikacii nastaveni suvisiacich s poctom a intervalom prichodu pacientov.
+         */
         private void TryParseSourceOptions(SimSourceOptions options, SimSource resPoolGUI)
         {
             bool error = false;
@@ -514,6 +517,9 @@ namespace WaxCenter_SimApp.Controller
             }
 
         }
+        /**
+         * Metoda, v ktorej dochadaza k parsrovaniu a pripadnej aplikacii nastaveni pre zvoleny resource pool.
+         */
         private void TryParseResourcePoolOptions(SimResPoolOptions options, SimResourcePool resPoolGUI)
         {
             bool error = false;
@@ -541,6 +547,9 @@ namespace WaxCenter_SimApp.Controller
 
         }
 
+        /**
+         * Metoda, v ktorej dochadaza k parsrovaniu a pripadnej aplikacii zadanych nastaveni simulacie s viacerymi replikaciami.
+         */
         public void TryParseAndApplyReplicationsOptions()
         {
             bool error = false;
@@ -664,6 +673,9 @@ namespace WaxCenter_SimApp.Controller
             }
         }
 
+        /**
+         * Metoda, v ktorej dochadaza k parsrovaniu a pripadnej aplikacii zadanych nastaveni pre experimentalnu simulaciu.
+         */
         public void TryParseAndApplyExperimentalOptions()
         {
             bool error = false;
@@ -837,6 +849,9 @@ namespace WaxCenter_SimApp.Controller
             _simulation.ResetSimulation();
         }
 
+        /**
+         * Metoda, pre predvyplnenie nastaveni simulacie s viacerymi replikaciami vzhladom na sucasne nastavenia.
+         */
         private void PrefillReplicationsOptions()
         {
             _replicationSimControl.UpdateIntervalInputText = _replicationsSettings.DataUpdateInterval.ToString();
@@ -848,7 +863,9 @@ namespace WaxCenter_SimApp.Controller
             _replicationSimControl.IntervalInputText = _simulation.SourceInterval.ToString();
         }
 
-
+        /**
+         * Metoda, pre predvyplnenie experimentalnych nastaveni vzhladom na sucasne nastavenia.
+         */
         private void SetExperimentalSettingsAcordingToActual()
         {
             _experimentalSettings.ActualAdmin = _simulation.AdminService.ResourcePool.MaxStaff;
@@ -866,7 +883,9 @@ namespace WaxCenter_SimApp.Controller
             _experimentalSettings.ArrivalInterval = _simulation.SourceInterval;
             _experimentalSettings.NumberOfPatients = _simulation.PatientGenerated;
         }
-
+        /**
+         * Metoda, pre predvyplnenie grafickych komponentov experimentalnych nastaveni vzhladom na sucasne nastavenia.
+         */
         private void PrefilExperimentalOptions()
         {
             _experimentSimControl.AdminInputText = _experimentalSettings.AdminPrefillText;

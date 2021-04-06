@@ -14,6 +14,10 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 {
     public class ServiceComponent : DelayComponent
     {
+        /**
+         * Trieda reprezentuje simulacny komponent service. Obsahuje udaje o aktualnom stave komponentu a taktiez sa stara o planovanie eventov zaciatku obsluhy. 
+         * Obsahuje referenciu na funkciu, ktora ma byt vykonana v okamihu, ked sa Agent dostane na rad a zancne by obsluhovany.
+         */
         public ResourcePool ResourcePool { get; private set; }
         public Queue<Agent> WaitingQueue { get; private set; } = new Queue<Agent>();
         public int QueueSize { get => WaitingQueue.Count; }
@@ -38,11 +42,11 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         override public void Enter(Agent agent)
         {
             ++AgentsEntered;
-
+            // Po vstupe agenta sa navysi counter agentov, ktori vstupili do komponentu. Vykona sa test, ci je obsluha volna a v pripade ak je volna, naplanuje sa zaciatok obsluhy pre daneho agenta.
+            // V pripade, ze by obsluha nebola volna, je agent zaradeny do frontu.
             if(IsFree)
             {
                 PlanServiceEventStart(agent);
-                //StartService();
             }
             else
             {
@@ -55,19 +59,17 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
         override public bool StartService(Agent agent)
         {
             // On service start
+            // Metoda sa vykona pri zacati obsluhy agenta.
             ++CurrentlyUsed;
             if (OnEnterDelay != null)
                 OnEnterDelay(this, agent);
 
-         /*   ++CurrentlyUsed;
-            // On enter Service
-            if (CurrentlyUsed > MaxService)
-                throw new Exception("ServiceComponent: Used more services than maximal avaiable!");*/
             return true;
         }
 
         override public bool EndService(Agent agent)
         {
+            // Metoda sa vykona pri ukonceni obsluhy agenta. Aktualizuje sa stav komponentu a uvolni sa kapacita u obsluhujucich prvkov.
             // On exit
             ++AgentsLeaved;
             --CurrentlyUsed;
@@ -77,7 +79,6 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
             if(QueueSize !=0)
             {
                 PlanServiceEventStart(WaitingQueue.Dequeue());
-                //StartService();
             }
             NextComponent.Enter(agent);
             return true;
@@ -96,12 +97,12 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 
         override protected void PlanServiceEventStart(Agent agent)
         {
+            // Naplanuje zaciatok obsluhy pre agenta zadaneho ako argument metody.
             ++_capacityUsed;
             // On enter Service
             if (CurrentlyUsed > MaxService)
                 throw new Exception("ServiceComponent: Used more services than maximal avaiable!");
 
-            //var serviceStartE = Activator.CreateInstance(typeof(E), Simulation) as E;
             var serviceStartE = new ServiceStartEvent(this);
             serviceStartE.Agent = agent;
             serviceStartE.OccurrenceTime = Simulation.CurrentTime;

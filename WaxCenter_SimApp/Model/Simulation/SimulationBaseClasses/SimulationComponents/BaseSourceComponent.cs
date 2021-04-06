@@ -11,6 +11,9 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.SimulationComp
 {
     public abstract class BaseSourceComponent : BaseComponent
     {
+        /**
+         * Abstraktny predok vseobecneho komponentu source. Je potomkom triedy base component.
+         */
         public IDistribution Generator { get; protected set; }
         public int NumberOfGenerated { get; protected set; } = 0;
         public SourceStateData StateData { get; protected set; }

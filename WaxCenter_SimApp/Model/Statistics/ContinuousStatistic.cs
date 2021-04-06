@@ -8,6 +8,7 @@ namespace WaxCenter_SimApp.Model.Statistics
 {
     public class ContinuousStatistic : BaseStatistic
     {
+        /** Potomok triedy base statistic. Umoznuje vypocet spojitch statistik. Zaznamenava si predchadzajuci stav a hodnotu. Stavom byva zvycajnse cas.*/
         public double PreviousState { get; private set; }
         public double PreviousValue { get; private set; }
         override public double Mean { get => Denominator != 0 ? Numerator / Denominator : 0; }
