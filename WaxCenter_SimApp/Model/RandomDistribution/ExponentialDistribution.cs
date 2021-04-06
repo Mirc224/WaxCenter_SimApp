@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace WaxCenter_SimApp.Model.RandomDistribution
 {
+    /*
+     * Trieda predstavujuca generator exponecialneho rozdelenia. Implementuje rozhranie IDistribution. Parametrom konstruktora je stredna hodnota.
+     * Na vypocet rozdelenia sa pouziva vzorec distribucnej funkcie pre toto rozdeleni.
+     */
     public class ExponentialDistribution : IDistribution
     {
         Random _generator;

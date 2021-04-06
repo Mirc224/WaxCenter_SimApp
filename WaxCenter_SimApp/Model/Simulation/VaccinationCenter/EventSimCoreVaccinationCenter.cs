@@ -131,16 +131,6 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         public void DoReplication()
         {
             base.DoReplication();
-/*            Console.WriteLine("AdminQL: " + StatAdminQLength.Mean);
-            Console.WriteLine("AdminWaiting Time: " + StatAdminWaitingTime.Mean);
-            Console.WriteLine("AdminRS: " + AdminService.ResourcePool.Utilization + "\n");
-            Console.WriteLine("ExaminationQL: " + StatExaminationQLength.Mean);
-            Console.WriteLine("ExaminationWaiting Time: " + StatExaminationWaitingTime.Mean);
-            Console.WriteLine("DoctorRS: " + ExaminationService.ResourcePool.Utilization + "\n");
-            Console.WriteLine("VaccinationQL: " + StatVaccinationQLength.Mean);
-            Console.WriteLine("VaccinationWaiting Time: " + StatVaccinationWaitingTime.Mean);
-            Console.WriteLine("SisterRS: " + VaccinationService.ResourcePool.Utilization + "\n");
-            Console.WriteLine("StatWaitingRoom: " + StatWaitingRoomCapacity.Mean + "\n");*/
         }
 
         override
@@ -211,7 +201,6 @@ namespace WaxCenter_SimApp.Model.Simulation.VaccinationCenter
         private double SourceGeneratorFunction()
         {
             int multiplier = 1;
-            //return ((EndTime/60.0)/NumberOfGeneratedAgents)*60;
             while(true)
             {
                 if (_sourceArrivalGenerator.NextDouble() < ((double)_numberOfNotComing / PatientGenerated))

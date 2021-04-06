@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace WaxCenter_SimApp.Model.RandomDistribution
 {
+    /*
+     * Trieda predstavujuca generator trojuholnikoveho rozdelenia. Vstupnymi parametrami konstruktora su minimum, maximum a modus.
+     */
     public class TriangularDistribution : IDistribution
     {
         private double _min;

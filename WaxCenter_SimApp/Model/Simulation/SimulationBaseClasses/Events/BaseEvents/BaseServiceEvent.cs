@@ -10,6 +10,10 @@ namespace WaxCenter_SimApp.Model.Simulation.SimulationBaseClasses.Events.BaseEve
 {
     public abstract class BaseServiceEvent : SimEvent
     {
+        /*
+         * Abstraktna trieda, ktora je predkom pre udalosti suvisiace s komponentom simulacie Service. Obsahuje referenciu an obsluhujuci personal a komponent, s ktorym
+         * je udalost spata.
+         */
         protected ServiceComponent _service;
         protected ServiceStaff _staff;
     }
